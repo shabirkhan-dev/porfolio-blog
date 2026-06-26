@@ -1,47 +1,44 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail } from "lucide-react";
-import { navItems, profile } from "@/content/site";
+import { ArrowUpRight } from "lucide-react";
+import { MobileMenu } from "@/components/mobile-menu";
+import { DesktopNav } from "@/components/site-nav";
+import { Magnetic } from "@/components/magnetic";
+import { LinkButton } from "@/components/ui/button";
+import { navItems, profile } from "@/data/site";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/88 backdrop-blur-xl">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
-        <Link href="/" className="flex items-center gap-3 font-semibold">
-          <span className="grid size-9 place-items-center rounded-md bg-foreground text-sm text-background">
+    <header className="sticky top-0 z-50 border-b border-border/60 glass">
+      <div className="shell flex min-h-16 items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="group flex items-center gap-3"
+          aria-label="Shabir Khan home"
+        >
+          <span className="grid size-8 place-items-center rounded-md bg-accent font-display text-xs font-bold text-accent-foreground transition-transform duration-500 group-hover:rotate-90">
             {profile.initials}
           </span>
-          <span className="hidden leading-tight sm:block">
-            <span className="block">{profile.name}</span>
-            <span className="block text-xs font-medium text-muted-foreground">
-              {profile.role}
-            </span>
+          <span className="hidden font-display text-sm font-semibold tracking-tight sm:block">
+            {profile.name}
           </span>
         </Link>
 
-        <nav
-          aria-label="Primary navigation"
-          className="hidden items-center gap-1 md:flex"
-        >
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <DesktopNav items={navItems} />
 
-        <a
-          href={`mailto:${profile.email}`}
-          aria-label={`Email ${profile.name}`}
-          className="inline-flex items-center gap-2 rounded-md bg-foreground px-3 py-2 text-sm font-semibold text-background transition hover:bg-primary hover:text-primary-foreground"
-        >
-          <Mail aria-hidden="true" size={16} />
-          <span className="hidden sm:inline">Contact</span>
-          <ArrowUpRight aria-hidden="true" className="hidden sm:block" size={16} />
-        </a>
+        <div className="flex items-center gap-2">
+          <Magnetic className="hidden sm:block">
+            <LinkButton
+              href={`mailto:${profile.email}`}
+              aria-label={`Email ${profile.name}`}
+              variant="primary"
+              size="sm"
+            >
+              Let&apos;s talk
+              <ArrowUpRight aria-hidden="true" size={14} />
+            </LinkButton>
+          </Magnetic>
+          <MobileMenu />
+        </div>
       </div>
     </header>
   );

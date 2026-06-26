@@ -1,292 +1,361 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BriefcaseBusiness,
-  CheckCircle2,
-  Mail,
-  MapPin,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
-import { ArchitectureVisual } from "@/components/architecture-visual";
-import { SectionHeading } from "@/components/section-heading";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArticleCard } from "@/components/blog/article-card";
+import { Reveal, WordReveal } from "@/components/motion";
+import { Magnetic } from "@/components/magnetic";
+import { Marquee } from "@/components/marquee";
+import { HeroCanvas } from "@/components/hero-canvas";
+import { SectionHeading } from "@/components/section";
+import { CaseStudyCard } from "@/components/portfolio/case-study-card";
+import { Badge } from "@/components/ui/badge";
+import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
   experience,
-  focusAreas,
+  philosophy,
   posts,
   profile,
   projects,
-  skillGroups,
-  stats,
-} from "@/content/site";
-import { formatDate } from "@/lib/format";
+  proof,
+  stackGroups,
+} from "@/data/site";
 
 export default function Home() {
+  const writingPreview = posts.slice(0, 3);
+
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <main>
-        <section className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[minmax(0,1fr)_440px] lg:py-20">
-          <div className="flex flex-col justify-center">
-            <p className="inline-flex w-fit items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground">
-              <MapPin aria-hidden="true" size={16} />
-              {profile.location} - {profile.availability}
-            </p>
-            <h1 className="mt-8 max-w-4xl text-5xl font-semibold leading-[1.03] text-foreground sm:text-7xl">
-              {profile.name}
-            </h1>
-            <p className="mt-5 text-xl font-semibold text-primary sm:text-2xl">
-              {profile.role}
-            </p>
-            <p className="text-balance mt-6 max-w-3xl text-xl leading-9 text-foreground">
-              {profile.headline}
-            </p>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-              {profile.intro}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={`mailto:${profile.email}`}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-foreground px-5 py-3 text-sm font-semibold text-background transition hover:bg-primary hover:text-primary-foreground"
-              >
-                Start a conversation
-                <Mail aria-hidden="true" size={18} />
-              </a>
-              <Link
-                href="/projects"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary"
-              >
-                View selected work
-                <BriefcaseBusiness aria-hidden="true" size={18} />
-              </Link>
-            </div>
+        {/* ---------------------------------------------------------- */}
+        {/* HERO — interactive vector field                            */}
+        {/* ---------------------------------------------------------- */}
+        <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
+          {/* Live, cursor-reactive canvas */}
+          <HeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
+          {/* Vignette so type stays legible over the field */}
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-background" />
 
-            <div className="mt-8 flex flex-wrap gap-2">
-              {focusAreas.map((area) => (
-                <span
-                  key={area}
-                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm text-muted-foreground"
-                >
-                  <CheckCircle2 aria-hidden="true" size={15} />
-                  {area}
+          {/* Top meta row */}
+          <div className="shell flex items-center justify-between pt-[clamp(2rem,1rem+4vw,4rem)]">
+            <Reveal className="flex items-center gap-3">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
+                <span className="relative inline-flex size-2 rounded-full bg-accent" />
+              </span>
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                Available — {profile.location}
+              </span>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:inline">
+                Senior Full-Stack Engineer · Est. {new Date().getFullYear() - 6}
+              </span>
+            </Reveal>
+          </div>
+
+          {/* Centerpiece headline */}
+          <div className="shell relative flex flex-1 flex-col justify-center py-16">
+            <Reveal className="mb-7 flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">
+              <span className="h-px w-8 bg-accent" />
+              Portfolio &amp; Journal — {profile.name}
+            </Reveal>
+
+            <h1 className="t-display max-w-[16ch]">
+              <WordReveal as="span" text="I engineer" className="block" />
+              <span className="block">
+                <WordReveal
+                  as="span"
+                  text="products that feel"
+                  className="inline-flex"
+                />
+              </span>
+              <span className="block overflow-hidden">
+                <span className="font-serif font-normal italic text-accent">
+                  inevitable.
                 </span>
-              ))}
-            </div>
+              </span>
+            </h1>
+
+            <Reveal
+              delay={0.2}
+              className="mt-10 flex max-w-xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between"
+            >
+              <p className="t-lead max-w-md">{profile.intro}</p>
+            </Reveal>
+
+            <Reveal delay={0.3} className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Magnetic>
+                <LinkButton href="#work" size="lg">
+                  Selected work
+                  <ArrowDownRight aria-hidden="true" size={18} />
+                </LinkButton>
+              </Magnetic>
+              <LinkButton href="/blog" variant="secondary" size="lg">
+                Read the writing
+              </LinkButton>
+              <span className="ml-1 hidden items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint lg:inline-flex">
+                <span className="size-1.5 rounded-full bg-accent" />
+                Move your cursor
+              </span>
+            </Reveal>
           </div>
 
-          <ArchitectureVisual />
-        </section>
-
-        <section className="border-y border-border bg-card">
-          <div className="mx-auto grid w-full max-w-7xl gap-4 px-5 py-6 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-border p-5">
-                <p className="text-4xl font-semibold text-foreground">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
+          {/* Bottom stat strip */}
+          <div className="shell relative pb-8">
+            <Reveal delay={0.15}>
+              <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
+                {proof.map((item) => (
+                  <div key={item.label} className="bg-background/70 p-5 backdrop-blur-sm">
+                    <dt className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.6rem)] font-semibold leading-none tracking-tight text-foreground">
+                      {item.value}
+                    </dt>
+                    <dd className="mt-2.5 text-xs leading-5 text-muted-foreground">
+                      {item.label}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
           </div>
         </section>
 
-        <section
-          id="experience"
-          className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8"
-        >
+        {/* Marquee */}
+        <div className="border-y border-border py-6">
+          <Marquee
+            items={[
+              "TypeScript",
+              "Next.js",
+              "React Native",
+              "Node.js",
+              "AI Workflows",
+              "Design Systems",
+              "Rust",
+              "Bun",
+            ]}
+          />
+        </div>
+
+        {/* ---------------------------------------------------------- */}
+        {/* SELECTED WORK                                              */}
+        {/* ---------------------------------------------------------- */}
+        <section id="work" className="shell section-y">
           <SectionHeading
-            eyebrow="Experience"
-            title="Built for production, not just launch day"
-            description="A track record across product architecture, frontend platforms, backend services, mobile apps, CI/CD, and security."
+            index="01"
+            eyebrow="Selected work"
+            title="Case studies with real architecture behind them."
+            description="SaaS platforms, security tooling, and multi-tenant systems — built with product taste and technical depth."
           />
 
-          <div className="mt-10 grid gap-5 lg:grid-cols-2">
-            {experience.map((item) => (
-              <article
-                key={`${item.company}-${item.role}`}
-                className="rounded-lg border border-border bg-card p-6 shadow-sm"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold">{item.role}</h3>
-                    <p className="mt-1 text-sm font-medium text-primary">
-                      {item.company}
-                    </p>
-                  </div>
-                  <p className="text-sm text-muted-foreground sm:text-right">
-                    {item.period}
-                    <br />
-                    {item.location}
-                  </p>
-                </div>
-                <p className="mt-5 text-sm leading-7 text-muted-foreground">
-                  {item.summary}
-                </p>
-                <ul className="mt-5 space-y-3">
-                  {item.bullets.map((bullet) => (
-                    <li
-                      key={bullet}
-                      className="flex gap-3 text-sm leading-6 text-foreground"
-                    >
-                      <CheckCircle2
-                        aria-hidden="true"
-                        size={17}
-                        className="mt-1 shrink-0 text-primary"
-                      />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
+          <div className="mt-16 flex flex-col">
+            {projects.map((project, index) => (
+              <Reveal key={project.slug} delay={index * 0.04}>
+                <CaseStudyCard project={project} index={index + 1} />
+              </Reveal>
             ))}
           </div>
         </section>
 
-        <section className="border-y border-border bg-card">
-          <div className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8">
-            <SectionHeading
-              eyebrow="Technical range"
-              title="Full-stack depth with security and AI at the edges"
-              description="The stack is broad, but the center is consistent: TypeScript systems that are reliable, observable, and fast."
-            />
+        {/* ---------------------------------------------------------- */}
+        {/* PHILOSOPHY                                                 */}
+        {/* ---------------------------------------------------------- */}
+        <section id="about" className="border-y border-border bg-background-2">
+          <div className="shell section-y">
+            <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+              <Reveal>
+                <span className="eyebrow">Approach</span>
+                <h2 className="t-h2 mt-6">
+                  Calm interfaces.{" "}
+                  <span className="font-serif font-normal italic text-muted-foreground">
+                    Disciplined
+                  </span>{" "}
+                  systems.
+                </h2>
+                <p className="mt-7 max-w-md text-sm leading-7 text-muted-foreground">
+                  Software that feels effortless on the surface and is deliberate
+                  underneath. These are the principles I build on.
+                </p>
+              </Reveal>
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-4">
-              {skillGroups.map((group) => (
-                <article
+              <div className="grid sm:grid-cols-2">
+                {philosophy.map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <Reveal
+                      key={item.title}
+                      delay={index * 0.04}
+                      className="group border-b border-border px-1 py-7 transition-colors hover:border-border-strong sm:odd:border-r sm:odd:pr-8 sm:even:pl-8"
+                    >
+                      <div className="flex items-center justify-between">
+                        <Icon
+                          aria-hidden="true"
+                          size={20}
+                          className="text-accent transition-transform duration-500 group-hover:-rotate-6"
+                        />
+                        <span className="font-mono text-xs text-faint">
+                          0{index + 1}
+                        </span>
+                      </div>
+                      <h3 className="t-h3 mt-6">{item.title}</h3>
+                      <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                        {item.body}
+                      </p>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------- */}
+        {/* STACK                                                      */}
+        {/* ---------------------------------------------------------- */}
+        <section className="shell section-y">
+          <SectionHeading
+            index="02"
+            eyebrow="Toolkit"
+            title="A serious stack for building durable products."
+            description="Organized around the kinds of products I ship — from interface to infrastructure."
+          />
+
+          <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
+            {stackGroups.map((group, index) => {
+              const Icon = group.icon;
+              return (
+                <Reveal
                   key={group.title}
-                  className="rounded-lg border border-border bg-background p-5"
+                  delay={index * 0.03}
+                  className="group bg-background p-7 transition-colors duration-300 hover:bg-card"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="grid size-10 place-items-center rounded-md bg-primary/10 text-primary">
-                      {group.title === "Security" ? (
-                        <ShieldCheck aria-hidden="true" size={20} />
-                      ) : (
-                        <Zap aria-hidden="true" size={20} />
-                      )}
+                  <div className="flex items-start gap-4">
+                    <div className="grid size-11 shrink-0 place-items-center rounded-lg border border-border text-accent transition-colors group-hover:border-accent/40">
+                      <Icon aria-hidden="true" size={19} />
                     </div>
-                    <h3 className="font-semibold">{group.title}</h3>
+                    <div>
+                      <h3 className="t-h3">{group.title}</h3>
+                      <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                        {group.description}
+                      </p>
+                    </div>
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {group.items.map((skill) => (
+                    {group.items.map((item) => (
                       <span
-                        key={skill}
-                        className="rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground"
+                        key={item}
+                        className="rounded-full border border-border px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.08em] text-muted-foreground"
                       >
-                        {skill}
+                        {item}
                       </span>
                     ))}
                   </div>
-                </article>
+                </Reveal>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------- */}
+        {/* EXPERIENCE                                                 */}
+        {/* ---------------------------------------------------------- */}
+        <section className="border-y border-border bg-background-2">
+          <div className="shell section-y">
+            <SectionHeading
+              index="03"
+              eyebrow="Track record"
+              title="Senior ownership across product and system."
+            />
+
+            <div className="mt-14">
+              {experience.map((item, index) => (
+                <Reveal
+                  key={`${item.company}-${item.role}`}
+                  delay={index * 0.04}
+                  className="rule group grid gap-4 py-8 last:border-b md:grid-cols-[10rem_1fr_1.3fr] md:gap-10"
+                >
+                  <span className="font-mono text-sm text-faint">
+                    {item.period}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent">
+                      {item.role}
+                    </h3>
+                    <p className="mt-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                      {item.company} — {item.location}
+                    </p>
+                  </div>
+                  <p className="text-sm leading-7 text-muted-foreground">
+                    {item.body}
+                  </p>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="work" className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <SectionHeading
-              eyebrow="Selected work"
-              title="Platforms with architecture behind them"
-              description="These projects reflect the CV pattern: systems thinking, secure delivery, product ownership, and performance."
-            />
-            <Link
-              href="/projects"
-              className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary"
-            >
-              All projects
-              <ArrowRight aria-hidden="true" size={16} />
-            </Link>
-          </div>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {projects.map((project) => (
-              <article
-                key={project.slug}
-                className="overflow-hidden rounded-lg border border-border bg-card shadow-sm"
+        {/* ---------------------------------------------------------- */}
+        {/* WRITING                                                    */}
+        {/* ---------------------------------------------------------- */}
+        <section className="shell section-y">
+          <SectionHeading
+            index="04"
+            eyebrow="Journal"
+            title="Notes from building serious software."
+            description={
+              <Link
+                href="/blog"
+                className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
               >
-                <div
-                  className={`h-32 bg-gradient-to-br ${project.palette}`}
-                  aria-hidden="true"
-                />
-                <div className="p-5">
-                  <p className="text-sm font-medium text-primary">
-                    {project.status}
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold">
-                    {project.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    {project.summary}
-                  </p>
-                  <p className="mt-5 text-sm font-semibold text-foreground">
-                    {project.impact}
-                  </p>
-                </div>
-              </article>
+                All writing
+                <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+              </Link>
+            }
+          />
+
+          <div className="mt-16 grid gap-4 md:grid-cols-3">
+            {writingPreview.map((post, index) => (
+              <Reveal key={post.slug} delay={index * 0.05}>
+                <ArticleCard post={post} />
+              </Reveal>
             ))}
           </div>
         </section>
 
-        <section className="border-y border-border bg-card">
-          <div className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8">
-            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-              <SectionHeading
-                eyebrow="Writing"
-                title="Notes from building serious software"
-                description="Short essays shaped around architecture, performance, CI/CD, and security."
-              />
-              <Link
-                href="/blog"
-                className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary"
-              >
-                All writing
-                <ArrowRight aria-hidden="true" size={16} />
-              </Link>
+        {/* ---------------------------------------------------------- */}
+        {/* CONTACT                                                    */}
+        {/* ---------------------------------------------------------- */}
+        <section id="contact" className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,4rem)] py-[clamp(2.5rem,2rem+4vw,5rem)]">
+              <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
+              <div className="relative">
+                <Badge tone="accent">Available for product work</Badge>
+                <h2 className="t-h1 mt-8 max-w-4xl">
+                  An engineer who can own the interface, the architecture, and
+                  the{" "}
+                  <span className="font-serif font-normal italic text-accent">
+                    shipping path.
+                  </span>
+                </h2>
+                <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center">
+                  <Magnetic>
+                    <LinkButton href={`mailto:${profile.email}`} size="lg">
+                      Start a conversation
+                      <ArrowUpRight aria-hidden="true" size={18} />
+                    </LinkButton>
+                  </Magnetic>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="link-line font-mono text-sm text-muted-foreground"
+                  >
+                    {profile.email}
+                  </a>
+                </div>
+              </div>
             </div>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="rounded-lg border border-border bg-background p-5 transition hover:border-primary"
-                >
-                  <p className="text-sm text-muted-foreground">
-                    {formatDate(post.publishedAt)} - {post.readingTime}
-                  </p>
-                  <h3 className="mt-3 text-xl font-semibold">{post.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8">
-          <div className="rounded-lg border border-border bg-foreground p-6 text-background sm:p-8 lg:flex lg:items-center lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase text-background/70">
-                Available for remote work
-              </p>
-              <h2 className="mt-3 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-                Need a senior engineer who can own the product surface and the
-                system behind it?
-              </h2>
-            </div>
-            <a
-              href={`mailto:${profile.email}`}
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-background px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-primary hover:text-primary-foreground lg:mt-0"
-            >
-              Email {profile.name.split(" ")[0]}
-              <ArrowRight aria-hidden="true" size={18} />
-            </a>
-          </div>
+          </Reveal>
         </section>
       </main>
       <SiteFooter />
