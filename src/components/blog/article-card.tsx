@@ -15,6 +15,48 @@ type ArticleCardProps = {
 };
 
 export function ArticleCard({ post, featured = false }: ArticleCardProps) {
+  if (featured) {
+    return (
+      <Link href={`/blog/${post.slug}`} className="group block">
+        <article className="relative grid overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-border-strong hover:bg-card lg:grid-cols-[1.4fr_1fr]">
+          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-0 transition-opacity duration-500 group-hover:opacity-40" />
+          <div className="relative p-8 sm:p-10">
+            <div className="flex items-center gap-2">
+              <span className="rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-accent">
+                {post.category}
+              </span>
+              <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                Latest
+              </span>
+            </div>
+            <h2 className="mt-8 max-w-2xl font-display text-[clamp(1.75rem,1.3rem+1.8vw,2.8rem)] font-semibold leading-[1.04] tracking-tight transition-colors group-hover:text-accent">
+              {post.title}
+            </h2>
+            <p className="mt-5 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
+              {post.excerpt}
+            </p>
+            <p className="mt-8 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+              {formatDate(post.publishedAt)} · {post.readingTime}
+            </p>
+          </div>
+          <div className="relative hidden items-center justify-center border-l border-border bg-background-2 p-10 lg:flex">
+            <span className="font-display text-[7rem] font-semibold leading-none tracking-tighter text-foreground/[0.06]">
+              01
+            </span>
+            <span className="absolute bottom-8 right-8 inline-flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-foreground">
+              Read essay
+              <ArrowUpRight
+                aria-hidden="true"
+                size={15}
+                className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </span>
+          </div>
+        </article>
+      </Link>
+    );
+  }
+
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
       <article className="flex h-full flex-col rounded-xl border border-border bg-background p-7 transition-colors duration-300 hover:border-border-strong hover:bg-card">
@@ -29,13 +71,7 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
           />
         </div>
 
-        <h2
-          className={
-            featured
-              ? "mt-10 max-w-2xl font-display text-3xl font-semibold leading-[1.05] tracking-tight sm:text-4xl"
-              : "mt-10 font-display text-xl font-semibold leading-[1.12] tracking-tight"
-          }
-        >
+        <h2 className="mt-10 font-display text-xl font-semibold leading-[1.12] tracking-tight transition-colors group-hover:text-accent">
           {post.title}
         </h2>
 

@@ -5,6 +5,8 @@ import { Reveal, WordReveal } from "@/components/motion";
 import { Magnetic } from "@/components/magnetic";
 import { Marquee } from "@/components/marquee";
 import { HeroCanvas } from "@/components/hero-canvas";
+import { CountUp } from "@/components/count-up";
+import { SpotlightCard } from "@/components/spotlight-card";
 import { SectionHeading } from "@/components/section";
 import { CaseStudyCard } from "@/components/portfolio/case-study-card";
 import { Badge } from "@/components/ui/badge";
@@ -108,13 +110,17 @@ export default function Home() {
             <Reveal delay={0.15}>
               <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
                 {proof.map((item) => (
-                  <div key={item.label} className="bg-background/70 p-5 backdrop-blur-sm">
+                  <div
+                    key={item.label}
+                    className="group/stat relative overflow-hidden bg-background/70 p-5 backdrop-blur-sm transition-colors duration-300 hover:bg-card"
+                  >
                     <dt className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.6rem)] font-semibold leading-none tracking-tight text-foreground">
-                      {item.value}
+                      <CountUp value={item.value} />
                     </dt>
                     <dd className="mt-2.5 text-xs leading-5 text-muted-foreground">
                       {item.label}
                     </dd>
+                    <span className="mt-4 block h-px w-6 bg-accent transition-all duration-500 group-hover/stat:w-full" />
                   </div>
                 ))}
               </dl>
@@ -161,47 +167,56 @@ export default function Home() {
         {/* ---------------------------------------------------------- */}
         {/* PHILOSOPHY                                                 */}
         {/* ---------------------------------------------------------- */}
-        <section id="about" className="border-y border-border bg-background-2">
-          <div className="shell section-y">
-            <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
-              <Reveal>
-                <span className="eyebrow">Approach</span>
-                <h2 className="t-h2 mt-6">
-                  Calm interfaces.{" "}
-                  <span className="font-serif font-normal italic text-muted-foreground">
-                    Disciplined
-                  </span>{" "}
-                  systems.
-                </h2>
-                <p className="mt-7 max-w-md text-sm leading-7 text-muted-foreground">
-                  Software that feels effortless on the surface and is deliberate
-                  underneath. These are the principles I build on.
-                </p>
-              </Reveal>
+        <section
+          id="about"
+          className="relative overflow-hidden border-y border-border bg-background-2"
+        >
+          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
+          <div className="shell section-y relative">
+            <div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr]">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <Reveal>
+                  <span className="eyebrow">Approach</span>
+                  <h2 className="t-h2 mt-6">
+                    Calm interfaces.{" "}
+                    <span className="font-serif font-normal italic text-muted-foreground">
+                      Disciplined
+                    </span>{" "}
+                    systems.
+                  </h2>
+                  <p className="mt-7 max-w-md text-sm leading-7 text-muted-foreground">
+                    Software that feels effortless on the surface and is
+                    deliberate underneath. These are the principles I build on.
+                  </p>
+                  <div className="mt-8 flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+                    <span className="h-px w-8 bg-accent" />
+                    {philosophy.length} operating principles
+                  </div>
+                </Reveal>
+              </div>
 
-              <div className="grid sm:grid-cols-2">
+              <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
                 {philosophy.map((item, index) => {
                   const Icon = item.icon;
                   return (
-                    <Reveal
-                      key={item.title}
-                      delay={index * 0.04}
-                      className="group border-b border-border px-1 py-7 transition-colors hover:border-border-strong sm:odd:border-r sm:odd:pr-8 sm:even:pl-8"
-                    >
-                      <div className="flex items-center justify-between">
-                        <Icon
-                          aria-hidden="true"
-                          size={20}
-                          className="text-accent transition-transform duration-500 group-hover:-rotate-6"
-                        />
-                        <span className="font-mono text-xs text-faint">
-                          0{index + 1}
-                        </span>
-                      </div>
-                      <h3 className="t-h3 mt-6">{item.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                        {item.body}
-                      </p>
+                    <Reveal key={item.title} delay={index * 0.04}>
+                      <SpotlightCard
+                        tilt={0}
+                        className="h-full bg-background-2 p-7 transition-colors duration-300 hover:bg-card"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="grid size-10 place-items-center rounded-lg border border-border text-accent transition-all duration-500 group-hover/spot:border-accent/40 group-hover/spot:-rotate-6">
+                            <Icon aria-hidden="true" size={18} />
+                          </span>
+                          <span className="font-mono text-xs text-faint">
+                            0{index + 1}
+                          </span>
+                        </div>
+                        <h3 className="t-h3 mt-6">{item.title}</h3>
+                        <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                          {item.body}
+                        </p>
+                      </SpotlightCard>
                     </Reveal>
                   );
                 })}
@@ -225,32 +240,35 @@ export default function Home() {
             {stackGroups.map((group, index) => {
               const Icon = group.icon;
               return (
-                <Reveal
-                  key={group.title}
-                  delay={index * 0.03}
-                  className="group bg-background p-7 transition-colors duration-300 hover:bg-card"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="grid size-11 shrink-0 place-items-center rounded-lg border border-border text-accent transition-colors group-hover:border-accent/40">
-                      <Icon aria-hidden="true" size={19} />
-                    </div>
-                    <div>
-                      <h3 className="t-h3">{group.title}</h3>
-                      <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-                        {group.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {group.items.map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full border border-border px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.08em] text-muted-foreground"
-                      >
-                        {item}
+                <Reveal key={group.title} delay={index * 0.03}>
+                  <SpotlightCard className="h-full bg-background p-7 transition-colors duration-300 hover:bg-card">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="grid size-11 shrink-0 place-items-center rounded-lg border border-border text-accent transition-colors group-hover/spot:border-accent/40">
+                          <Icon aria-hidden="true" size={19} />
+                        </div>
+                        <div>
+                          <h3 className="t-h3">{group.title}</h3>
+                          <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                            {group.description}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="font-mono text-[0.62rem] text-faint opacity-0 transition-opacity duration-300 group-hover/spot:opacity-100">
+                        0{index + 1}
                       </span>
-                    ))}
-                  </div>
+                    </div>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {group.items.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-border px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.08em] text-muted-foreground transition-colors group-hover/spot:border-border-strong"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </SpotlightCard>
                 </Reveal>
               );
             })}
@@ -273,13 +291,19 @@ export default function Home() {
                 <Reveal
                   key={`${item.company}-${item.role}`}
                   delay={index * 0.04}
-                  className="rule group grid gap-4 py-8 last:border-b md:grid-cols-[10rem_1fr_1.3fr] md:gap-10"
+                  className="rule group relative grid gap-4 py-9 last:border-b md:grid-cols-[11rem_1fr_1.3fr] md:gap-10"
                 >
-                  <span className="font-mono text-sm text-faint">
-                    {item.period}
-                  </span>
+                  {/* Accent rail that grows on hover */}
+                  <span className="pointer-events-none absolute left-0 top-0 h-px w-0 bg-accent transition-all duration-500 group-hover:w-full" />
+
+                  <div className="flex items-center gap-3">
+                    <span className="size-1.5 shrink-0 rounded-full bg-border-strong transition-colors duration-300 group-hover:bg-accent" />
+                    <span className="font-mono text-sm text-faint transition-colors group-hover:text-muted-foreground">
+                      {item.period}
+                    </span>
+                  </div>
                   <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent">
+                    <h3 className="font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent sm:text-3xl">
                       {item.role}
                     </h3>
                     <p className="mt-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
@@ -289,6 +313,11 @@ export default function Home() {
                   <p className="text-sm leading-7 text-muted-foreground">
                     {item.body}
                   </p>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    size={18}
+                    className="absolute right-0 top-9 hidden text-faint opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent group-hover:opacity-100 md:block"
+                  />
                 </Reveal>
               ))}
             </div>
@@ -314,10 +343,14 @@ export default function Home() {
             }
           />
 
-          <div className="mt-16 grid gap-4 md:grid-cols-3">
+          <div className="mt-16 grid gap-4 lg:grid-cols-3">
             {writingPreview.map((post, index) => (
-              <Reveal key={post.slug} delay={index * 0.05}>
-                <ArticleCard post={post} />
+              <Reveal
+                key={post.slug}
+                delay={index * 0.05}
+                className={index === 0 ? "lg:col-span-3" : ""}
+              >
+                <ArticleCard post={post} featured={index === 0} />
               </Reveal>
             ))}
           </div>
@@ -330,8 +363,15 @@ export default function Home() {
           <Reveal>
             <div className="relative overflow-hidden rounded-2xl border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,4rem)] py-[clamp(2.5rem,2rem+4vw,5rem)]">
               <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
+              {/* Ambient accent glow */}
+              <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-accent/10 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-32 -left-20 size-80 rounded-full bg-accent/[0.06] blur-3xl" />
+
               <div className="relative">
-                <Badge tone="accent">Available for product work</Badge>
+                <Badge tone="accent">
+                  <span className="mr-1.5 inline-block size-1.5 animate-pulse rounded-full bg-accent" />
+                  Available for product work
+                </Badge>
                 <h2 className="t-h1 mt-8 max-w-4xl">
                   An engineer who can own the interface, the architecture, and
                   the{" "}
@@ -353,6 +393,24 @@ export default function Home() {
                     {profile.email}
                   </a>
                 </div>
+
+                {/* Quick facts row */}
+                <dl className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
+                  {[
+                    { k: "Response time", v: "Within 24h" },
+                    { k: "Engagements", v: "Remote, worldwide" },
+                    { k: "Focus", v: "Senior product builds" },
+                  ].map((fact) => (
+                    <div key={fact.k} className="bg-background-2 p-5">
+                      <dt className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                        {fact.k}
+                      </dt>
+                      <dd className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">
+                        {fact.v}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
             </div>
           </Reveal>

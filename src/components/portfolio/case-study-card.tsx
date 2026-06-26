@@ -21,10 +21,15 @@ export function CaseStudyCard({
   index: number;
 }) {
   return (
-    <article className="rule group grid items-center gap-8 py-12 last:border-b lg:grid-cols-[3rem_1fr_minmax(0,30rem)] lg:gap-12">
-      <span className="font-mono text-sm text-faint">
-        {String(index).padStart(2, "0")}
-      </span>
+    <article className="rule group relative grid items-center gap-8 py-12 last:border-b lg:grid-cols-[4rem_1fr_minmax(0,30rem)] lg:gap-12">
+      {/* Accent rail that grows across the row on hover */}
+      <span className="pointer-events-none absolute left-0 top-0 h-px w-0 bg-accent transition-all duration-700 ease-out group-hover:w-full" />
+
+      <div className="flex items-start gap-2">
+        <span className="font-display text-3xl font-semibold leading-none tracking-tight text-foreground/15 transition-colors duration-300 group-hover:text-accent/70">
+          {String(index).padStart(2, "0")}
+        </span>
+      </div>
 
       <div>
         <div className="flex flex-wrap items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.14em]">
@@ -33,7 +38,7 @@ export function CaseStudyCard({
           <span className="text-faint">{project.year}</span>
         </div>
 
-        <h3 className="mt-5 font-display text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] font-semibold leading-[0.98] tracking-tight transition-colors duration-300 group-hover:text-accent">
+        <h3 className="mt-5 inline-block font-display text-[clamp(2.25rem,1.6rem+2.4vw,3.5rem)] font-semibold leading-[0.98] tracking-tight transition-colors duration-300 group-hover:text-accent">
           {project.title}
         </h3>
         <p className="mt-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
@@ -52,7 +57,7 @@ export function CaseStudyCard({
           {project.stack.map((item) => (
             <span
               key={item}
-              className="font-mono text-[0.66rem] uppercase tracking-[0.1em] text-faint"
+              className="font-mono text-[0.66rem] uppercase tracking-[0.1em] text-faint transition-colors duration-300 group-hover:text-muted-foreground"
             >
               {item}
             </span>
@@ -69,7 +74,9 @@ export function CaseStudyCard({
         </span>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border transition-colors duration-500 group-hover:border-border-strong">
+      <div className="relative overflow-hidden rounded-xl border border-border transition-colors duration-500 group-hover:border-border-strong">
+        {/* Hover sheen sweep */}
+        <div className="pointer-events-none absolute inset-0 z-10 -translate-x-full bg-gradient-to-r from-transparent via-accent/10 to-transparent transition-transform duration-[1100ms] ease-out group-hover:translate-x-full" />
         <div className="transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]">
           <ProjectPreview visual={project.visual} title={project.title} />
         </div>
