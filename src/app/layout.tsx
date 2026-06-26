@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import { Cursor } from "@/components/cursor";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { ThemeScript } from "@/components/theme-toggle";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -77,8 +78,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a1814",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#1a1814" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f3ec" },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
@@ -93,6 +97,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${bricolage.variable} ${instrument.variable} ${jetbrains.variable} scroll-smooth`}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body suppressHydrationWarning>
         <ScrollProgress />
         <Cursor />

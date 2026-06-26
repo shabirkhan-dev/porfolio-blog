@@ -64,7 +64,7 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover/spot:opacity-100"
         style={{
           background:
-            "radial-gradient(280px circle at var(--mx,50%) var(--my,50%), oklch(0.885 0.19 118 / 0.14), transparent 70%)",
+            "radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgb(var(--accent-rgb) / 0.14), transparent 70%)",
         }}
       />
       {/* Accent edge highlight on hover */}
@@ -73,7 +73,7 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0 z-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover/spot:opacity-100"
         style={{
           background:
-            "radial-gradient(420px circle at var(--mx,50%) var(--my,50%), transparent, transparent 60%, oklch(0.885 0.19 118 / 0.08))",
+            "radial-gradient(420px circle at var(--mx,50%) var(--my,50%), transparent, transparent 60%, rgb(var(--accent-rgb) / 0.08))",
           WebkitMask:
             "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
           WebkitMaskComposite: "xor",

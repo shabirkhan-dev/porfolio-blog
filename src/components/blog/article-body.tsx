@@ -132,9 +132,9 @@ export function ArticleBody({ blocks }: { blocks: ArticleBlock[] }) {
             return (
               <div
                 key={key}
-                className="my-10 overflow-hidden rounded-xl border border-border bg-[#0c0c0b]"
+                className="code-surface my-10 overflow-hidden rounded-xl border border-border"
               >
-                <div className="flex items-center justify-between border-b border-border px-5 py-3 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                <div className="code-header flex items-center justify-between border-b px-5 py-3 font-mono text-[0.66rem] uppercase tracking-[0.14em]">
                   <span className="flex items-center gap-2">
                     <span className="flex gap-1.5">
                       <span className="size-2.5 rounded-full bg-white/15" />
@@ -143,9 +143,9 @@ export function ArticleBody({ blocks }: { blocks: ArticleBlock[] }) {
                     </span>
                     {block.filename ?? "snippet"}
                   </span>
-                  <span className="text-accent">{block.language}</span>
+                  <span className="code-accent">{block.language}</span>
                 </div>
-                <pre className="overflow-x-auto p-5 font-mono text-sm leading-7 text-foreground/90">
+                <pre className="overflow-x-auto p-5 font-mono text-sm leading-7">
                   <code>{block.code}</code>
                 </pre>
               </div>

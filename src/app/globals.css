@@ -1,46 +1,55 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* ================================================================== */
 /* Design system — "Studio"                                           */
-/* Restrained warm-black canvas · cream type · single acid accent     */
+/* Warm neutral canvas · single refined amber accent · light + dark   */
 /* ================================================================== */
+
+/* ---- DARK (default) ---------------------------------------------- */
 :root {
   color-scheme: dark;
 
-  /* Surfaces */
-  --background: oklch(0.155 0.006 70);
-  --background-2: oklch(0.182 0.006 70);
-  --foreground: oklch(0.955 0.01 85);
+  --background: oklch(0.16 0.005 60);
+  --background-2: oklch(0.196 0.005 60);
+  --foreground: oklch(0.96 0.008 80);
 
-  --card: oklch(0.195 0.006 70);
-  --card-foreground: oklch(0.955 0.01 85);
-  --popover: oklch(0.195 0.006 70);
-  --popover-foreground: oklch(0.955 0.01 85);
+  --card: oklch(0.207 0.005 60);
+  --card-foreground: oklch(0.96 0.008 80);
+  --popover: oklch(0.207 0.005 60);
+  --popover-foreground: oklch(0.96 0.008 80);
 
-  --muted: oklch(0.235 0.006 70);
-  --muted-foreground: oklch(0.66 0.01 80);
-  --faint: oklch(0.5 0.008 78);
+  --muted: oklch(0.247 0.005 60);
+  --muted-foreground: oklch(0.7 0.01 75);
+  --faint: oklch(0.52 0.008 70);
 
-  --secondary: oklch(0.235 0.006 70);
-  --secondary-foreground: oklch(0.955 0.01 85);
+  --secondary: oklch(0.247 0.005 60);
+  --secondary-foreground: oklch(0.96 0.008 80);
 
-  /* Single accent */
-  --accent: oklch(0.885 0.19 118);
-  --accent-foreground: oklch(0.22 0.05 118);
+  /* Single accent — warm amber */
+  --accent: oklch(0.78 0.135 62);
+  --accent-foreground: oklch(0.21 0.04 62);
+  --accent-rgb: 233 176 105;
 
-  --primary: oklch(0.885 0.19 118);
-  --primary-foreground: oklch(0.2 0.04 118);
+  --primary: oklch(0.78 0.135 62);
+  --primary-foreground: oklch(0.21 0.04 62);
 
   --destructive: oklch(0.62 0.2 25);
 
-  /* Lines */
   --border: oklch(1 0 0 / 0.08);
   --border-strong: oklch(1 0 0 / 0.16);
   --input: oklch(1 0 0 / 0.12);
-  --ring: oklch(0.885 0.19 118 / 0.5);
+  --ring: oklch(0.78 0.135 62 / 0.5);
+
+  /* Themeable surface bits */
+  --grid-line: oklch(1 0 0 / 0.026);
+  --glass-bg: oklch(0.16 0.005 60 / 0.7);
+  --stroke-faint: oklch(1 0 0 / 0.16);
+  --scrollbar: oklch(1 0 0 / 0.12);
+  --scrollbar-hover: oklch(1 0 0 / 0.22);
+  --stroke-rgb: 245 240 230;
+  --grain-blend: overlay;
+  --grain-opacity: 0.03;
 
   --radius: 0.75rem;
 
@@ -64,6 +73,49 @@
   --section-y: clamp(5rem, 3rem + 8vw, 9rem);
   --gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
   --maxw: 80rem;
+}
+
+/* ---- LIGHT -------------------------------------------------------- */
+.light {
+  color-scheme: light;
+
+  --background: oklch(0.975 0.006 85);
+  --background-2: oklch(0.945 0.007 85);
+  --foreground: oklch(0.205 0.01 60);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.205 0.01 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.205 0.01 60);
+
+  --muted: oklch(0.925 0.006 85);
+  --muted-foreground: oklch(0.46 0.01 65);
+  --faint: oklch(0.6 0.01 65);
+
+  --secondary: oklch(0.925 0.006 85);
+  --secondary-foreground: oklch(0.205 0.01 60);
+
+  /* Deeper copper so the accent holds contrast on a light field */
+  --accent: oklch(0.62 0.16 52);
+  --accent-foreground: oklch(0.99 0.01 85);
+  --accent-rgb: 188 108 52;
+
+  --primary: oklch(0.62 0.16 52);
+  --primary-foreground: oklch(0.99 0.01 85);
+
+  --border: oklch(0.21 0.02 60 / 0.12);
+  --border-strong: oklch(0.21 0.02 60 / 0.22);
+  --input: oklch(0.21 0.02 60 / 0.16);
+  --ring: oklch(0.62 0.16 52 / 0.4);
+
+  --grid-line: oklch(0.21 0.02 60 / 0.05);
+  --glass-bg: oklch(0.975 0.006 85 / 0.72);
+  --stroke-faint: oklch(0.21 0.02 60 / 0.14);
+  --scrollbar: oklch(0.21 0.02 60 / 0.2);
+  --scrollbar-hover: oklch(0.21 0.02 60 / 0.32);
+  --stroke-rgb: 40 34 28;
+  --grain-blend: multiply;
+  --grain-opacity: 0.025;
 }
 
 @theme inline {
@@ -140,12 +192,12 @@
     background: var(--background);
   }
   ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 0.1);
+    background: var(--scrollbar);
     border-radius: 999px;
     border: 2px solid var(--background);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(1 0 0 / 0.2);
+    background: var(--scrollbar-hover);
   }
 
   h1, h2, h3, h4 {
@@ -154,6 +206,16 @@
   p {
     text-wrap: pretty;
   }
+}
+
+/* Smooth, momentary cross-fade when toggling theme */
+.theme-transition,
+.theme-transition * {
+  transition:
+    background-color 0.45s ease,
+    border-color 0.45s ease,
+    color 0.45s ease,
+    fill 0.45s ease !important;
 }
 
 /* ------------------------------------------------------------------ */
@@ -225,7 +287,7 @@
 
 .text-stroke {
   color: transparent;
-  -webkit-text-stroke: 1px oklch(1 0 0 / 0.16);
+  -webkit-text-stroke: 1px var(--stroke-faint);
 }
 
 .link-line {
@@ -260,7 +322,7 @@
   background:
     radial-gradient(
       130% 90% at 8% -10%,
-      oklch(0.885 0.19 118 / 0.06),
+      rgb(var(--accent-rgb) / 0.07),
       transparent 40%
     ),
     var(--background);
@@ -271,21 +333,42 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  opacity: 0.03;
-  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
 
 .hairline-grid {
   background-image:
-    linear-gradient(oklch(1 0 0 / 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(1 0 0 / 0.025) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
+/* Forced-dark surface (device mockups) keep a light hairline regardless of theme */
+.grid-on-dark {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Always-dark code / device mockup surfaces */
+.code-surface {
+  background: oklch(0.13 0.005 60);
+  color: oklch(0.88 0.01 85);
+}
+.code-surface .code-header {
+  color: oklch(0.88 0.01 85 / 0.45);
+  border-color: oklch(1 0 0 / 0.08);
+}
+.code-surface .code-accent {
+  color: var(--accent);
+}
+
 .glass {
-  background: oklch(0.155 0.006 70 / 0.65);
+  background: var(--glass-bg);
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
 }
@@ -321,7 +404,7 @@
 .cursor-ring {
   width: 36px;
   height: 36px;
-  border: 1px solid oklch(1 0 0 / 0.35);
+  border: 1px solid rgb(var(--stroke-rgb) / 0.5);
   transition:
     width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     height 0.3s cubic-bezier(0.22, 1, 0.36, 1),

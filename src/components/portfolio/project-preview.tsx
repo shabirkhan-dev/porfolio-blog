@@ -10,7 +10,7 @@ export function ProjectPreview({ visual, title }: ProjectPreviewProps) {
   if (visual === "security") {
     return (
       <div className="relative h-full min-h-72 overflow-hidden bg-[#0c0c0b] p-5 text-white">
-        <div className="absolute inset-0 hairline-grid opacity-40" />
+        <div className="absolute inset-0 grid-on-dark opacity-40" />
         <div className="relative flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.14em] text-white/45">
           <span>policy graph</span>
           <span className="text-accent">active</span>
@@ -45,7 +45,7 @@ export function ProjectPreview({ visual, title }: ProjectPreviewProps) {
   if (visual === "dashboard") {
     return (
       <div className="relative h-full min-h-72 overflow-hidden bg-[#111110] p-5 text-white">
-        <div className="absolute inset-0 hairline-grid opacity-40" />
+        <div className="absolute inset-0 grid-on-dark opacity-40" />
         <div className="relative flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] p-3">
           <div>
             <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-white/45">
@@ -81,7 +81,7 @@ export function ProjectPreview({ visual, title }: ProjectPreviewProps) {
 
   return (
     <div className="relative h-full min-h-72 overflow-hidden bg-[#0c0c0b] p-5 text-white">
-      <div className="absolute inset-0 hairline-grid opacity-40" />
+      <div className="absolute inset-0 grid-on-dark opacity-40" />
       <div className="relative flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.14em] text-white/45">
         <span>{title}</span>
         <GitBranch aria-hidden="true" size={16} className="text-accent" />

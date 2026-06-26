@@ -24,8 +24,17 @@ export function HeroCanvas({ className }: { className?: string }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    const accent = "rgba(199, 240, 74,";
-    const base = "rgba(245, 240, 225,";
+    const readColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      const accentRgb = styles.getPropertyValue("--accent-rgb").trim() || "233 176 105";
+      const strokeRgb = styles.getPropertyValue("--stroke-rgb").trim() || "245 240 230";
+      return {
+        accent: `rgba(${accentRgb},`,
+        base: `rgba(${strokeRgb},`,
+      };
+    };
+
+    let colors = readColors();
 
     let width = 0;
     let height = 0;
@@ -104,7 +113,7 @@ export function HeroCanvas({ className }: { className?: string }) {
         const sin = Math.sin(node.angle);
 
         const opacity = 0.12 + intensity * 0.7;
-        const color = intensity > 0.15 ? accent : base;
+        const color = intensity > 0.15 ? colors.accent : colors.base;
 
         ctx.beginPath();
         ctx.moveTo(node.x - cos * half, node.y - sin * half);
@@ -124,7 +133,7 @@ export function HeroCanvas({ className }: { className?: string }) {
             0,
             Math.PI * 2,
           );
-          ctx.fillStyle = `${accent} ${intensity})`;
+          ctx.fillStyle = `${colors.accent} ${intensity})`;
           ctx.fill();
         }
       }
@@ -139,7 +148,7 @@ export function HeroCanvas({ className }: { className?: string }) {
         ctx.beginPath();
         ctx.moveTo(node.x - half, node.y);
         ctx.lineTo(node.x + half, node.y);
-        ctx.strokeStyle = `${base} 0.12)`;
+        ctx.strokeStyle = `${colors.base} 0.12)`;
         ctx.lineWidth = 1;
         ctx.lineCap = "round";
         ctx.stroke();
@@ -188,9 +197,19 @@ export function HeroCanvas({ className }: { className?: string }) {
     );
     io.observe(canvas);
 
+    const themeObserver = new MutationObserver(() => {
+      colors = readColors();
+      if (reduceMotion) drawStatic();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     return () => {
       stop();
       io.disconnect();
+      themeObserver.disconnect();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerout", onLeave);

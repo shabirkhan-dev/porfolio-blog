@@ -4,13 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { MobileNavLinks } from "@/components/site-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { navItems, profile, socials } from "@/data/site";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden">
+    <div className="flex items-center gap-2 md:hidden">
+      <ThemeToggle className="size-9" />
       <button
         type="button"
         aria-label={open ? "Close menu" : "Open menu"}

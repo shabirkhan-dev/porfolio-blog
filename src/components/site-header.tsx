@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { MobileMenu } from "@/components/mobile-menu";
 import { DesktopNav } from "@/components/site-nav";
 import { Magnetic } from "@/components/magnetic";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { LinkButton } from "@/components/ui/button";
 import { navItems, profile } from "@/data/site";
 
@@ -26,6 +27,7 @@ export function SiteHeader() {
         <DesktopNav items={navItems} />
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className="hidden size-9 sm:grid" />
           <Magnetic className="hidden sm:block">
             <LinkButton
               href={`mailto:${profile.email}`}
