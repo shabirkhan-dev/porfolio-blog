@@ -49,20 +49,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <main className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-8">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)]"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
         >
           <ArrowLeft aria-hidden="true" size={16} />
           Back to blog
         </Link>
 
-        <article className="mt-10 rounded-lg border border-[var(--line)] bg-white p-6 sm:p-8">
-          <p className="text-sm text-[var(--muted)]">
-            {formatDate(post.publishedAt)} / {post.readingTime}
+        <article className="mt-10 rounded-lg border border-border bg-card p-6 shadow-sm sm:p-8">
+          <p className="text-sm text-muted-foreground">
+            {formatDate(post.publishedAt)} - {post.readingTime}
           </p>
-          <h1 className="mt-4 text-4xl font-semibold leading-tight text-[var(--foreground)]">
+          <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">
             {post.title}
           </h1>
-          <p className="mt-5 text-lg leading-8 text-[var(--muted)]">
+          <p className="mt-5 text-lg leading-8 text-muted-foreground">
             {post.excerpt}
           </p>
 
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   {section.paragraphs.map((paragraph) => (
                     <p
                       key={paragraph}
-                      className="text-base leading-8 text-[var(--muted)]"
+                      className="text-base leading-8 text-muted-foreground"
                     >
                       {paragraph}
                     </p>

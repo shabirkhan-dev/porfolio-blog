@@ -9,37 +9,37 @@ import { formatDate } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Writing, notes, and project essays.",
+  description: "Engineering notes from Shabir Khan.",
 };
 
 export default function BlogPage() {
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
+      <main className="mx-auto w-full max-w-7xl px-5 py-14 sm:px-8">
         <SectionHeading
           eyebrow="Blog"
-          title="Writing on design, shipping, and the web"
-          description="Use this index for essays, project retrospectives, and shorter notes."
+          title="Engineering notes from the build process"
+          description="Short, practical essays on architecture, performance, CI/CD, security, and production-grade TypeScript."
         />
 
-        <div className="mt-10 divide-y divide-[var(--line)] rounded-lg border border-[var(--line)] bg-white">
+        <div className="mt-10 divide-y divide-border rounded-lg border border-border bg-card">
           {posts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="grid gap-4 p-5 transition hover:bg-[var(--background)] md:grid-cols-[180px_1fr_auto] md:items-center"
+              className="grid gap-4 p-5 transition hover:bg-muted/45 md:grid-cols-[180px_1fr_auto] md:items-center"
             >
-              <p className="text-sm text-[var(--muted)]">
+              <p className="text-sm text-muted-foreground">
                 {formatDate(post.publishedAt)}
               </p>
               <div>
                 <h2 className="text-xl font-semibold">{post.title}</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                   {post.excerpt}
                 </p>
               </div>
-              <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-[var(--accent)]">
+              <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary">
                 Read
                 <ArrowUpRight aria-hidden="true" size={16} />
               </span>

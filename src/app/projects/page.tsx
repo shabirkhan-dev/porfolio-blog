@@ -7,50 +7,61 @@ import { projects } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected portfolio projects and case studies.",
+  description: "Selected engineering projects by Shabir Khan.",
 };
 
 export default function ProjectsPage() {
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
+      <main className="mx-auto w-full max-w-7xl px-5 py-14 sm:px-8">
         <SectionHeading
           eyebrow="Projects"
-          title="Selected work and case studies"
-          description="Replace these placeholders with your real projects, case study links, and visuals."
+          title="Selected systems and product platforms"
+          description="Work shaped by secure delivery, product ownership, performance, and full-stack architecture."
         />
 
         <div className="mt-10 grid gap-5">
           {projects.map((project) => (
             <article
               key={project.slug}
-              className="grid gap-5 rounded-lg border border-[var(--line)] bg-white p-5 md:grid-cols-[280px_1fr_auto] md:items-center"
+              className="grid gap-5 overflow-hidden rounded-lg border border-border bg-card shadow-sm md:grid-cols-[320px_1fr]"
             >
               <div
-                className={`h-40 rounded-md bg-gradient-to-br md:h-36 ${project.palette}`}
+                className={`min-h-56 bg-gradient-to-br ${project.palette}`}
+                aria-hidden="true"
               />
-              <div>
-                <p className="text-sm font-medium text-[var(--accent-2)]">
+              <div className="p-6">
+                <p className="text-sm font-medium text-primary">
                   {project.category} / {project.year}
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold">
                   {project.title}
                 </h2>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+                <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">
                   {project.summary}
                 </p>
-                <p className="mt-4 text-sm font-semibold text-[var(--accent-3)]">
+                <p className="mt-5 text-sm font-semibold text-foreground">
                   {project.impact}
                 </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {project.stack.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href="mailto:shabirkhan.dev@gmail.com"
+                  className="mt-6 inline-flex w-fit items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold transition hover:border-primary hover:text-primary"
+                >
+                  Discuss project
+                  <ArrowUpRight aria-hidden="true" size={16} />
+                </a>
               </div>
-              <a
-                href="mailto:hello@example.com"
-                className="inline-flex w-fit items-center gap-2 rounded-md border border-[var(--line)] px-4 py-2 text-sm font-semibold transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
-              >
-                Discuss
-                <ArrowUpRight aria-hidden="true" size={16} />
-              </a>
             </article>
           ))}
         </div>
