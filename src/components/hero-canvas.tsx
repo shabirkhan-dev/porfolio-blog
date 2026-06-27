@@ -26,12 +26,11 @@ export function HeroCanvas({ className }: { className?: string }) {
 
     const readColors = () => {
       const styles = getComputedStyle(document.documentElement);
-      const accentRgb = styles.getPropertyValue("--accent-rgb").trim() || "233 176 105";
-      const strokeRgb = styles.getPropertyValue("--stroke-rgb").trim() || "245 240 230";
-      return {
-        accent: `rgba(${accentRgb},`,
-        base: `rgba(${strokeRgb},`,
-      };
+      const accentRgb =
+        styles.getPropertyValue("--accent-rgb").trim() || "233 176 105";
+      // Modern space-separated syntax: rgb(R G B / A). Mixing comma + spaces
+      // (e.g. "rgba(R G B, A)") is invalid and silently renders black.
+      return { accent: `rgb(${accentRgb} /` };
     };
 
     let colors = readColors();
@@ -112,14 +111,17 @@ export function HeroCanvas({ className }: { className?: string }) {
         const cos = Math.cos(node.angle);
         const sin = Math.sin(node.angle);
 
-        const opacity = 0.12 + intensity * 0.7;
-        const color = intensity > 0.15 ? colors.accent : colors.base;
+        // Always show a light shade of primary across the whole field; ramp to
+        // full primary where the pointer charges it.
+        const opacity = 0.2 + intensity * 0.8;
+        const color = colors.accent;
+        const lineWidth = 1 + intensity * 1.5;
 
         ctx.beginPath();
         ctx.moveTo(node.x - cos * half, node.y - sin * half);
         ctx.lineTo(node.x + cos * half, node.y + sin * half);
         ctx.strokeStyle = `${color} ${opacity})`;
-        ctx.lineWidth = 1 + intensity * 1.2;
+        ctx.lineWidth = lineWidth;
         ctx.lineCap = "round";
         ctx.stroke();
 
@@ -148,7 +150,7 @@ export function HeroCanvas({ className }: { className?: string }) {
         ctx.beginPath();
         ctx.moveTo(node.x - half, node.y);
         ctx.lineTo(node.x + half, node.y);
-        ctx.strokeStyle = `${colors.base} 0.12)`;
+        ctx.strokeStyle = `${colors.accent} 0.2)`;
         ctx.lineWidth = 1;
         ctx.lineCap = "round";
         ctx.stroke();

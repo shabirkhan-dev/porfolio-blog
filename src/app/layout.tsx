@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import { DeferredChrome } from "@/components/deferred-chrome";
 import { MotionProvider } from "@/components/motion-provider";
+import { RandomAccentScript } from "@/components/random-accent";
 import { ThemeScript } from "@/components/theme-toggle";
 
 const inter = Inter({
@@ -99,6 +100,7 @@ export default function RootLayout({
     >
       <head>
         <ThemeScript />
+        <RandomAccentScript />
       </head>
       <body suppressHydrationWarning>
         <MotionProvider>

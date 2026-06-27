@@ -3,6 +3,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
 import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
+import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { ScalesFrame } from "@/components/scales";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
@@ -38,8 +39,8 @@ export default function Home() {
         {/* HERO — interactive vector field                            */}
         {/* ---------------------------------------------------------- */}
         <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-          {/* Static field texture — canvas loads only on interaction to protect LCP */}
-          <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgb(var(--accent-rgb)/0.12),transparent_55%)]" />
+          {/* Live, cursor-reactive vector field */}
+          <DeferredHeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
           {/* Vignette so type stays legible over the field */}
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-background" />
