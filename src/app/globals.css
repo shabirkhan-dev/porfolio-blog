@@ -520,3 +520,21 @@
   .marquee-track { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Touch / coarse pointer                                             */
+/* ------------------------------------------------------------------ */
+@media (hover: none) {
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding: max(0px)) {
+  .page-shell {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}

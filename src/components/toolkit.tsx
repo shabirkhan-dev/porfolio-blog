@@ -57,7 +57,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                 onClick={() => setActive(index)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group/row relative flex w-full items-center gap-5 px-7 py-5 text-left transition-colors duration-300",
+                  "group/row relative flex w-full items-center gap-5 px-7 py-5 text-left transition-colors duration-300 active:scale-[0.99]",
                   index !== 0 && "border-t border-border",
                   isActive ? "bg-background-2" : "hover:bg-background-2/60",
                 )}
@@ -184,7 +184,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                 type="button"
                 onClick={() => setOpenMobile(isOpen ? null : index)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center gap-4 px-5 py-5 text-left"
+                className="flex w-full items-center gap-4 px-5 py-5 text-left transition-transform active:scale-[0.99]"
               >
                 <span
                   className={cn(

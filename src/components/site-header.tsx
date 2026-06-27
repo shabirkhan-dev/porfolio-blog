@@ -49,7 +49,7 @@ export function SiteHeader() {
           className={cn(
             "flex items-center justify-between gap-4 transition-all duration-500 ease-out",
             scrolled
-              ? "mt-3 min-h-[3.25rem] rounded-full border border-border-strong glass-strong pl-3 pr-2 [box-shadow:var(--header-shadow)]"
+              ? "mt-2 min-h-[3.25rem] rounded-full border border-border-strong glass-strong pl-3 pr-2 sm:mt-3 [box-shadow:var(--header-shadow)]"
               : "min-h-16",
           )}
         >

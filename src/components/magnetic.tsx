@@ -36,6 +36,7 @@ export function Magnetic({ children, className, strength = 0.35 }: MagneticProps
       ref={ref}
       onMouseMove={handleMove}
       onMouseLeave={reset}
+      whileTap={{ scale: 0.97 }}
       style={{ x: springX, y: springY }}
       className={className}
     >

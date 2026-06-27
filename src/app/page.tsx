@@ -10,9 +10,10 @@ import { Toolkit } from "@/components/toolkit";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ScalesFrame } from "@/components/scales";
 import { Testimonials } from "@/components/testimonials";
+import { PrincipleCard } from "@/components/principle-card";
+import { ContactSection } from "@/components/contact-section";
 import { SectionHeading } from "@/components/section";
 import { CaseStudyCard } from "@/components/portfolio/case-study-card";
-import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -293,27 +294,12 @@ export default function Home() {
                 const Icon = item.icon;
                 return (
                   <Reveal key={item.title} delay={index * 0.05}>
-                    <div className="group relative">
-                      {/* baseline + animated accent segment */}
-                      <span className="block h-px w-full bg-border" />
-                      <span className="absolute left-0 top-0 h-px w-10 bg-accent transition-all duration-500 ease-out group-hover:w-full" />
-
-                      <div className="flex items-center justify-between pt-6">
-                        <span className="font-serif text-3xl italic leading-none text-accent">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="grid size-10 place-items-center rounded-full border border-border text-faint transition-all duration-500 group-hover:rotate-6 group-hover:border-accent/40 group-hover:text-accent">
-                          <Icon aria-hidden="true" size={17} />
-                        </span>
-                      </div>
-
-                      <h3 className="t-h3 mt-7 transition-transform duration-300 group-hover:translate-x-1">
-                        {item.title}
-                      </h3>
-                      <p className="mt-3.5 text-sm leading-7 text-muted-foreground">
-                        {item.body}
-                      </p>
-                    </div>
+                    <PrincipleCard
+                      index={index}
+                      title={item.title}
+                      body={item.body}
+                      icon={<Icon aria-hidden="true" size={17} />}
+                    />
                   </Reveal>
                 );
               })}
@@ -401,65 +387,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* CONTACT                                                    */}
-        {/* ---------------------------------------------------------- */}
-        <section id="contact" className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
-          <Reveal>
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,4rem)] py-[clamp(2.5rem,2rem+4vw,5rem)]">
-              <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
-              {/* Ambient accent glow */}
-              <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-accent/10 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-32 -left-20 size-80 rounded-full bg-accent/[0.06] blur-3xl" />
-
-              <div className="relative">
-                <Badge tone="accent">
-                  <span className="mr-1.5 inline-block size-1.5 animate-pulse rounded-full bg-accent" />
-                  Available for product work
-                </Badge>
-                <h2 className="t-h1 mt-8 max-w-4xl">
-                  An engineer who can own the interface, the architecture, and
-                  the{" "}
-                  <span className="font-serif font-normal italic text-accent">
-                    shipping path.
-                  </span>
-                </h2>
-                <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center">
-                  <Magnetic>
-                    <LinkButton href={`mailto:${profile.email}`} size="lg">
-                      Start a conversation
-                      <ArrowUpRight aria-hidden="true" size={18} />
-                    </LinkButton>
-                  </Magnetic>
-                  <a
-                    href={`mailto:${profile.email}`}
-                    className="link-line font-mono text-sm text-muted-foreground"
-                  >
-                    {profile.email}
-                  </a>
-                </div>
-
-                {/* Quick facts row */}
-                <dl className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
-                  {[
-                    { k: "Response time", v: "Within 24h" },
-                    { k: "Engagements", v: "Remote, worldwide" },
-                    { k: "Focus", v: "Senior product builds" },
-                  ].map((fact) => (
-                    <div key={fact.k} className="bg-background-2 p-5">
-                      <dt className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-                        {fact.k}
-                      </dt>
-                      <dd className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">
-                        {fact.v}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
-          </Reveal>
-        </section>
+        <ContactSection />
       </main>
       <SiteFooter />
     </div>
