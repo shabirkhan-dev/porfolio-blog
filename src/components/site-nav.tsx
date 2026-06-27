@@ -22,7 +22,7 @@ export function DesktopNav({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label="Primary navigation"
-      className="hidden items-center gap-1 md:flex"
+      className="hidden items-center gap-2 md:flex"
     >
       {items.map((item) => {
         const active = isActive(pathname, item.href);
@@ -33,7 +33,7 @@ export function DesktopNav({ items }: { items: NavItem[] }) {
             href={item.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "group relative px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors duration-200",
+              "group relative inline-flex min-h-11 items-center px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors duration-200",
               active
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground",

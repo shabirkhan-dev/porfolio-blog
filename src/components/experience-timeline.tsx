@@ -41,7 +41,7 @@ export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
       </div>
 
       <ol className="flex flex-col">
-        {items.map((item, index) => {
+        {items.map((item) => {
           const isCurrent = /present/i.test(item.period);
           return (
             <li

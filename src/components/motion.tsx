@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type MotionProps, type Variants } from "framer-motion";
+import { m, type MotionProps, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type RevealProps = React.HTMLAttributes<HTMLDivElement> &
@@ -10,7 +10,7 @@ type RevealProps = React.HTMLAttributes<HTMLDivElement> &
 
 export function Reveal({ className, delay = 0, children, ...props }: RevealProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -19,7 +19,7 @@ export function Reveal({ className, delay = 0, children, ...props }: RevealProps
       {...props}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -51,7 +51,7 @@ export function WordReveal({
   as = "h1",
   delay = 0,
 }: WordRevealProps) {
-  const Tag = motion[as];
+  const Tag = m[as];
   const words = text.split(" ");
 
   return (
@@ -68,9 +68,9 @@ export function WordReveal({
           key={`${word}-${index}`}
           className="mr-[0.25em] inline-flex overflow-hidden pb-[0.12em] last:mr-0"
         >
-          <motion.span variants={wordVariants} className="inline-block">
+          <m.span variants={wordVariants} className="inline-block">
             {word}
-          </motion.span>
+          </m.span>
         </span>
       ))}
     </Tag>
@@ -83,13 +83,13 @@ export function GentleLift({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & MotionProps) {
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className={cn(className)}
       {...props}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

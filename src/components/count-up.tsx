@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, useInView } from "framer-motion";
+import { animate, useInView, useReducedMotion } from "framer-motion";
 
 type CountUpProps = {
   /** Raw value like "6+", "100k+", "35%", "50%". */
@@ -22,17 +22,12 @@ function parse(value: string) {
 export function CountUp({ value, className, duration = 1.6 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduceMotion = useReducedMotion() ?? false;
   const { prefix, target, suffix, decimals } = parse(value);
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setDisplay(target);
-      return;
-    }
+    if (!inView || reduceMotion) return;
 
     const controls = animate(0, target, {
       duration,
@@ -40,12 +35,14 @@ export function CountUp({ value, className, duration = 1.6 }: CountUpProps) {
       onUpdate: (latest) => setDisplay(latest),
     });
     return () => controls.stop();
-  }, [inView, target, duration]);
+  }, [inView, target, duration, reduceMotion]);
+
+  const shown = reduceMotion && inView ? target : display;
 
   return (
     <span ref={ref} className={className}>
       {prefix}
-      {display.toFixed(decimals)}
+      {shown.toFixed(decimals)}
       {suffix}
     </span>
   );

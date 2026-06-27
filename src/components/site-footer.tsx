@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { LogoDots } from "@/components/logo-dots";
+import { FooterLogoDots } from "@/components/footer-logo-dots";
 import { navItems, profile, socials } from "@/data/site";
 
 export function SiteFooter() {
@@ -71,7 +71,7 @@ export function SiteFooter() {
         className="select-none overflow-hidden px-[var(--gutter)] [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
         aria-hidden="true"
       >
-        <LogoDots
+        <FooterLogoDots
           text="shabir"
           className="h-[clamp(7rem,22vw,17rem)] w-full"
         />

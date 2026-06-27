@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useSyncExternalStore, type MouseEvent } from "react";
 import { ActionSwapIcon } from "@/components/motion/action-swap";
 import { cn } from "@/lib/utils";
 
@@ -77,18 +77,34 @@ function applyTheme(theme: Theme) {
 
 type ToggleOptions = { variant?: ThemeVariant; start?: RectStart };
 
+function subscribeToTheme(onStoreChange: () => void) {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
+
+function getIsDark() {
+  return !document.documentElement.classList.contains("light");
+}
+
 export function useThemeToggle({
   variant = "circle-blur",
   start = "bottom-up",
 }: ToggleOptions = {}) {
   const reduce = useReducedMotion() ?? false;
-  const [mounted, setMounted] = useState(false);
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    setMounted(true);
-    setIsDark(!document.documentElement.classList.contains("light"));
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const isDark = useSyncExternalStore(
+    subscribeToTheme,
+    getIsDark,
+    () => true,
+  );
 
   useEffect(() => {
     if (document.getElementById(VT_STYLE_ID)) return;
@@ -100,7 +116,6 @@ export function useThemeToggle({
 
   const toggle = (event?: MouseEvent) => {
     const next: Theme = isDark ? "light" : "dark";
-    setIsDark(next === "dark");
 
     const supportsVT =
       typeof document !== "undefined" && "startViewTransition" in document;
@@ -158,14 +173,19 @@ export function ThemeToggle({
   return (
     <button
       type="button"
-      aria-label={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={
+        !mounted
+          ? "Toggle theme"
+          : isDark
+            ? "Switch to light mode"
+            : "Switch to dark mode"
+      }
       onClick={toggle}
       className={cn(
-        "group relative grid size-10 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent",
+        "group relative grid min-h-11 min-w-11 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent",
         className,
       )}
     >
-      <span className="sr-only">Toggle theme</span>
       {mounted ? (
         <ActionSwapIcon value={isDark ? "dark" : "light"} animation="blur">
           {isDark ? (

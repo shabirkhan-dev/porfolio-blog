@@ -210,14 +210,14 @@ export function Testimonials({
           </div>
 
           {/* Dot indicators */}
-          <div className="mt-10 flex gap-2">
+          <div className="mt-10 flex gap-1">
             {items.map((item, i) => (
               <button
                 key={item.author}
                 type="button"
                 aria-label={`Go to testimonial ${i + 1}`}
                 onClick={() => setActive(i)}
-                className="group/dot py-2"
+                className="group/dot flex size-11 items-center justify-center"
               >
                 <span
                   className={`block h-1 rounded-full transition-all duration-300 ${

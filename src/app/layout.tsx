@@ -6,8 +6,8 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import "./globals.css";
-import { Cursor } from "@/components/cursor";
-import { ScrollProgress } from "@/components/scroll-progress";
+import { DeferredChrome } from "@/components/deferred-chrome";
+import { MotionProvider } from "@/components/motion-provider";
 import { ThemeScript } from "@/components/theme-toggle";
 
 const inter = Inter({
@@ -101,9 +101,10 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body suppressHydrationWarning>
-        <ScrollProgress />
-        <Cursor />
-        {children}
+        <MotionProvider>
+          <DeferredChrome />
+          {children}
+        </MotionProvider>
         <div className="grain" aria-hidden="true" />
       </body>
     </html>

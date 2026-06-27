@@ -2,7 +2,9 @@ import { Quote } from "lucide-react";
 import { slugifyHeading, type ArticleBlock } from "@/data/site";
 
 export function ArticleBody({ blocks }: { blocks: ArticleBlock[] }) {
-  let firstParagraphSeen = false;
+  const firstParagraphIndex = blocks.findIndex(
+    (block) => block.type === "paragraph",
+  );
 
   return (
     <div className="space-y-7">
@@ -11,8 +13,7 @@ export function ArticleBody({ blocks }: { blocks: ArticleBlock[] }) {
 
         switch (block.type) {
           case "paragraph": {
-            const isFirst = !firstParagraphSeen;
-            firstParagraphSeen = true;
+            const isFirst = index === firstParagraphIndex;
 
             if (block.lead) {
               return (

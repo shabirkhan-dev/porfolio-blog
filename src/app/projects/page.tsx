@@ -4,7 +4,6 @@ import { CaseStudyCard } from "@/components/portfolio/case-study-card";
 import { Reveal, WordReveal } from "@/components/motion";
 import { Magnetic } from "@/components/magnetic";
 import { Marquee } from "@/components/marquee";
-import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -101,7 +100,8 @@ export default function ProjectsPage() {
 
         {/* Case studies */}
         <section className="shell section-y">
-          <div className="flex flex-col">
+          <h2 className="sr-only">Case studies</h2>
+          <div className="flex flex-col gap-8 lg:gap-10">
             {projects.map((project, index) => (
               <Reveal key={project.slug} delay={index * 0.04}>
                 <CaseStudyCard project={project} index={index + 1} />

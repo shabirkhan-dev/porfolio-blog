@@ -59,22 +59,22 @@ export function ContactSection() {
             </Magnetic>
           </div>
 
-          <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
+          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
             {[
               { k: "Response", v: "Within 24h" },
               { k: "Location", v: profile.location },
               { k: "Engagements", v: "Remote, worldwide" },
             ].map((fact) => (
               <div key={fact.k}>
-                <dt className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
                   {fact.k}
-                </dt>
-                <dd className="mt-1 text-sm font-medium text-foreground">
+                </p>
+                <p className="mt-1 text-sm font-medium text-foreground">
                   {fact.v}
-                </dd>
+                </p>
               </div>
             ))}
-          </dl>
+          </div>
         </div>
 
         {/* Right — contact channels */}

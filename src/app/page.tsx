@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
-import { Reveal, WordReveal } from "@/components/motion";
-import { Magnetic } from "@/components/magnetic";
+import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
-import { HeroCanvas } from "@/components/hero-canvas";
-import { CountUp } from "@/components/count-up";
-import { Toolkit } from "@/components/toolkit";
-import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ScalesFrame } from "@/components/scales";
-import { Testimonials } from "@/components/testimonials";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
+import {
+  HomeCaseStudyCard,
+  HomeExperienceTimeline,
+  HomeTestimonials,
+  HomeToolkit,
+} from "@/components/home-deferred";
 import { SectionHeading } from "@/components/section";
-import { CaseStudyCard } from "@/components/portfolio/case-study-card";
 import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -39,15 +38,15 @@ export default function Home() {
         {/* HERO — interactive vector field                            */}
         {/* ---------------------------------------------------------- */}
         <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-          {/* Live, cursor-reactive canvas */}
-          <HeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
+          {/* Static field texture — canvas loads only on interaction to protect LCP */}
+          <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgb(var(--accent-rgb)/0.12),transparent_55%)]" />
           {/* Vignette so type stays legible over the field */}
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-background" />
 
           {/* Top meta row */}
           <div className="shell flex items-center justify-between pt-[clamp(2rem,1rem+4vw,4rem)]">
-            <Reveal className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
                 <span className="relative inline-flex size-2 rounded-full bg-accent" />
@@ -55,51 +54,36 @@ export default function Home() {
               <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                 Available — {profile.location}
               </span>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:inline">
-                Senior Full-Stack Engineer · Est. {new Date().getFullYear() - 6}
-              </span>
-            </Reveal>
+            </div>
+            <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:inline">
+              Senior Full-Stack Engineer · Est. {new Date().getFullYear() - 6}
+            </span>
           </div>
 
-          {/* Centerpiece headline */}
+          {/* Centerpiece headline — static for LCP; motion lives below the fold */}
           <div className="shell relative flex flex-1 flex-col justify-center py-16">
-            <Reveal className="mb-7 flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">
+            <p className="mb-7 flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">
               <span className="h-px w-8 bg-accent" />
               Portfolio &amp; Journal — {profile.name}
-            </Reveal>
+            </p>
 
             <h1 className="t-display max-w-[16ch]">
-              <WordReveal as="span" text="I engineer" className="block" />
-              <span className="block">
-                <WordReveal
-                  as="span"
-                  text="products that feel"
-                  className="inline-flex"
-                />
-              </span>
-              <span className="block overflow-hidden">
-                <span className="font-serif font-normal italic text-accent">
-                  inevitable.
-                </span>
+              <span className="block">I engineer</span>
+              <span className="block">products that feel</span>
+              <span className="block font-serif font-normal italic text-accent">
+                inevitable.
               </span>
             </h1>
 
-            <Reveal
-              delay={0.2}
-              className="mt-10 flex max-w-xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between"
-            >
+            <div className="mt-10 flex max-w-xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
               <p className="t-lead max-w-md">{profile.intro}</p>
-            </Reveal>
+            </div>
 
-            <Reveal delay={0.3} className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Magnetic>
-                <LinkButton href="#work" size="lg">
-                  Selected work
-                  <ArrowDownRight aria-hidden="true" size={18} />
-                </LinkButton>
-              </Magnetic>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <LinkButton href="#work" size="lg">
+                Selected work
+                <ArrowDownRight aria-hidden="true" size={18} />
+              </LinkButton>
               <LinkButton href="/blog" variant="secondary" size="lg">
                 Read the writing
               </LinkButton>
@@ -107,29 +91,27 @@ export default function Home() {
                 <span className="size-1.5 rounded-full bg-accent" />
                 Move your cursor
               </span>
-            </Reveal>
+            </div>
           </div>
 
           {/* Bottom stat strip */}
           <div className="shell relative pb-8">
-            <Reveal delay={0.15}>
-              <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
-                {proof.map((item) => (
-                  <div
-                    key={item.label}
-                    className="group/stat relative overflow-hidden bg-background/70 p-5 backdrop-blur-sm transition-colors duration-300 hover:bg-card"
-                  >
-                    <dt className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.6rem)] font-semibold leading-none tracking-tight text-foreground">
-                      <CountUp value={item.value} />
-                    </dt>
-                    <dd className="mt-2.5 text-xs leading-5 text-muted-foreground">
-                      {item.label}
-                    </dd>
-                    <span className="mt-4 block h-px w-6 bg-accent transition-all duration-500 group-hover/stat:w-full" />
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
+            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
+              {proof.map((item) => (
+                <div
+                  key={item.label}
+                  className="group/stat relative overflow-hidden bg-background/70 p-5 backdrop-blur-sm transition-colors duration-300 hover:bg-card"
+                >
+                  <p className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.6rem)] font-semibold leading-none tracking-tight text-foreground">
+                    {item.value}
+                  </p>
+                  <p className="mt-2.5 text-xs leading-5 text-muted-foreground">
+                    {item.label}
+                  </p>
+                  <span className="mt-4 block h-px w-6 bg-accent transition-all duration-500 group-hover/stat:w-full" />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -184,24 +166,24 @@ export default function Home() {
                 {profile.intro}
               </p>
 
-              <dl className="mt-9 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border">
+              <div className="mt-9 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border">
                 <div className="bg-background p-5">
-                  <dt className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
+                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
                     Based in
-                  </dt>
-                  <dd className="mt-1.5 text-sm text-foreground">
+                  </p>
+                  <p className="mt-1.5 text-sm text-foreground">
                     {profile.location}
-                  </dd>
+                  </p>
                 </div>
                 <div className="bg-background p-5">
-                  <dt className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
+                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
                     Status
-                  </dt>
-                  <dd className="mt-1.5 text-sm text-foreground">
+                  </p>
+                  <p className="mt-1.5 text-sm text-foreground">
                     Open to senior roles
-                  </dd>
+                  </p>
                 </div>
-              </dl>
+              </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
                 <a
@@ -245,10 +227,10 @@ export default function Home() {
             description="SaaS platforms, security tooling, and multi-tenant systems — built with product taste and technical depth."
           />
 
-          <div className="mt-16 flex flex-col">
+          <div className="mt-16 flex flex-col gap-8 lg:gap-10">
             {projects.map((project, index) => (
               <Reveal key={project.slug} delay={index * 0.04}>
-                <CaseStudyCard project={project} index={index + 1} />
+                <HomeCaseStudyCard project={project} index={index + 1} />
               </Reveal>
             ))}
           </div>
@@ -319,7 +301,7 @@ export default function Home() {
           />
 
           <Reveal>
-            <Toolkit groups={stackGroups} />
+            <HomeToolkit groups={stackGroups} />
           </Reveal>
         </section>
 
@@ -334,7 +316,7 @@ export default function Home() {
               title="Senior ownership across product and system."
             />
 
-            <ExperienceTimeline items={experience} />
+            <HomeExperienceTimeline items={experience} />
           </div>
         </section>
 
@@ -383,7 +365,7 @@ export default function Home() {
             />
           </div>
           <div className="mt-14">
-            <Testimonials items={testimonials} />
+            <HomeTestimonials items={testimonials} />
           </div>
         </section>
 

@@ -55,8 +55,7 @@ export function SiteHeader() {
         >
           <Link
             href="/"
-            className="group flex items-center gap-3"
-            aria-label="Shabir Khan home"
+            className="group inline-flex min-h-11 items-center gap-3 py-1"
           >
             <span
               className={cn(
@@ -81,12 +80,7 @@ export function SiteHeader() {
           <DesktopNav items={navItems} />
 
           <div className="flex items-center gap-2">
-            <ThemeToggle
-              className={cn(
-                "hidden transition-all duration-500 sm:grid",
-                scrolled ? "size-8" : "size-9",
-              )}
-            />
+            <ThemeToggle className="hidden sm:grid" />
             <Magnetic className="hidden sm:block">
               <LinkButton
                 href={`mailto:${profile.email}`}
