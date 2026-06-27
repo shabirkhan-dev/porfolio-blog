@@ -7,6 +7,7 @@ import { Marquee } from "@/components/marquee";
 import { HeroCanvas } from "@/components/hero-canvas";
 import { CountUp } from "@/components/count-up";
 import { SpotlightCard } from "@/components/spotlight-card";
+import { Toolkit } from "@/components/toolkit";
 import { SectionHeading } from "@/components/section";
 import { CaseStudyCard } from "@/components/portfolio/case-study-card";
 import { Badge } from "@/components/ui/badge";
@@ -236,43 +237,9 @@ export default function Home() {
             description="Organized around the kinds of products I ship — from interface to infrastructure."
           />
 
-          <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
-            {stackGroups.map((group, index) => {
-              const Icon = group.icon;
-              return (
-                <Reveal key={group.title} delay={index * 0.03}>
-                  <SpotlightCard className="h-full bg-background p-7 transition-colors duration-300 hover:bg-card">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        <div className="grid size-11 shrink-0 place-items-center rounded-lg border border-border text-accent transition-colors group-hover/spot:border-accent/40">
-                          <Icon aria-hidden="true" size={19} />
-                        </div>
-                        <div>
-                          <h3 className="t-h3">{group.title}</h3>
-                          <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-                            {group.description}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="font-mono text-[0.62rem] text-faint opacity-0 transition-opacity duration-300 group-hover/spot:opacity-100">
-                        0{index + 1}
-                      </span>
-                    </div>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {group.items.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full border border-border px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.08em] text-muted-foreground transition-colors group-hover/spot:border-border-strong"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </SpotlightCard>
-                </Reveal>
-              );
-            })}
-          </div>
+          <Reveal>
+            <Toolkit groups={stackGroups} />
+          </Reveal>
         </section>
 
         {/* ---------------------------------------------------------- */}

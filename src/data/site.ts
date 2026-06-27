@@ -1,22 +1,14 @@
-import type { LucideIcon } from "lucide-react";
 import {
   AppWindow,
-  Bot,
   Boxes,
   ChartNoAxesCombined,
-  Cloud,
-  Code2,
-  Database,
   Github,
   Layers3,
   Linkedin,
   Mail,
   Network,
-  PenLine,
   Phone,
-  Smartphone,
   Sparkles,
-  TerminalSquare,
 } from "lucide-react";
 
 export type BlogCategory =
@@ -241,10 +233,19 @@ export const philosophy = [
   },
 ];
 
+export type StackIconName =
+  | "frontend"
+  | "backend"
+  | "mobile"
+  | "database"
+  | "devops"
+  | "ai"
+  | "design";
+
 type StackGroup = {
   title: string;
   description: string;
-  icon: LucideIcon;
+  iconName: StackIconName;
   items: string[];
 };
 
@@ -252,43 +253,43 @@ export const stackGroups: StackGroup[] = [
   {
     title: "Frontend",
     description: "Interfaces that feel fast, intentional, and production-ready.",
-    icon: Code2,
+    iconName: "frontend",
     items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui"],
   },
   {
     title: "Backend",
     description: "APIs and service boundaries built for long-term ownership.",
-    icon: TerminalSquare,
+    iconName: "backend",
     items: ["Node.js", "Express", "Hono", "NestJS", "Bun"],
   },
   {
     title: "Mobile",
     description: "Cross-platform product surfaces with native-feeling workflows.",
-    icon: Smartphone,
+    iconName: "mobile",
     items: ["React Native", "Expo", "Mobile UX", "Offline states"],
   },
   {
     title: "Databases",
     description: "Data models, caching, and persistence with practical constraints.",
-    icon: Database,
+    iconName: "database",
     items: ["PostgreSQL", "MongoDB", "Redis", "ChromaDB"],
   },
   {
     title: "DevOps",
     description: "Repeatable delivery with security and reliability built in.",
-    icon: Cloud,
+    iconName: "devops",
     items: ["Docker", "AWS", "GitHub Actions", "CodeQL", "Linux"],
   },
   {
     title: "AI and automation",
     description: "Useful AI features shaped by product context, not novelty.",
-    icon: Bot,
+    iconName: "ai",
     items: ["LLM APIs", "RAG", "Embeddings", "Structured outputs", "Ollama"],
   },
   {
     title: "UI and product design",
     description: "Clean flows, strong hierarchy, and interfaces that earn trust.",
-    icon: PenLine,
+    iconName: "design",
     items: ["Design systems", "Dashboards", "Admin UX", "Interaction states"],
   },
 ];
