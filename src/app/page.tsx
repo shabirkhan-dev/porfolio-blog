@@ -293,17 +293,28 @@ export default function Home() {
         {/* ---------------------------------------------------------- */}
         {/* STACK                                                      */}
         {/* ---------------------------------------------------------- */}
-        <section className="shell section-y">
-          <SectionHeading
-            index="02"
-            eyebrow="Toolkit"
-            title="A serious stack for building durable products."
-            description="Organized around the kinds of products I ship — from interface to infrastructure."
-          />
+        <section className="relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(90%_70%_at_50%_50%,black,transparent_85%)]" />
+          <div className="shell section-y relative">
+            <SectionHeading
+              index="02"
+              eyebrow="Toolkit"
+              title={
+                <>
+                  A serious stack for{" "}
+                  <span className="font-serif font-normal italic text-accent">
+                    durable
+                  </span>{" "}
+                  products.
+                </>
+              }
+              description="Organized around the kinds of products I ship — from interface to infrastructure."
+            />
 
-          <Reveal>
-            <HomeToolkit groups={stackGroups} />
-          </Reveal>
+            <Reveal>
+              <HomeToolkit groups={stackGroups} />
+            </Reveal>
+          </div>
         </section>
 
         {/* ---------------------------------------------------------- */}

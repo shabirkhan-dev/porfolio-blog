@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   Bot,
@@ -30,49 +30,210 @@ const iconRegistry: Record<StackIconName, LucideIcon> = {
 type StackGroup = {
   title: string;
   description: string;
+  focus: string;
   iconName: StackIconName;
   items: string[];
 };
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
+function CategoryArt({ iconName }: { iconName: StackIconName }) {
+  if (iconName === "frontend") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-6 top-6 size-32 text-accent/20"
+        viewBox="0 0 120 120"
+        fill="none"
+      >
+        <rect x="8" y="8" width="44" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
+        <rect x="68" y="8" width="44" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
+        <rect x="8" y="68" width="104" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    );
+  }
+  if (iconName === "backend") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-6 top-6 size-32 text-accent/20"
+        viewBox="0 0 120 120"
+        fill="none"
+      >
+        <circle cx="60" cy="24" r="10" stroke="currentColor" strokeWidth="1" />
+        <circle cx="24" cy="96" r="10" stroke="currentColor" strokeWidth="1" />
+        <circle cx="96" cy="96" r="10" stroke="currentColor" strokeWidth="1" />
+        <path d="M60 34 L24 86 M60 34 L96 86" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    );
+  }
+  if (iconName === "mobile") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-8 top-8 size-28 text-accent/20"
+        viewBox="0 0 80 120"
+        fill="none"
+      >
+        <rect x="16" y="8" width="48" height="104" rx="10" stroke="currentColor" strokeWidth="1" />
+        <rect x="28" y="20" width="24" height="4" rx="2" fill="currentColor" />
+        <circle cx="40" cy="100" r="4" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    );
+  }
+  if (iconName === "database") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-6 top-6 size-32 text-accent/20"
+        viewBox="0 0 120 120"
+        fill="none"
+      >
+        <ellipse cx="60" cy="28" rx="40" ry="14" stroke="currentColor" strokeWidth="1" />
+        <path d="M20 28 V72 C20 84 36 92 60 92 C84 92 100 84 100 72 V28" stroke="currentColor" strokeWidth="1" />
+        <path d="M20 50 C20 62 36 70 60 70 C84 70 100 62 100 50" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    );
+  }
+  if (iconName === "devops") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-6 top-6 size-32 text-accent/20"
+        viewBox="0 0 120 120"
+        fill="none"
+      >
+        <path d="M20 60 H100 M60 20 V100" stroke="currentColor" strokeWidth="1" />
+        <circle cx="60" cy="60" r="18" stroke="currentColor" strokeWidth="1" />
+        <circle cx="60" cy="60" r="6" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (iconName === "ai") {
+    return (
+      <svg
+        aria-hidden
+        className="absolute right-6 top-6 size-32 text-accent/20"
+        viewBox="0 0 120 120"
+        fill="none"
+      >
+        <circle cx="60" cy="60" r="8" stroke="currentColor" strokeWidth="1" />
+        {[0, 60, 120, 180, 240, 300].map((deg) => (
+          <g key={deg} transform={`rotate(${deg} 60 60)`}>
+            <circle cx="60" cy="20" r="5" stroke="currentColor" strokeWidth="1" />
+            <path d="M60 28 L60 52" stroke="currentColor" strokeWidth="1" />
+          </g>
+        ))}
+      </svg>
+    );
+  }
+  return (
+    <svg
+      aria-hidden
+      className="absolute right-6 top-6 size-32 text-accent/20"
+      viewBox="0 0 120 120"
+      fill="none"
+    >
+      <path d="M16 88 L44 32 L76 64 L104 24" stroke="currentColor" strokeWidth="1" />
+      <circle cx="44" cy="32" r="5" stroke="currentColor" strokeWidth="1" />
+      <circle cx="76" cy="64" r="5" stroke="currentColor" strokeWidth="1" />
+      <circle cx="104" cy="24" r="5" stroke="currentColor" strokeWidth="1" />
+    </svg>
+  );
+}
+
 export function Toolkit({ groups }: { groups: StackGroup[] }) {
   const [active, setActive] = useState(0);
   const [openMobile, setOpenMobile] = useState<number | null>(0);
+  const listRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
   const current = groups[active];
   const ActiveIcon = iconRegistry[current.iconName];
+  const totalTools = groups.reduce((sum, g) => sum + g.items.length, 0);
+  const progress = groups.length > 1 ? active / (groups.length - 1) : 0;
+
+  const select = useCallback((index: number) => {
+    setActive(index);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!listRef.current?.contains(document.activeElement)) return;
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setActive((i) => Math.min(i + 1, groups.length - 1));
+      }
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActive((i) => Math.max(i - 1, 0));
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        setActive(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        setActive(groups.length - 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [groups.length]);
 
   return (
     <div className="mt-16">
-      {/* ---------------- Desktop: list + detail panel ---------------- */}
-      <div className="hidden overflow-hidden rounded-2xl border border-border lg:grid lg:grid-cols-[1.05fr_0.95fr]">
-        {/* Left: interactive index */}
-        <div className="border-r border-border">
+      {/* Meta strip */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
+        <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+          {groups.length} capability areas · {totalTools} tools in rotation
+        </p>
+        <p className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:block">
+          Hover or use ↑ ↓ to explore
+        </p>
+      </div>
+
+      {/* Desktop console */}
+      <div
+        ref={listRef}
+        className="hidden overflow-hidden rounded-2xl border border-border bg-background lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
+      >
+        {/* Left index */}
+        <div className="relative border-r border-border">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-6 left-[1.65rem] top-6 w-px bg-border"
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute left-[1.65rem] top-6 w-px origin-top bg-accent"
+            animate={{ scaleY: progress }}
+            transition={{ duration: reduceMotion ? 0 : 0.45, ease }}
+            style={{ height: "calc(100% - 3rem)" }}
+          />
+
           {groups.map((group, index) => {
             const isActive = index === active;
             return (
               <button
                 key={group.title}
                 type="button"
-                onMouseEnter={() => setActive(index)}
-                onFocus={() => setActive(index)}
-                onClick={() => setActive(index)}
+                onMouseEnter={() => select(index)}
+                onFocus={() => select(index)}
+                onClick={() => select(index)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group/row relative flex w-full items-center gap-5 px-7 py-5 text-left transition-colors duration-300 active:scale-[0.99]",
+                  "group/row relative flex w-full items-center gap-5 px-7 py-5 text-left transition-colors duration-300",
                   index !== 0 && "border-t border-border",
-                  isActive ? "bg-background-2" : "hover:bg-background-2/60",
+                  isActive ? "bg-background-2" : "hover:bg-background-2/50",
                 )}
               >
-                {/* active accent rail */}
                 <span
                   className={cn(
-                    "absolute left-0 top-0 h-full w-[2px] origin-top bg-accent transition-transform duration-300",
-                    isActive ? "scale-y-100" : "scale-y-0",
-                  )}
-                />
-                <span
-                  className={cn(
-                    "font-mono text-xs tabular-nums transition-colors duration-300",
-                    isActive ? "text-accent" : "text-faint",
+                    "relative z-10 grid size-7 place-items-center rounded-full border font-mono text-[0.62rem] tabular-nums transition-all duration-300",
+                    isActive
+                      ? "border-accent bg-accent text-accent-foreground"
+                      : "border-border bg-background text-faint group-hover/row:border-border-strong",
                   )}
                 >
                   {String(index + 1).padStart(2, "0")}
@@ -81,20 +242,20 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                   className={cn(
                     "font-display text-2xl font-semibold tracking-tight transition-all duration-300",
                     isActive
-                      ? "translate-x-1 text-foreground"
-                      : "text-muted-foreground group-hover/row:translate-x-1 group-hover/row:text-foreground",
+                      ? "translate-x-0.5 text-foreground"
+                      : "text-muted-foreground group-hover/row:text-foreground",
                   )}
                 >
                   {group.title}
                 </span>
                 <ArrowUpRight
-                  aria-hidden="true"
-                  size={18}
+                  aria-hidden
+                  size={17}
                   className={cn(
                     "ml-auto transition-all duration-300",
                     isActive
                       ? "translate-x-0 text-accent opacity-100"
-                      : "-translate-x-2 text-faint opacity-0 group-hover/row:translate-x-0 group-hover/row:opacity-100",
+                      : "-translate-x-1 text-faint opacity-0 group-hover/row:translate-x-0 group-hover/row:opacity-60",
                   )}
                 />
               </button>
@@ -102,66 +263,82 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
           })}
         </div>
 
-        {/* Right: animated detail panel */}
-        <div className="relative min-h-[24rem] overflow-hidden bg-background-2/40">
-          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-50 [mask-image:radial-gradient(120%_100%_at_100%_0%,black,transparent_75%)]" />
-          {/* giant ghost numeral */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-2 -top-10 select-none font-display text-[12rem] font-semibold leading-none text-foreground/[0.035]"
-          >
-            {String(active + 1).padStart(2, "0")}
-          </span>
+        {/* Detail panel */}
+        <div className="relative min-h-[28rem] overflow-hidden bg-background-2/50">
+          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(120%_100%_at_100%_0%,black,transparent_80%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_100%_0%,rgb(var(--accent-rgb)/0.12),transparent_65%)]" />
 
           <AnimatePresence mode="wait">
             <motion.div
               key={current.title}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative flex h-full flex-col p-9"
+              initial={reduceMotion ? false : { opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={reduceMotion ? undefined : { opacity: 0, x: -16 }}
+              transition={{ duration: 0.38, ease }}
+              className="relative flex h-full flex-col p-8 sm:p-9"
             >
-              <div className="flex items-center gap-4">
-                <span className="grid size-12 place-items-center rounded-xl border border-accent/30 bg-accent/[0.08] text-accent">
-                  <ActiveIcon aria-hidden="true" size={22} />
-                </span>
-                <div className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
-                  Capability
-                  <br />
-                  <span className="text-muted-foreground">
-                    {String(active + 1).padStart(2, "0")} / {String(groups.length).padStart(2, "0")}
+              <CategoryArt iconName={current.iconName} />
+
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -left-2 bottom-4 select-none font-display text-[9rem] font-semibold leading-none text-foreground/[0.03]"
+              >
+                {String(active + 1).padStart(2, "0")}
+              </span>
+
+              <div className="flex items-start justify-between gap-4">
+                <div className="relative">
+                  <span className="absolute -inset-2 animate-[spin_14s_linear_infinite] rounded-2xl border border-dashed border-accent/30" />
+                  <span className="relative grid size-14 place-items-center rounded-xl border border-accent/30 bg-accent/[0.08] text-accent">
+                    <ActiveIcon aria-hidden size={24} />
                   </span>
                 </div>
+                <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
+                  {String(active + 1).padStart(2, "0")} /{" "}
+                  {String(groups.length).padStart(2, "0")}
+                </span>
               </div>
 
-              <h3 className="mt-7 font-display text-[clamp(2rem,1.5rem+1.5vw,2.75rem)] font-semibold tracking-tight">
+              <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-accent">
+                Capability focus
+              </p>
+              <h3 className="mt-3 font-display text-[clamp(2rem,1.4rem+1.8vw,2.85rem)] font-semibold leading-[1.02] tracking-tight">
                 {current.title}
               </h3>
-              <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+              <p className="mt-4 max-w-md font-serif text-lg italic leading-relaxed text-muted-foreground">
+                {current.focus}
+              </p>
+              <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
                 {current.description}
               </p>
 
-              <div className="mt-auto pt-8">
-                <p className="mb-4 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
-                  {current.items.length} tools in rotation
-                </p>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-auto pt-10">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
+                    Tools in rotation
+                  </p>
+                  <span className="font-mono text-[0.62rem] text-muted-foreground">
+                    {current.items.length} selected
+                  </span>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
                   {current.items.map((item, i) => (
-                    <motion.span
+                    <motion.div
                       key={item}
-                      initial={{ opacity: 0, y: 8 }}
+                      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
-                        duration: 0.3,
-                        delay: 0.1 + i * 0.05,
-                        ease: [0.22, 1, 0.36, 1],
+                        duration: 0.32,
+                        delay: 0.08 + i * 0.05,
+                        ease,
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/[0.08] px-3.5 py-1.5 font-mono text-[0.72rem] text-accent transition-colors duration-300 hover:border-accent/50 hover:bg-accent/[0.14]"
+                      className="group/pill flex items-center justify-between rounded-xl border border-border bg-background/60 px-4 py-3 transition-colors duration-300 hover:border-accent/35 hover:bg-card"
                     >
-                      <span className="size-1 rounded-full bg-accent" />
-                      {item}
-                    </motion.span>
+                      <span className="font-mono text-[0.72rem] text-foreground">
+                        {item}
+                      </span>
+                      <span className="size-1.5 rounded-full bg-accent opacity-40 transition-opacity group-hover/pill:opacity-100" />
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -170,7 +347,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
         </div>
       </div>
 
-      {/* ---------------- Mobile: accordion ---------------- */}
+      {/* Mobile accordion */}
       <div className="overflow-hidden rounded-2xl border border-border lg:hidden">
         {groups.map((group, index) => {
           const Icon = iconRegistry[group.iconName];
@@ -184,24 +361,26 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                 type="button"
                 onClick={() => setOpenMobile(isOpen ? null : index)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center gap-4 px-5 py-5 text-left transition-transform active:scale-[0.99]"
+                className="flex w-full items-center gap-4 px-5 py-5 text-left"
               >
                 <span
                   className={cn(
-                    "font-mono text-xs tabular-nums",
-                    isOpen ? "text-accent" : "text-faint",
+                    "grid size-7 place-items-center rounded-full border font-mono text-[0.62rem]",
+                    isOpen
+                      ? "border-accent bg-accent text-accent-foreground"
+                      : "border-border text-faint",
                   )}
                 >
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-border text-accent">
-                  <Icon aria-hidden="true" size={17} />
+                  <Icon aria-hidden size={17} />
                 </span>
                 <span className="font-display text-xl font-semibold tracking-tight">
                   {group.title}
                 </span>
                 <Plus
-                  aria-hidden="true"
+                  aria-hidden
                   size={18}
                   className={cn(
                     "ml-auto text-muted-foreground transition-transform duration-300",
@@ -216,21 +395,24 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.32, ease }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-6">
+                    <div className="space-y-4 px-5 pb-6">
+                      <p className="font-serif text-base italic leading-relaxed text-muted-foreground">
+                        {group.focus}
+                      </p>
                       <p className="text-sm leading-7 text-muted-foreground">
                         {group.description}
                       </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
+                      <div className="grid gap-2">
                         {group.items.map((item) => (
                           <span
                             key={item}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.7rem] text-accent"
+                            className="flex items-center justify-between rounded-xl border border-border bg-background-2 px-4 py-3 font-mono text-[0.72rem]"
                           >
-                            <span className="size-1 rounded-full bg-accent" />
                             {item}
+                            <span className="size-1.5 rounded-full bg-accent" />
                           </span>
                         ))}
                       </div>

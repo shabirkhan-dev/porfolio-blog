@@ -297,6 +297,7 @@ export type StackIconName =
 type StackGroup = {
   title: string;
   description: string;
+  focus: string;
   iconName: StackIconName;
   items: string[];
 };
@@ -305,42 +306,49 @@ export const stackGroups: StackGroup[] = [
   {
     title: "Frontend",
     description: "Interfaces that feel fast, intentional, and production-ready.",
+    focus: "Ship surfaces that stay fast, honest, and calm under real traffic.",
     iconName: "frontend",
     items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui"],
   },
   {
     title: "Backend",
     description: "APIs and service boundaries built for long-term ownership.",
+    focus: "Design contracts and services teams can trust for years.",
     iconName: "backend",
     items: ["Node.js", "Express", "Hono", "NestJS", "Bun"],
   },
   {
     title: "Mobile",
     description: "Cross-platform product surfaces with native-feeling workflows.",
+    focus: "Build mobile flows that feel native, not like a wrapped website.",
     iconName: "mobile",
     items: ["React Native", "Expo", "Mobile UX", "Offline states"],
   },
   {
     title: "Databases",
     description: "Data models, caching, and persistence with practical constraints.",
+    focus: "Model data for the product you have — and the one you're growing into.",
     iconName: "database",
     items: ["PostgreSQL", "MongoDB", "Redis", "ChromaDB"],
   },
   {
     title: "DevOps",
     description: "Repeatable delivery with security and reliability built in.",
+    focus: "Make shipping boring, observable, and safe by default.",
     iconName: "devops",
     items: ["Docker", "AWS", "GitHub Actions", "CodeQL", "Linux"],
   },
   {
     title: "AI and automation",
     description: "Useful AI features shaped by product context, not novelty.",
+    focus: "Embed intelligence where it removes friction — not where it performs.",
     iconName: "ai",
     items: ["LLM APIs", "RAG", "Embeddings", "Structured outputs", "Ollama"],
   },
   {
     title: "UI and product design",
     description: "Clean flows, strong hierarchy, and interfaces that earn trust.",
+    focus: "Turn complexity into hierarchy people can move through without fear.",
     iconName: "design",
     items: ["Design systems", "Dashboards", "Admin UX", "Interaction states"],
   },
