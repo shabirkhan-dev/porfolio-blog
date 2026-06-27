@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { LogoDots } from "@/components/logo-dots";
 import { navItems, profile, socials } from "@/data/site";
 
 export function SiteFooter() {
@@ -66,10 +67,14 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="select-none px-[var(--gutter)]" aria-hidden="true">
-        <p className="text-stroke whitespace-nowrap font-display text-[19vw] font-semibold leading-[0.78] tracking-tighter">
-          SHABIR KHAN
-        </p>
+      <div
+        className="select-none overflow-hidden px-[var(--gutter)] [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
+        aria-hidden="true"
+      >
+        <LogoDots
+          text="shabir"
+          className="h-[clamp(7rem,22vw,17rem)] w-full"
+        />
       </div>
 
       <div className="shell flex flex-col gap-2 border-t border-border py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">

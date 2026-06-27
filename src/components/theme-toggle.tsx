@@ -1,62 +1,181 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import { useEffect, useState, type MouseEvent } from "react";
+import { ActionSwapIcon } from "@/components/motion/action-swap";
+import { cn } from "@/lib/utils";
+
+export type ThemeVariant = "rectangle" | "circle" | "circle-blur";
+
+export type RectStart =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right"
+  | "center"
+  | "bottom-up";
 
 type Theme = "light" | "dark";
 
+const VT_STYLE_ID = "beui-theme-toggle-vt";
+
+// Duration/easing is component-specific: the View Transition API uses CSS, not
+// motion springs. Timings mirror native OS mode-switch feel.
+const VT_CSS = `
+html[data-beui-vt="rect"]::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html[data-beui-vt="rect"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: beui-rect-reveal 400ms ease-out;
+}
+html[data-beui-vt="circle"]::view-transition-old(root),
+html[data-beui-vt="circle-blur"]::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html[data-beui-vt="circle"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: beui-circle-reveal 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+html[data-beui-vt="circle-blur"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: beui-circle-blur-reveal 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes beui-rect-reveal {
+  from { clip-path: var(--beui-vt-from, inset(100% 0 0 0)); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes beui-circle-reveal {
+  from { clip-path: circle(0% at var(--beui-vt-origin, 50% 100%)); }
+  to   { clip-path: circle(150% at var(--beui-vt-origin, 50% 100%)); }
+}
+@keyframes beui-circle-blur-reveal {
+  from { clip-path: circle(0% at var(--beui-vt-origin, 50% 100%)); filter: blur(8px); }
+  to   { clip-path: circle(150% at var(--beui-vt-origin, 50% 100%)); filter: blur(0px); }
+}
+`;
+
+const RECT_FROM: Record<RectStart, string> = {
+  "top-left": "inset(0 100% 100% 0)",
+  "top-right": "inset(0 0 100% 100%)",
+  "bottom-left": "inset(100% 100% 0 0)",
+  "bottom-right": "inset(100% 0 0 100%)",
+  center: "inset(50% 50% 50% 50%)",
+  "bottom-up": "inset(100% 0 0 0)",
+};
+
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
-  root.classList.add("theme-transition");
   root.classList.toggle("light", theme === "light");
-  window.localStorage.setItem("theme", theme);
-  window.setTimeout(() => root.classList.remove("theme-transition"), 500);
+  try {
+    window.localStorage.setItem("theme", theme);
+  } catch {}
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+type ToggleOptions = { variant?: ThemeVariant; start?: RectStart };
+
+export function useThemeToggle({
+  variant = "circle-blur",
+  start = "bottom-up",
+}: ToggleOptions = {}) {
+  const reduce = useReducedMotion() ?? false;
   const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     setMounted(true);
-    setTheme(document.documentElement.classList.contains("light") ? "light" : "dark");
+    setIsDark(!document.documentElement.classList.contains("light"));
   }, []);
 
-  const toggle = () => {
-    const next: Theme = theme === "light" ? "dark" : "light";
-    setTheme(next);
-    applyTheme(next);
+  useEffect(() => {
+    if (document.getElementById(VT_STYLE_ID)) return;
+    const el = document.createElement("style");
+    el.id = VT_STYLE_ID;
+    el.textContent = VT_CSS;
+    document.head.appendChild(el);
+  }, []);
+
+  const toggle = (event?: MouseEvent) => {
+    const next: Theme = isDark ? "light" : "dark";
+    setIsDark(next === "dark");
+
+    const supportsVT =
+      typeof document !== "undefined" && "startViewTransition" in document;
+
+    if (reduce || !supportsVT) {
+      const root = document.documentElement;
+      root.classList.add("theme-transition");
+      applyTheme(next);
+      window.setTimeout(() => root.classList.remove("theme-transition"), 500);
+      return;
+    }
+
+    const root = document.documentElement;
+
+    if (variant === "rectangle") {
+      root.style.setProperty("--beui-vt-from", RECT_FROM[start]);
+      root.dataset.beuiVt = "rect";
+    } else {
+      // Emanate from the pointer when available, otherwise the default origin.
+      if (event) {
+        const x = (event.clientX / window.innerWidth) * 100;
+        const y = (event.clientY / window.innerHeight) * 100;
+        root.style.setProperty("--beui-vt-origin", `${x}% ${y}%`);
+      }
+      root.dataset.beuiVt = variant;
+    }
+
+    const vt = (
+      document as Document & {
+        startViewTransition(cb: () => void): { finished: Promise<void> };
+      }
+    ).startViewTransition(() => applyTheme(next));
+
+    vt.finished.finally(() => {
+      delete root.dataset.beuiVt;
+    });
   };
+
+  return { isDark: mounted && isDark, mounted, toggle };
+}
+
+export function ThemeToggle({
+  variant = "circle-blur",
+  start = "bottom-up",
+  className,
+  iconClassName = "size-[17px]",
+}: {
+  variant?: ThemeVariant;
+  start?: RectStart;
+  className?: string;
+  iconClassName?: string;
+}) {
+  const { isDark, mounted, toggle } = useThemeToggle({ variant, start });
 
   return (
     <button
       type="button"
+      aria-label={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={toggle}
-      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      className={`group relative grid size-10 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent ${className ?? ""}`}
+      className={cn(
+        "group relative grid size-10 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent",
+        className,
+      )}
     >
-      {/* keep markup stable until mounted to avoid hydration mismatch */}
       <span className="sr-only">Toggle theme</span>
       {mounted ? (
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={theme}
-            initial={{ y: 14, opacity: 0, rotate: -30 }}
-            animate={{ y: 0, opacity: 1, rotate: 0 }}
-            exit={{ y: -14, opacity: 0, rotate: 30 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="grid place-items-center"
-          >
-            {theme === "light" ? (
-              <Moon aria-hidden="true" size={17} />
-            ) : (
-              <Sun aria-hidden="true" size={17} />
-            )}
-          </motion.span>
-        </AnimatePresence>
+        <ActionSwapIcon value={isDark ? "dark" : "light"} animation="blur">
+          {isDark ? (
+            <Sun aria-hidden="true" className={iconClassName} />
+          ) : (
+            <Moon aria-hidden="true" className={iconClassName} />
+          )}
+        </ActionSwapIcon>
       ) : (
-        <Sun aria-hidden="true" size={17} />
+        <Sun aria-hidden="true" className={iconClassName} />
       )}
     </button>
   );

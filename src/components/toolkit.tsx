@@ -157,7 +157,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                         delay: 0.1 + i * 0.05,
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-1.5 font-mono text-[0.72rem] text-foreground/85"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/[0.08] px-3.5 py-1.5 font-mono text-[0.72rem] text-accent transition-colors duration-300 hover:border-accent/50 hover:bg-accent/[0.14]"
                     >
                       <span className="size-1 rounded-full bg-accent" />
                       {item}
@@ -227,7 +227,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                         {group.items.map((item) => (
                           <span
                             key={item}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 font-mono text-[0.7rem] text-foreground/85"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.7rem] text-accent"
                           >
                             <span className="size-1 rounded-full bg-accent" />
                             {item}

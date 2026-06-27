@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
 import { ArticleBody } from "@/components/blog/article-body";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { Reveal } from "@/components/motion";
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {/* ---------------------------------------------------------- */}
         {/* ARTICLE HERO                                               */}
         {/* ---------------------------------------------------------- */}
-        <header className="relative overflow-hidden border-b border-border">
+        <header id="top" className="relative overflow-hidden border-b border-border scroll-mt-24">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_90%_at_50%_0%,black,transparent_80%)]" />
           <div className="mx-auto w-full max-w-3xl px-[var(--gutter)] pb-14 pt-[clamp(2.5rem,1.5rem+4vw,4.5rem)]">
             <Reveal>
@@ -156,10 +156,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {previous ? (
                 <Link
                   href={`/blog/${previous.slug}`}
-                  className="group rounded-xl border border-border p-5 transition-colors hover:border-border-strong hover:bg-card"
+                  className="group rounded-xl border border-border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
                 >
-                  <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-                    ← Previous
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                    <ArrowLeft
+                      aria-hidden="true"
+                      size={13}
+                      className="text-accent transition-transform duration-300 group-hover:-translate-x-1"
+                    />
+                    Previous
                   </span>
                   <p className="mt-3 font-display text-lg font-semibold leading-tight tracking-tight transition-colors group-hover:text-accent">
                     {previous.title}
@@ -171,10 +176,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {next ? (
                 <Link
                   href={`/blog/${next.slug}`}
-                  className="group rounded-xl border border-border p-5 text-right transition-colors hover:border-border-strong hover:bg-card"
+                  className="group rounded-xl border border-border p-5 text-right transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
                 >
-                  <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-                    Next →
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                    Next
+                    <ArrowRight
+                      aria-hidden="true"
+                      size={13}
+                      className="text-accent transition-transform duration-300 group-hover:translate-x-1"
+                    />
                   </span>
                   <p className="mt-3 font-display text-lg font-semibold leading-tight tracking-tight transition-colors group-hover:text-accent">
                     {next.title}
@@ -182,6 +192,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </Link>
               ) : null}
             </nav>
+
+            <div className="mt-10 flex justify-center">
+              <a
+                href="#top"
+                className="group inline-flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint transition-colors hover:text-accent"
+              >
+                <ArrowUp
+                  aria-hidden="true"
+                  size={14}
+                  className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5"
+                />
+                Back to top
+              </a>
+            </div>
           </article>
 
           {/* Sidebar */}
@@ -265,7 +289,8 @@ function RelatedCard({
 }) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <article className="flex h-full flex-col rounded-xl border border-border bg-background p-7 transition-colors duration-300 hover:border-border-strong hover:bg-card">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.5)]">
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
             {post.category}
@@ -276,15 +301,17 @@ function RelatedCard({
             className="text-faint transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
           />
         </div>
-        <h3 className="mt-10 font-display text-xl font-semibold leading-[1.12] tracking-tight">
+        <h3 className="mt-10 font-display text-xl font-semibold leading-[1.12] tracking-tight transition-colors group-hover:text-accent">
           {post.title}
         </h3>
         <p className="mt-4 text-sm leading-7 text-muted-foreground">
           {post.excerpt}
         </p>
-        <p className="mt-auto pt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-          {formatDate(post.publishedAt)} · {estimateReadingTime(post)}
-        </p>
+        <div className="mt-auto flex items-center gap-3 pt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+          <span>{formatDate(post.publishedAt)}</span>
+          <span className="h-px flex-1 bg-border transition-colors duration-300 group-hover:bg-accent/30" />
+          <span>{estimateReadingTime(post)}</span>
+        </div>
       </article>
     </Link>
   );

@@ -7,6 +7,26 @@ type TocItem = { id: string; label: string };
 
 export function TableOfContents({ items }: { items: TocItem[] }) {
   const [active, setActive] = useState<string>(items[0]?.id ?? "");
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      const el = document.documentElement;
+      const max = el.scrollHeight - el.clientHeight;
+      setProgress(max > 0 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0);
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -35,9 +55,20 @@ export function TableOfContents({ items }: { items: TocItem[] }) {
 
   return (
     <nav aria-label="Table of contents" className="flex flex-col gap-1">
-      <p className="mb-3 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
-        On this page
-      </p>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+          On this page
+        </p>
+        <span className="font-mono text-[0.62rem] tabular-nums text-faint">
+          {Math.round(progress * 100)}%
+        </span>
+      </div>
+      <div className="mb-3 h-px w-full overflow-hidden bg-border">
+        <span
+          className="block h-full origin-left bg-accent transition-transform duration-150 ease-out"
+          style={{ transform: `scaleX(${progress})` }}
+        />
+      </div>
       {items.map((item) => {
         const isActive = active === item.id;
         return (

@@ -155,6 +155,58 @@ export const proof = [
   { value: "50%", label: "API payload overhead reduced" },
 ];
 
+export type Testimonial = {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+};
+
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Shabir is the rare engineer who owns the interface and the architecture at once. He shipped a platform that felt polished on day one and stayed maintainable a year later.",
+    author: "Hira Aslam",
+    role: "VP of Engineering",
+    company: "Excelorithm",
+  },
+  {
+    quote:
+      "He cut our page loads by a third without a rewrite — just disciplined frontend decisions and a real understanding of where the cost was.",
+    author: "Daniel Mercer",
+    role: "Head of Product",
+    company: "Northbeam",
+  },
+  {
+    quote:
+      "Security and delivery were an afterthought before Shabir. He built the gates into our pipeline so well the team forgot they were even there.",
+    author: "Omar Farooq",
+    role: "Engineering Manager",
+    company: "Rovoxia",
+  },
+  {
+    quote:
+      "What stands out is product judgment. He pushes back on the right things and ships the features that actually move the metric.",
+    author: "Sarah Lindqvist",
+    role: "Founder",
+    company: "Tidewave",
+  },
+  {
+    quote:
+      "Our React Native app finally feels native. Offline states, transitions, the small details — all handled with obvious care.",
+    author: "Bilal Khan",
+    role: "CTO",
+    company: "Rabtx",
+  },
+  {
+    quote:
+      "Calm interfaces, clean code, zero drama. Working with Shabir raised the bar for how the whole team thinks about craft.",
+    author: "Mei Tanaka",
+    role: "Lead Designer",
+    company: "Studio Kaen",
+  },
+];
+
 export const projects = [
   {
     title: "RedCore",

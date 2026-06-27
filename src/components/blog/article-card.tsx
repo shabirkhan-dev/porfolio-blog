@@ -59,7 +59,10 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <article className="flex h-full flex-col rounded-xl border border-border bg-background p-7 transition-colors duration-300 hover:border-border-strong hover:bg-card">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.5)]">
+        {/* animated accent top-rule */}
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
+
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
             {post.category}
@@ -79,9 +82,11 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
           {post.excerpt}
         </p>
 
-        <p className="mt-auto pt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-          {formatDate(post.publishedAt)} · {post.readingTime}
-        </p>
+        <div className="mt-auto flex items-center gap-3 pt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+          <span>{formatDate(post.publishedAt)}</span>
+          <span className="h-px flex-1 bg-border transition-colors duration-300 group-hover:bg-accent/30" />
+          <span>{post.readingTime}</span>
+        </div>
       </article>
     </Link>
   );

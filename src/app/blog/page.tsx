@@ -155,18 +155,41 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
         {/* Article grid */}
         <section className="shell pb-[clamp(3rem,2rem+3vw,5rem)] pt-8">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredPosts.map((post, index) => (
-              <Reveal key={post.slug} delay={index * 0.04}>
-                <ArticleCard post={post} />
-              </Reveal>
-            ))}
+          <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border pb-5">
+            <h2 className="font-display text-lg font-semibold tracking-tight">
+              {activeCategory === "All" ? "All essays" : activeCategory}
+            </h2>
+            <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+              {filteredPosts.length}{" "}
+              {filteredPosts.length === 1 ? "essay" : "essays"}
+            </span>
           </div>
-          {filteredPosts.length === 0 ? (
-            <div className="rounded-xl border border-border p-12 text-center text-muted-foreground">
-              No essays found for this category yet.
+
+          {filteredPosts.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filteredPosts.map((post, index) => (
+                <Reveal key={post.slug} delay={index * 0.04}>
+                  <ArticleCard post={post} />
+                </Reveal>
+              ))}
             </div>
-          ) : null}
+          ) : (
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-20 text-center">
+              <p className="font-display text-xl font-semibold tracking-tight">
+                Nothing here yet
+              </p>
+              <p className="max-w-sm text-sm leading-7 text-muted-foreground">
+                No essays in this category for now. Browse everything in the
+                journal instead.
+              </p>
+              <Link
+                href="/blog"
+                className="link-line mt-2 font-mono text-xs uppercase tracking-[0.14em] text-accent"
+              >
+                View all writing
+              </Link>
+            </div>
+          )}
         </section>
 
         <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
