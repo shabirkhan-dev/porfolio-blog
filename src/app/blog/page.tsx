@@ -8,7 +8,7 @@ import { Marquee } from "@/components/marquee";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { categories, getFeaturedPost, getPostsByCategory } from "@/data/site";
+import { categories, getFeaturedPost, getPostsByCategory, getReadingTime } from "@/data/site";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -54,11 +54,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               </span>
             </h1>
 
-            <Reveal delay={0.12} className="mt-10 max-w-xl border-t border-border pt-8">
+            <Reveal delay={0.12} className="mt-10 max-w-lg border-t border-border pt-8">
               <p className="t-lead">
-                Calm writing on engineering judgment, frontend systems, backend
-                design, AI product work, interface craft, and the quieter parts
-                of shipping real software.
+                Notes on engineering judgment, system design, and the quieter
+                parts of shipping real software.
               </p>
             </Reveal>
           </div>
@@ -95,11 +94,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     {featuredPost.title}
                   </h2>
                   <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">
-                    {featuredPost.summary}
+                    {featuredPost.excerpt}
                   </p>
                   <p className="mt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
                     {formatDate(featuredPost.publishedAt)} ·{" "}
-                    {featuredPost.readingTime}
+                    {getReadingTime(featuredPost)}
                   </p>
                 </div>
 

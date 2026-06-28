@@ -20,39 +20,25 @@ const channels = [
     value: "shabirkhan23",
     href: profile.linkedin,
   },
-  {
-    label: "Phone",
-    value: profile.phone,
-    href: "tel:+923166651488",
-  },
-];
-
-const facts = [
-  { k: "Response", v: "Within 24h" },
-  { k: "Location", v: profile.location },
-  { k: "Engagements", v: "Remote, worldwide" },
 ];
 
 export function ContactSection() {
   return (
-    <section id="contact" className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
-      <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-16">
-        {/* Left — pitch */}
+    <section id="contact" className="shell pb-[clamp(5rem,4rem+5vw,8rem)] pt-[clamp(2rem,1rem+3vw,4rem)]">
+      <div className="grid gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-20">
         <div className="flex flex-col lg:justify-between">
           <div>
             <span className="eyebrow">Contact</span>
             <h2 className="t-h1 mt-6 max-w-[14ch]">
-              <span className="block">Let&apos;s build</span>
-              <span className="block">
-                something{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  sharp.
-                </span>
-              </span>
+              Building a{" "}
+              <span className="font-serif font-normal italic text-accent">
+                serious
+              </span>{" "}
+              product?
             </h2>
             <p className="mt-6 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
-              {profile.availability}. I respond within 24 hours and take on a
-              small number of senior product builds each quarter.
+              I can help design the system, ship the interface, and make the
+              architecture hold under real use.
             </p>
 
             <div className="mt-10">
@@ -65,29 +51,18 @@ export function ContactSection() {
             </div>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-3 lg:mt-0">
-            {facts.map((fact) => (
-              <div key={fact.k}>
-                <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">
-                  {fact.k}
-                </p>
-                <p className="mt-1.5 text-sm font-medium text-foreground">
-                  {fact.v}
-                </p>
-              </div>
-            ))}
-          </div>
+          <p className="mt-12 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-faint lg:mt-0">
+            {profile.location} · Remote worldwide · Response within 24h
+          </p>
         </div>
 
-        {/* Right — editorial contact index */}
         <div className="flex flex-col justify-between border-t border-border">
           {channels.map((ch, i) => (
             <Link
               key={ch.label}
               href={ch.href}
-              className="group relative flex flex-1 items-center gap-5 overflow-hidden border-b border-border py-6 lg:py-7"
+              className="group relative flex flex-1 items-center gap-5 overflow-hidden border-b border-border py-6 lg:py-8"
             >
-              {/* Accent wipe on hover */}
               <span className="pointer-events-none absolute inset-0 -z-10 origin-left scale-x-0 bg-accent/[0.06] transition-transform duration-500 ease-out group-hover:scale-x-100" />
 
               <span className="w-8 shrink-0 font-mono text-[0.7rem] tabular-nums text-muted-foreground transition-colors duration-300 group-hover:text-accent">

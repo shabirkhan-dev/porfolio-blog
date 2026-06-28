@@ -72,7 +72,7 @@
   --step-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
 
   /* Rhythm */
-  --section-y: clamp(5rem, 3rem + 8vw, 9rem);
+  --section-y: clamp(6rem, 4rem + 9vw, 11rem);
   --gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
   --maxw: 80rem;
 }

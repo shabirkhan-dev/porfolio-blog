@@ -53,11 +53,10 @@ export default function ProjectsPage() {
               </span>
             </h1>
 
-            <Reveal delay={0.12} className="mt-10 max-w-xl border-t border-border pt-8">
+            <Reveal delay={0.12} className="mt-10 max-w-lg border-t border-border pt-8">
               <p className="t-lead">
-                Architecture-heavy product work across SaaS, dashboards, security
-                tooling, AI workflows, mobile apps, and production delivery
-                foundations.
+                Architecture-heavy product work — SaaS, marketplaces, security
+                tooling, AI workflows, and delivery foundations.
               </p>
             </Reveal>
           </div>

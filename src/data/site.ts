@@ -1,9 +1,7 @@
 import {
   AppWindow,
-  Boxes,
   ChartNoAxesCombined,
   Github,
-  Layers3,
   Linkedin,
   Mail,
   Network,
@@ -122,22 +120,22 @@ export const profile = {
   descriptor:
     "TypeScript-first product builder, frontend-focused systems engineer, startup founder, and creative UI engineer.",
   location: "Islamabad, Pakistan",
-  availability: "Open to remote senior engineering roles and focused product builds",
+  availability: "Open to remote senior roles and focused product builds",
   email: "shabirkhan.dev@gmail.com",
   phone: "+92 316 665 1488",
   github: "https://github.com/shabirkhan-dev",
   linkedin: "https://linkedin.com/in/shabirkhan23",
   hero:
-    "I build polished digital products where frontend craft, backend architecture, and product judgment meet.",
+    "Senior full-stack engineer building calm, production-grade software across SaaS, mobile, dashboards, APIs, and AI systems.",
   intro:
-    "For 6+ years I have shipped SaaS platforms, admin systems, React frontends, Node APIs, mobile apps, AI-powered products, and secure delivery pipelines. I like software that feels calm on the surface and disciplined underneath.",
+    "Six years shipping SaaS, admin systems, mobile apps, and AI workflows. I care about the boring parts that make software survive: state, latency, permissions, release flow, and the details users never see.",
 };
 
 export const navItems = [
   { href: "/", label: "Home" },
   { href: "/#work", label: "Work" },
-  { href: "/blog", label: "Writing" },
-  { href: "/#about", label: "About" },
+  { href: "/blog", label: "Journal" },
+  { href: "/lab", label: "Lab" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -146,6 +144,18 @@ export const socials = [
   { href: profile.github, label: "GitHub", icon: Github },
   { href: profile.linkedin, label: "LinkedIn", icon: Linkedin },
   { href: "tel:+923166651488", label: "Phone", icon: Phone },
+];
+
+/** Compact "core stack" shown as a quiet static strip under the hero. */
+export const coreStack = [
+  "TypeScript",
+  "Next.js",
+  "React Native",
+  "Node.js",
+  "PostgreSQL",
+  "Redis",
+  "AI Workflows",
+  "Docker",
 ];
 
 export const proof = [
@@ -207,81 +217,126 @@ export const testimonials: Testimonial[] = [
   },
 ];
 
-export const projects = [
+export type Project = {
+  title: string;
+  subtitle?: string;
+  slug: string;
+  role: string;
+  category: string;
+  year: string;
+  tagline: string;
+  built: string;
+  stack: string[];
+  impact: string[];
+  tags: string[];
+  visual: string;
+  caseStudy?: boolean;
+};
+
+export const projects: Project[] = [
   {
-    title: "RedCore",
-    slug: "redcore",
-    role: "Founder and systems architect",
-    category: "Cybersecurity tooling platform",
-    year: "In development",
-    description:
-      "A modular security tooling platform with policy enforcement, workflow automation, and performance-focused architecture.",
-    impact:
-      "Designed as a serious operator-grade platform for repeatable security workflows.",
-    stack: ["TypeScript", "Rust", "Policy engines", "Workflow automation"],
-    tags: ["Security", "Automation", "Systems"],
-    visual: "security",
+    title: "Autobay",
+    subtitle: "Kansai Group",
+    slug: "autobay",
+    role: "Lead frontend, backend, and DevOps",
+    category: "Marketplace & operations",
+    year: "2022 – 2023",
+    tagline: "Production marketplace and internal operations system.",
+    built:
+      "Next.js admin, React Native app, CodeIgniter APIs, WebSockets, Redis, Docker, Nginx, MySQL",
+    stack: [
+      "Next.js",
+      "React Native",
+      "CodeIgniter",
+      "WebSockets",
+      "Redis",
+      "Docker",
+    ],
+    impact: [
+      "Reduced API payload overhead by 50%",
+      "Improved page-load performance by 35%",
+      "Supported production workflows across web and mobile",
+    ],
+    tags: ["Marketplace", "Mobile", "DevOps"],
+    visual: "marketplace",
+    caseStudy: true,
   },
   {
     title: "School OS",
     slug: "school-os",
     role: "Product architect and lead engineer",
-    category: "Multi-tenant school management platform",
-    year: "2025 - Present",
-    description:
-      "AI-powered attendance, analytics, and management system designed for scalable deployment across school networks.",
-    impact:
-      "Built around multi-tenant architecture, operational clarity, and product workflows schools can actually run.",
-    stack: ["Next.js", "Node.js", "AI integration", "Analytics"],
+    category: "Multi-tenant SaaS",
+    year: "2025 – Present",
+    tagline: "AI-powered attendance, analytics, and school operations.",
+    built:
+      "Multi-tenant Next.js admin, Node.js APIs, PostgreSQL, Redis, structured AI insight pipelines",
+    stack: ["Next.js", "Node.js", "PostgreSQL", "Redis", "LLM APIs"],
+    impact: [
+      "Single codebase serving multiple school tenants",
+      "Structured AI insights without exposing raw student data",
+      "Role-scoped dashboards for staff and network operators",
+    ],
     tags: ["SaaS", "AI", "Multi-tenant"],
     visual: "dashboard",
+    caseStudy: true,
   },
   {
-    title: "Starter Kit",
-    slug: "starter-kit",
-    role: "Open-source maintainer",
-    category: "Production monorepo",
-    year: "2024 - Present",
-    description:
-      "A production-grade monorepo with polyglot services, CI/CD pipelines, and automated security enforcement.",
-    impact:
-      "Created a reusable foundation for disciplined delivery across TypeScript, Python, and Rust services.",
-    stack: ["TypeScript", "Python", "Rust", "GitHub Actions"],
-    tags: ["DevEx", "Infrastructure", "CI/CD"],
+    title: "RedCore",
+    slug: "redcore",
+    role: "Founder and systems architect",
+    category: "Security tooling",
+    year: "In development",
+    tagline: "Modular security platform with policy enforcement and workflow automation.",
+    built:
+      "TypeScript core, Rust performance modules, policy engine, workflow automation layer",
+    stack: ["TypeScript", "Rust", "Policy engines", "Workflow automation"],
+    impact: [
+      "Operator-grade platform for repeatable security workflows",
+      "Policy enforcement designed into the delivery path",
+    ],
+    tags: ["Security", "Automation", "Systems"],
+    visual: "security",
+  },
+  {
+    title: "Excelorithm EMS",
+    slug: "excelorithm-ems",
+    role: "Lead frontend engineer",
+    category: "Employee management platform",
+    year: "2023 – 2025",
+    tagline: "100k+ user platform for workforce management and operations.",
+    built:
+      "React frontend architecture, component standards, performance optimization, SSR/SSG strategy",
+    stack: ["React", "TypeScript", "Node.js", "Redis"],
+    impact: [
+      "Served 100k+ users across production workflows",
+      "Improved page-load performance by 35%",
+      "Reduced server load by 20% through render discipline",
+    ],
+    tags: ["SaaS", "Frontend", "Scale"],
     visual: "monorepo",
   },
 ];
 
 export const philosophy = [
   {
-    title: "Product-first engineering",
-    body: "A system is only elegant if it makes the product easier to ship, understand, and improve.",
+    title: "Product judgment first",
+    body: "Architecture only matters if it makes the product easier to ship and harder to break.",
     icon: Sparkles,
   },
   {
-    title: "Systems thinking",
-    body: "Service boundaries, API contracts, data flow, and deployment paths are designed together.",
+    title: "Systems, not screens",
+    body: "Boundaries, contracts, and data flow designed together — not patched together later.",
     icon: Network,
   },
   {
-    title: "Clean architecture",
-    body: "Readable structure, clear ownership, and boring primitives keep codebases healthy.",
-    icon: Layers3,
-  },
-  {
-    title: "Beautiful interfaces matter",
-    body: "The frontend is where trust becomes visible. Details, states, and motion all matter.",
+    title: "Honest interfaces",
+    body: "Trust comes from states that tell the truth: loading, empty, error, irreversible.",
     icon: AppWindow,
   },
   {
-    title: "Performance and reliability",
-    body: "Fast interfaces and dependable services are part of the product experience, not polish added later.",
+    title: "Boring where it counts",
+    body: "Release flow, permissions, and observability should be invisible — until you need them.",
     icon: ChartNoAxesCombined,
-  },
-  {
-    title: "Maintainability",
-    body: "A good system lets the next person move with confidence instead of fear.",
-    icon: Boxes,
   },
 ];
 
@@ -354,38 +409,74 @@ export const stackGroups: StackGroup[] = [
   },
 ];
 
-export const experience = [
+export type ExperienceItem = {
+  role: string;
+  company: string;
+  period: string;
+  year: string;
+  location: string;
+  summary: string;
+  metrics: { value: string; label: string }[];
+  tags: string[];
+};
+
+export const experience: ExperienceItem[] = [
   {
     role: "Founder & Lead Engineer",
     company: "Rabtx",
-    period: "Sep 2025 - Present",
+    period: "Sep 2025 — Present",
+    year: "2025",
     location: "Remote",
-    body:
-      "Building web, backend, and React Native systems as the sole lead engineer, from service boundaries and API contracts to deployment infrastructure and CI/CD security gates.",
+    summary:
+      "I own web, backend, and React Native systems end to end — from API contracts to deploy infrastructure and CI security gates.",
+    metrics: [
+      { value: "E2E", label: "web · API · mobile ownership" },
+      { value: "CI", label: "security gates in the deploy path" },
+    ],
+    tags: ["Full-stack", "React Native", "DevOps"],
   },
   {
     role: "Lead Frontend Engineer",
     company: "Excelorithm LLC",
-    period: "Jun 2023 - Sep 2025",
+    period: "Jun 2023 — Sep 2025",
+    year: "2023",
     location: "Rawalpindi",
-    body:
-      "Architected a 100k+ user employee management platform, improved page load performance by 35 percent, reduced server load by 20 percent, and defined component standards for the team.",
+    summary:
+      "Architected a platform used by over a hundred thousand people, and set the component standards the rest of the team builds on.",
+    metrics: [
+      { value: "100k+", label: "users on the platform" },
+      { value: "35%", label: "faster page loads" },
+      { value: "20%", label: "less server load" },
+    ],
+    tags: ["Frontend systems", "Scale", "Performance"],
   },
   {
     role: "Senior Full-Stack Engineer",
     company: "Rovoxia",
-    period: "Mar 2021 - May 2023",
+    period: "Mar 2021 — May 2023",
+    year: "2021",
     location: "Remote",
-    body:
-      "Delivered MERN, Next.js, and TypeScript applications, improved performance by 40 percent with SSR/SSG and caching, and reduced API payload overhead by 50 percent.",
+    summary:
+      "Shipped Next.js and TypeScript products with a focus on rendering strategy, caching, and lean API contracts.",
+    metrics: [
+      { value: "40%", label: "performance gain via SSR/SSG" },
+      { value: "50%", label: "smaller API payloads" },
+    ],
+    tags: ["Next.js", "SSR/SSG", "APIs"],
   },
   {
     role: "Full-Stack Developer",
     company: "Dot Austere",
-    period: "Sep 2018 - Dec 2019",
+    period: "Sep 2018 — Dec 2019",
+    year: "2018",
     location: "Gilgit",
-    body:
-      "Built client applications with Node.js, Express, and PostgreSQL while improving API reliability and security posture with OWASP practices.",
+    summary:
+      "Built client applications on Node, Express, and PostgreSQL with a focus on API reliability and a hardened security posture.",
+    metrics: [
+      { value: "OWASP", label: "security practices" },
+      { value: "Postgres", label: "reliable data layer" },
+    ],
+    tags: ["Node.js", "PostgreSQL", "Security"],
   },
 ];
 
@@ -889,6 +980,58 @@ jobs:
     ] satisfies ArticleBlock[],
   },
 ];
+
+export const labExperiments = [
+  {
+    title: "Vector field hero",
+    category: "Motion",
+    description:
+      "Cursor-reactive particle field powering the homepage hero — calm, performant, and scroll-aware.",
+    tags: ["Canvas", "Interaction", "Performance"],
+    href: "/",
+  },
+  {
+    title: "Engine Room layers",
+    category: "Systems visualization",
+    description:
+      "Scroll-driven layer diagram showing how product surfaces map to underlying system decisions.",
+    tags: ["Framer Motion", "Scroll", "Architecture"],
+    href: "/#engine-room",
+  },
+  {
+    title: "AI workflow UI",
+    category: "AI prototype",
+    description:
+      "Structured input/output panels for LLM features — verification-first, not chat-first.",
+    tags: ["AI", "Product UI", "TypeScript"],
+  },
+  {
+    title: "3D interface concepts",
+    category: "Visual engineering",
+    description:
+      "Spatial navigation studies for dashboard and admin tools — depth without losing clarity.",
+    tags: ["Three.js", "3D", "UX"],
+  },
+  {
+    title: "Motion primitives",
+    category: "Interaction design",
+    description:
+      "Reusable reveal, stagger, and magnetic interaction patterns used across the portfolio.",
+    tags: ["Framer Motion", "Components"],
+  },
+  {
+    title: "Generative typography",
+    category: "Creative code",
+    description:
+      "Procedural letterform experiments exploring display type as a living surface.",
+    tags: ["Canvas", "Typography"],
+  },
+];
+
+/** Single source of truth for reading time across listing and detail pages. */
+export function getReadingTime(post: BlogPost) {
+  return estimateReadingTime(post);
+}
 
 export function getPostBySlug(slug: string) {
   return posts.find((post) => post.slug === slug);

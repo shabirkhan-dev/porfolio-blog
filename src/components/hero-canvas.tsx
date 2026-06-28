@@ -38,7 +38,7 @@ export function HeroCanvas({ className }: { className?: string }) {
     let width = 0;
     let height = 0;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const spacing = 38;
+    const spacing = 52;
 
     type Node = { x: number; y: number; angle: number };
     let nodes: Node[] = [];
@@ -75,12 +75,12 @@ export function HeroCanvas({ className }: { className?: string }) {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-      t += 0.004;
+      t += 0.0018;
 
-      pointer.x += (pointer.tx - pointer.x) * 0.12;
-      pointer.y += (pointer.ty - pointer.y) * 0.12;
+      pointer.x += (pointer.tx - pointer.x) * 0.08;
+      pointer.y += (pointer.ty - pointer.y) * 0.08;
 
-      const radius = 220;
+      const radius = 190;
       const radiusSq = radius * radius;
 
       for (const node of nodes) {
@@ -88,34 +88,38 @@ export function HeroCanvas({ className }: { className?: string }) {
         const dy = pointer.y - node.y;
         const distSq = dx * dx + dy * dy;
 
-        // Idle drift gives the field a subtle living quality.
+        // Gentle idle drift — calmer baseline motion.
         const idle =
-          Math.sin(node.x * 0.01 + t * 1.2) * 0.3 +
-          Math.cos(node.y * 0.012 - t) * 0.3;
+          Math.sin(node.x * 0.008 + t) * 0.12 +
+          Math.cos(node.y * 0.009 - t * 0.8) * 0.12;
 
         let targetAngle = idle;
         let intensity = 0;
 
         if (distSq < radiusSq) {
-          targetAngle = Math.atan2(dy, dx);
           intensity = 1 - Math.sqrt(distSq) / radius;
+          // Near the cursor, strokes align to the grid — engineered, not magnetic.
+          const col = Math.round(node.x / spacing);
+          const row = Math.round(node.y / spacing);
+          const gridAngle = (col + row) % 2 === 0 ? 0 : Math.PI / 2;
+          targetAngle = idle * (1 - intensity) + gridAngle * intensity;
         }
 
         // Ease the angle toward its target (shortest rotational path).
         let diff = targetAngle - node.angle;
         diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-        node.angle += diff * (0.1 + intensity * 0.35);
+        node.angle += diff * (0.06 + intensity * 0.22);
 
-        const len = 7 + intensity * 16;
+        const len = 5 + intensity * 11;
         const half = len / 2;
         const cos = Math.cos(node.angle);
         const sin = Math.sin(node.angle);
 
         // Always show a light shade of primary across the whole field; ramp to
         // full primary where the pointer charges it.
-        const opacity = 0.2 + intensity * 0.8;
+        const opacity = 0.14 + intensity * 0.72;
         const color = colors.accent;
-        const lineWidth = 1 + intensity * 1.5;
+        const lineWidth = 0.85 + intensity * 1.15;
 
         ctx.beginPath();
         ctx.moveTo(node.x - cos * half, node.y - sin * half);

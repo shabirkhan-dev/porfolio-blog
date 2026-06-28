@@ -1,4 +1,4 @@
-import { CheckCircle2, GitBranch, LockKeyhole, Signal, Sparkles } from "lucide-react";
+import { CheckCircle2, GitBranch, LockKeyhole, Signal, Sparkles, Truck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ProjectPreviewProps = {
@@ -7,6 +7,44 @@ type ProjectPreviewProps = {
 };
 
 export function ProjectPreview({ visual, title }: ProjectPreviewProps) {
+  if (visual === "marketplace") {
+    return (
+      <div className="code-surface relative min-h-72 overflow-hidden p-5">
+        <div className="absolute inset-0 grid-on-dark opacity-40" />
+        <div className="relative flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.14em] text-white/45">
+          <span>inventory sync</span>
+          <span className="code-accent">live</span>
+        </div>
+        <div className="relative mt-6 grid grid-cols-2 gap-3">
+          {["Listings", "Dealers", "Mobile", "Ops"].map((item, index) => (
+            <div
+              key={item}
+              className={cn(
+                "rounded-xl border border-white/10 bg-white/[0.04] p-3",
+                index % 2 === 1 && "translate-y-3",
+              )}
+            >
+              <Truck aria-hidden="true" size={16} className="code-accent" />
+              <p className="mt-3 text-sm font-medium">{item}</p>
+              <div className="mt-2 h-1 rounded-full bg-white/10">
+                <div
+                  className="code-accent h-full rounded-full bg-current opacity-80"
+                  style={{ width: `${60 + index * 10}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/[0.04] p-3">
+          <div className="flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.14em] text-white/55">
+            <span>websocket · redis</span>
+            <CheckCircle2 aria-hidden="true" size={15} className="code-accent" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (visual === "security") {
     return (
       <div className="code-surface relative min-h-72 overflow-hidden p-5">

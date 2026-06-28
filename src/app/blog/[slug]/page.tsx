@@ -9,9 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
-  estimateReadingTime,
   getAdjacentPosts,
   getPostBySlug,
+  getReadingTime,
   getRelatedPosts,
   getTableOfContents,
   posts,
@@ -57,7 +57,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const relatedPosts = getRelatedPosts(post.slug, post.category);
   const toc = getTableOfContents(post);
-  const readingTime = estimateReadingTime(post);
+  const readingTime = getReadingTime(post);
   const { previous, next } = getAdjacentPosts(post.slug);
 
   return (
@@ -310,7 +310,7 @@ function RelatedCard({
         <div className="mt-auto flex items-center gap-3 pt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
           <span>{formatDate(post.publishedAt)}</span>
           <span className="h-px flex-1 bg-border transition-colors duration-300 group-hover:bg-accent/30" />
-          <span>{estimateReadingTime(post)}</span>
+          <span>{getReadingTime(post)}</span>
         </div>
       </article>
     </Link>

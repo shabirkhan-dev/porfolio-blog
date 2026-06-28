@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
+import { EngineRoom } from "@/components/engine-room";
 import { Reveal } from "@/components/motion";
-import { Marquee } from "@/components/marquee";
-import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
+import { HeroSection } from "@/components/hero-section";
 import { ScalesFrame } from "@/components/scales";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
@@ -14,10 +14,10 @@ import {
   HomeToolkit,
 } from "@/components/home-deferred";
 import { SectionHeading } from "@/components/section";
-import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  coreStack,
   experience,
   philosophy,
   posts,
@@ -30,126 +30,47 @@ import {
 
 export default function Home() {
   const writingPreview = posts.slice(0, 3);
+  const featuredProjects = projects.slice(0, 3);
 
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <main>
-        {/* ---------------------------------------------------------- */}
-        {/* HERO — interactive vector field                            */}
-        {/* ---------------------------------------------------------- */}
-        <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-          {/* Live, cursor-reactive vector field */}
-          <DeferredHeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
-          {/* Vignette so type stays legible over the field */}
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-background" />
+        <HeroSection
+          lead={profile.hero}
+          location={profile.location}
+          proof={proof}
+        />
 
-          {/* Top meta row */}
-          <div className="shell flex items-center justify-between pt-[clamp(2rem,1rem+4vw,4rem)]">
-            <div className="flex items-center gap-3">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
-                <span className="relative inline-flex size-2 rounded-full bg-accent" />
-              </span>
-              <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                Available — {profile.location}
-              </span>
-            </div>
-            <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:inline">
-              Senior Full-Stack Engineer · Est. {new Date().getFullYear() - 6}
+        {/* CORE STACK — quiet static strip */}
+        <div className="border-y border-border">
+          <div className="shell flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:gap-8">
+            <span className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
+              Core stack
             </span>
-          </div>
-
-          {/* Centerpiece headline — static for LCP; motion lives below the fold */}
-          <div className="shell relative flex flex-1 flex-col justify-center py-16">
-            <p className="mb-7 flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">
-              <span className="h-px w-8 bg-accent" />
-              Portfolio &amp; Journal — {profile.name}
-            </p>
-
-            <h1 className="t-display max-w-[16ch]">
-              <span className="block">I engineer</span>
-              <span className="block">products that feel</span>
-              <span className="block font-serif font-normal italic text-accent">
-                inevitable.
-              </span>
-            </h1>
-
-            <div className="mt-10 flex max-w-xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
-              <p className="t-lead max-w-md">{profile.intro}</p>
-            </div>
-
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <LinkButton href="#work" size="lg">
-                Selected work
-                <ArrowDownRight aria-hidden="true" size={18} />
-              </LinkButton>
-              <LinkButton href="/blog" variant="secondary" size="lg">
-                Read the writing
-              </LinkButton>
-              <span className="ml-1 hidden items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint lg:inline-flex">
-                <span className="size-1.5 rounded-full bg-accent" />
-                Move your cursor
-              </span>
-            </div>
-          </div>
-
-          {/* Bottom stat strip */}
-          <div className="shell relative pb-8">
-            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
-              {proof.map((item) => (
-                <div
-                  key={item.label}
-                  className="group/stat relative overflow-hidden bg-background/70 p-5 backdrop-blur-sm transition-colors duration-300 hover:bg-card"
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              {coreStack.map((item) => (
+                <li
+                  key={item}
+                  className="font-mono text-[0.72rem] uppercase tracking-[0.1em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
-                  <p className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.6rem)] font-semibold leading-none tracking-tight text-foreground">
-                    {item.value}
-                  </p>
-                  <p className="mt-2.5 text-xs leading-5 text-muted-foreground">
-                    {item.label}
-                  </p>
-                  <span className="mt-4 block h-px w-6 bg-accent transition-all duration-500 group-hover/stat:w-full" />
-                </div>
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-        </section>
-
-        {/* Marquee */}
-        <div className="border-y border-border py-6">
-          <Marquee
-            items={[
-              "TypeScript",
-              "Next.js",
-              "React Native",
-              "Node.js",
-              "AI Workflows",
-              "Design Systems",
-              "Rust",
-              "Bun",
-            ]}
-          />
         </div>
 
-        {/* ---------------------------------------------------------- */}
-        {/* ABOUT                                                      */}
-        {/* ---------------------------------------------------------- */}
+        {/* ABOUT — compressed */}
         <section className="shell section-y">
-          <div className="grid items-center gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
+          <div className="grid items-center gap-16 lg:grid-cols-[0.65fr_1.35fr] lg:gap-24">
             <Reveal>
-              <ScalesFrame className="mx-auto w-full max-w-[19rem]">
+              <ScalesFrame className="mx-auto w-full max-w-[17rem]">
                 <div className="relative grid aspect-square place-items-center">
                   <div className="absolute inset-0 hairline-grid opacity-50" />
                   <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_50%_42%,rgb(var(--accent-rgb)/0.18),transparent_62%)]" />
-                  <span className="relative font-display text-[clamp(4.5rem,3rem+9vw,7.5rem)] font-semibold leading-none tracking-tight text-accent">
+                  <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-semibold leading-none tracking-tight text-accent">
                     {profile.initials}
-                  </span>
-                  <span className="absolute bottom-5 left-5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-faint">
-                    {profile.name}
-                  </span>
-                  <span className="absolute right-5 top-5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-faint">
-                    Est. 2018
                   </span>
                 </div>
               </ScalesFrame>
@@ -157,36 +78,18 @@ export default function Home() {
 
             <Reveal delay={0.1}>
               <span className="eyebrow">About</span>
-              <h2 className="t-h2 mt-6 max-w-xl text-balance">
-                I build software that feels calm on the surface and{" "}
+              <h2 className="t-h2 mt-6 max-w-lg text-balance">
+                Calm on the surface.{" "}
                 <span className="font-serif font-normal italic text-accent">
-                  disciplined underneath.
-                </span>
+                  Disciplined
+                </span>{" "}
+                underneath.
               </h2>
-              <p className="mt-7 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
+              <p className="mt-6 max-w-lg text-[0.95rem] leading-7 text-muted-foreground">
                 {profile.intro}
               </p>
 
-              <div className="mt-9 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border">
-                <div className="bg-background p-5">
-                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
-                    Based in
-                  </p>
-                  <p className="mt-1.5 text-sm text-foreground">
-                    {profile.location}
-                  </p>
-                </div>
-                <div className="bg-background p-5">
-                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-faint">
-                    Status
-                  </p>
-                  <p className="mt-1.5 text-sm text-foreground">
-                    Open to senior roles
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
                 <a
                   href={profile.github}
                   target="_blank"
@@ -217,62 +120,52 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* SELECTED WORK                                              */}
-        {/* ---------------------------------------------------------- */}
+        {/* SIGNATURE — Engine Room */}
+        <EngineRoom />
+
+        {/* SELECTED WORK */}
         <section id="work" className="shell section-y">
           <SectionHeading
             index="01"
             eyebrow="Selected work"
-            title="Case studies with real architecture behind them."
-            description="SaaS platforms, security tooling, and multi-tenant systems — built with product taste and technical depth."
+            title="Proof, not promises."
           />
 
-          <div className="mt-16 flex flex-col gap-8 lg:gap-10">
-            {projects.map((project, index) => (
+          <div className="mt-20 flex flex-col gap-10 lg:gap-14">
+            {featuredProjects.map((project, index) => (
               <Reveal key={project.slug} delay={index * 0.04}>
                 <HomeCaseStudyCard project={project} index={index + 1} />
               </Reveal>
             ))}
           </div>
+
+          <Reveal className="mt-12">
+            <Link
+              href="/projects"
+              className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
+            >
+              All projects
+              <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+            </Link>
+          </Reveal>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* PHILOSOPHY                                                 */}
-        {/* ---------------------------------------------------------- */}
-        <section
-          id="about"
-          className="relative overflow-hidden border-y border-border bg-background-2"
-        >
+        {/* PHILOSOPHY — compressed */}
+        <section className="relative overflow-hidden border-y border-border bg-background-2">
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
           <div className="shell section-y relative">
-            {/* Intro */}
-            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-              <Reveal className="max-w-2xl">
-                <span className="eyebrow">Approach</span>
-                <h2 className="t-h2 mt-6 text-balance">
-                  Calm interfaces.{" "}
-                  <span className="font-serif font-normal italic text-accent">
-                    Disciplined
-                  </span>{" "}
-                  systems.
-                </h2>
-                <p className="mt-6 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
-                  Software that feels effortless on the surface and is deliberate
-                  underneath. These are the principles I build on.
-                </p>
-              </Reveal>
-              <Reveal
-                delay={0.1}
-                className="flex shrink-0 items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint"
-              >
-                <span className="h-px w-8 bg-accent" />
-                {philosophy.length} operating principles
-              </Reveal>
-            </div>
+            <Reveal className="max-w-xl">
+              <span className="eyebrow">Approach</span>
+              <h2 className="t-h2 mt-6 text-balance">
+                How I{" "}
+                <span className="font-serif font-normal italic text-accent">
+                  think
+                </span>{" "}
+                about building.
+              </h2>
+            </Reveal>
 
-            {/* Principles grid */}
-            <div className="mt-16 grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-20 grid gap-x-16 gap-y-14 sm:grid-cols-2">
               {philosophy.map((item, index) => {
                 const Icon = item.icon;
                 return (
@@ -290,56 +183,33 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* STACK                                                      */}
-        {/* ---------------------------------------------------------- */}
+        {/* STACK */}
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(90%_70%_at_50%_50%,black,transparent_85%)]" />
           <div className="shell section-y relative">
             <SectionHeading
               index="02"
               eyebrow="Toolkit"
-              title={
-                <>
-                  A serious stack for{" "}
-                  <span className="font-serif font-normal italic text-accent">
-                    durable
-                  </span>{" "}
-                  products.
-                </>
-              }
-              description="Organized around the kinds of products I ship — from interface to infrastructure."
+              title="The stack I ship with."
             />
 
-            <Reveal>
+            <Reveal className="mt-16">
               <HomeToolkit groups={stackGroups} />
             </Reveal>
           </div>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* EXPERIENCE                                                 */}
-        {/* ---------------------------------------------------------- */}
-        <section className="border-y border-border bg-background-2">
-          <div className="shell section-y">
-            <SectionHeading
-              index="03"
-              eyebrow="Track record"
-              title="Senior ownership across product and system."
-            />
+        {/* EXPERIENCE — pinned horizontal scroll */}
+        <div className="border-y border-border bg-background-2">
+          <HomeExperienceTimeline items={experience} />
+        </div>
 
-            <HomeExperienceTimeline items={experience} />
-          </div>
-        </section>
-
-        {/* ---------------------------------------------------------- */}
-        {/* WRITING                                                    */}
-        {/* ---------------------------------------------------------- */}
+        {/* JOURNAL */}
         <section className="shell section-y">
           <SectionHeading
             index="04"
             eyebrow="Journal"
-            title="Notes from building serious software."
+            title="Notes from the work."
             description={
               <Link
                 href="/blog"
@@ -351,7 +221,7 @@ export default function Home() {
             }
           />
 
-          <div className="mt-16 grid gap-4 lg:grid-cols-3">
+          <div className="mt-20 grid gap-5 lg:grid-cols-3">
             {writingPreview.map((post, index) => (
               <Reveal
                 key={post.slug}
@@ -364,19 +234,16 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------- */}
-        {/* TESTIMONIALS                                               */}
-        {/* ---------------------------------------------------------- */}
+        {/* TESTIMONIALS */}
         <section className="section-y border-y border-border bg-background-2">
           <div className="shell">
             <SectionHeading
               index="05"
               eyebrow="Endorsements"
-              title="Trusted by the people who shipped alongside me."
-              description="A few words from founders, managers, and teammates I've built with."
+              title="Trusted by people I've shipped with."
             />
           </div>
-          <div className="mt-14">
+          <div className="mt-16">
             <HomeTestimonials items={testimonials} />
           </div>
         </section>
