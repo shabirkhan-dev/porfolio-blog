@@ -8,9 +8,18 @@ import { Marquee } from "@/components/marquee";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { categories, getFeaturedPost, getPostsByCategory, getReadingTime } from "@/data/site";
+import {
+  categories,
+  getReadingTime,
+} from "@/data/posts";
+import {
+  getFeaturedPost,
+  getPostsByCategory,
+} from "@/data/posts.server";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -27,16 +36,19 @@ type BlogPageProps = {
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category } = await searchParams;
   const activeCategory = category ?? "All";
-  const featuredPost = getFeaturedPost();
-  const filteredPosts = getPostsByCategory(activeCategory).filter(
-    (post) => post.slug !== featuredPost.slug || activeCategory !== "All",
-  );
+  const featuredPost = await getFeaturedPost();
+  const allInCategory = await getPostsByCategory(activeCategory);
+  const filteredPosts = featuredPost
+    ? allInCategory.filter(
+        (post) =>
+          post.slug !== featuredPost.slug || activeCategory !== "All",
+      )
+    : allInCategory;
 
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <main>
-        {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
           <div className="shell relative pb-14 pt-[clamp(3rem,2rem+6vw,6rem)]">
@@ -77,54 +89,54 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </div>
         </section>
 
-        {/* Featured essay */}
-        <section className="shell pt-[clamp(3rem,2rem+4vw,5rem)]">
-          <Reveal>
-            <Link
-              href={`/blog/${featuredPost.slug}`}
-              className="group block overflow-hidden rounded-2xl border border-border bg-background transition-colors duration-500 hover:border-border-strong"
-            >
-              <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
-                <div className="p-[clamp(1.75rem,1.25rem+3vw,3.5rem)]">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone="accent">{featuredPost.category}</Badge>
-                    <Badge tone="muted">Featured essay</Badge>
+        {featuredPost ? (
+          <section className="shell pt-[clamp(3rem,2rem+4vw,5rem)]">
+            <Reveal>
+              <Link
+                href={`/blog/${featuredPost.slug}`}
+                className="group block overflow-hidden rounded-2xl border border-border bg-background transition-colors duration-500 hover:border-border-strong"
+              >
+                <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+                  <div className="p-[clamp(1.75rem,1.25rem+3vw,3.5rem)]">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge tone="accent">{featuredPost.category}</Badge>
+                      <Badge tone="muted">Featured essay</Badge>
+                    </div>
+                    <h2 className="t-h1 mt-10 max-w-2xl transition-colors group-hover:text-accent">
+                      {featuredPost.title}
+                    </h2>
+                    <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">
+                      {featuredPost.excerpt}
+                    </p>
+                    <p className="mt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
+                      {formatDate(featuredPost.publishedAt)} ·{" "}
+                      {getReadingTime(featuredPost)}
+                    </p>
                   </div>
-                  <h2 className="t-h1 mt-10 max-w-2xl transition-colors group-hover:text-accent">
-                    {featuredPost.title}
-                  </h2>
-                  <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">
-                    {featuredPost.excerpt}
-                  </p>
-                  <p className="mt-10 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-                    {formatDate(featuredPost.publishedAt)} ·{" "}
-                    {getReadingTime(featuredPost)}
-                  </p>
-                </div>
 
-                <div className="relative flex min-h-72 flex-col justify-between border-t border-border bg-background-2 p-8 lg:border-l lg:border-t-0">
-                  <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
-                  <p className="relative font-mono text-xs uppercase tracking-[0.16em] text-faint">
-                    From the journal
-                  </p>
-                  <p className="relative font-display text-[8rem] font-semibold leading-none tracking-tighter text-accent/15">
-                    01
-                  </p>
-                  <span className="relative inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground">
-                    Read featured essay
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      size={16}
-                      className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    />
-                  </span>
+                  <div className="relative flex min-h-72 flex-col justify-between border-t border-border bg-background-2 p-8 lg:border-l lg:border-t-0">
+                    <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
+                    <p className="relative font-mono text-xs uppercase tracking-[0.16em] text-faint">
+                      From the journal
+                    </p>
+                    <p className="relative font-display text-[8rem] font-semibold leading-none tracking-tighter text-accent/15">
+                      01
+                    </p>
+                    <span className="relative inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground">
+                      Read featured essay
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        size={16}
+                        className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </Reveal>
-        </section>
+              </Link>
+            </Reveal>
+          </section>
+        ) : null}
 
-        {/* Category filter */}
         <section className="shell sticky top-16 z-30 py-6">
           <div className="glass -mx-2 flex gap-2 overflow-x-auto rounded-full border border-border px-2 py-2">
             {["All", ...categories].map((item) => {
@@ -152,7 +164,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </div>
         </section>
 
-        {/* Article grid */}
         <section className="shell pb-[clamp(3rem,2rem+3vw,5rem)] pt-8">
           <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border pb-5">
             <h2 className="font-display text-lg font-semibold tracking-tight">

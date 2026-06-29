@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { m, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowDownRight } from "lucide-react";
+import { ArrowDownRight, Download } from "lucide-react";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { LinkButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -181,9 +182,16 @@ export function HeroSection({ lead, location, proof }: HeroSectionProps) {
               View selected work
               <ArrowDownRight aria-hidden="true" size={18} />
             </LinkButton>
-            <LinkButton href="/blog" variant="secondary" size="lg">
-              Read the journal
+            <LinkButton href="/resume" variant="secondary" size="lg">
+              Download résumé
+              <Download aria-hidden="true" size={17} />
             </LinkButton>
+            <Link
+              href="/blog"
+              className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Read the journal
+            </Link>
           </div>
         ) : (
           <m.div
@@ -200,9 +208,20 @@ export function HeroSection({ lead, location, proof }: HeroSectionProps) {
                 className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:translate-y-0.5"
               />
             </LinkButton>
-            <LinkButton href="/blog" variant="secondary" size="lg">
-              Read the journal
+            <LinkButton href="/resume" variant="secondary" size="lg">
+              Download résumé
+              <Download
+                aria-hidden="true"
+                size={17}
+                className="transition-transform duration-300 group-hover/btn:translate-y-0.5"
+              />
             </LinkButton>
+            <Link
+              href="/blog"
+              className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Read the journal
+            </Link>
           </m.div>
         )}
       </div>

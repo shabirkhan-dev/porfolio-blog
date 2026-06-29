@@ -7,8 +7,8 @@ import { HeroSection } from "@/components/hero-section";
 import { ScalesFrame } from "@/components/scales";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
+import { ProjectsBento } from "@/components/portfolio/projects-bento";
 import {
-  HomeCaseStudyCard,
   HomeExperienceTimeline,
   HomeTestimonials,
   HomeToolkit,
@@ -20,17 +20,19 @@ import {
   coreStack,
   experience,
   philosophy,
-  posts,
   profile,
   projects,
   proof,
   stackGroups,
   testimonials,
 } from "@/data/site";
+import { getPublishedPosts } from "@/data/posts.server";
 
-export default function Home() {
-  const writingPreview = posts.slice(0, 3);
-  const featuredProjects = projects.slice(0, 3);
+export const revalidate = 3600;
+
+export default async function Home() {
+  const writingPreview = (await getPublishedPosts()).slice(0, 3);
+  const workProjects = projects.slice(0, 4);
 
   return (
     <div className="page-shell min-h-screen">
@@ -123,30 +125,25 @@ export default function Home() {
         {/* SIGNATURE — Engine Room */}
         <EngineRoom />
 
-        {/* SELECTED WORK */}
+        {/* SELECTED WORK — bento */}
         <section id="work" className="shell section-y">
           <SectionHeading
             index="01"
             eyebrow="Selected work"
             title="Proof, not promises."
+            description={
+              <Link
+                href="/projects"
+                className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
+              >
+                All projects
+                <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+              </Link>
+            }
           />
 
-          <div className="mt-20 flex flex-col gap-10 lg:gap-14">
-            {featuredProjects.map((project, index) => (
-              <Reveal key={project.slug} delay={index * 0.04}>
-                <HomeCaseStudyCard project={project} index={index + 1} />
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal className="mt-12">
-            <Link
-              href="/projects"
-              className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
-            >
-              All projects
-              <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
-            </Link>
+          <Reveal className="mt-16">
+            <ProjectsBento projects={workProjects} />
           </Reveal>
         </section>
 

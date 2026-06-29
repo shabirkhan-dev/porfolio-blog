@@ -496,3 +496,22 @@
     padding-right: max(0px, env(safe-area-inset-right));
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Print — résumé                                                      */
+/* ------------------------------------------------------------------ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    margin: 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  .resume-sheet {
+    max-width: none !important;
+  }
+}

@@ -2,24 +2,20 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { getReadingTime } from "@/data/site";
+import { getReadingTime, type BlogPost } from "@/data/posts";
 import { useActiveOnScroll } from "@/lib/use-active-on-scroll";
 
 type ArticleCardProps = {
-  post: {
-    title: string;
-    slug: string;
-    category: string;
-    publishedAt: string;
-    excerpt: string;
-    body: Parameters<typeof getReadingTime>[0]["body"];
-  };
+  post: Pick<
+    BlogPost,
+    "title" | "slug" | "category" | "publishedAt" | "excerpt" | "body"
+  >;
   featured?: boolean;
 };
 
 export function ArticleCard({ post, featured = false }: ArticleCardProps) {
   const { ref, active } = useActiveOnScroll<HTMLAnchorElement>();
-  const readingTime = getReadingTime(post as Parameters<typeof getReadingTime>[0]);
+  const readingTime = getReadingTime(post);
 
   if (featured) {
     return (

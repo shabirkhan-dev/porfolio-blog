@@ -3,21 +3,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
 import { ArticleBody } from "@/components/blog/article-body";
+import { ListenButton } from "@/components/blog/listen-button";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { Reveal } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  getReadableText,
+  getReadingTime,
+  getTableOfContents,
+  type BlogPost,
+} from "@/data/posts";
+import {
   getAdjacentPosts,
   getPostBySlug,
-  getReadingTime,
+  getPublishedSlugs,
   getRelatedPosts,
-  getTableOfContents,
-  posts,
-  profile,
-} from "@/data/site";
+} from "@/data/posts.server";
+import { profile } from "@/data/site";
 import { formatDate } from "@/lib/format";
+
+export const revalidate = 3600;
 
 type BlogPostPageProps = {
   params: Promise<{
@@ -25,17 +32,16 @@ type BlogPostPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+export async function generateStaticParams() {
+  const slugs = await getPublishedSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {};
@@ -49,24 +55,21 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = getRelatedPosts(post.slug, post.category);
+  const relatedPosts = await getRelatedPosts(post.slug, post.category);
   const toc = getTableOfContents(post);
   const readingTime = getReadingTime(post);
-  const { previous, next } = getAdjacentPosts(post.slug);
+  const { previous, next } = await getAdjacentPosts(post.slug);
 
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <main>
-        {/* ---------------------------------------------------------- */}
-        {/* ARTICLE HERO                                               */}
-        {/* ---------------------------------------------------------- */}
         <header id="top" className="relative overflow-hidden border-b border-border scroll-mt-24">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_90%_at_50%_0%,black,transparent_80%)]" />
           <div className="mx-auto w-full max-w-3xl px-[var(--gutter)] pb-14 pt-[clamp(2.5rem,1.5rem+4vw,4.5rem)]">
@@ -116,13 +119,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </p>
                 </div>
               </div>
+
+              <ListenButton text={getReadableText(post)} />
             </Reveal>
           </div>
         </header>
 
-        {/* ---------------------------------------------------------- */}
-        {/* BODY + SIDEBAR                                             */}
-        {/* ---------------------------------------------------------- */}
         <div className="shell grid gap-12 py-[clamp(2.5rem,2rem+3vw,4.5rem)] lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-16 xl:justify-center">
           <article className="min-w-0 max-w-[44rem]">
             {post.takeaways && post.takeaways.length > 0 ? (
@@ -145,10 +147,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             ) : null}
 
             <Reveal delay={0.05}>
-              <ArticleBody blocks={post.body} />
+              <ArticleBody markdown={post.body} />
             </Reveal>
 
-            {/* Prev / next */}
             <nav
               aria-label="More essays"
               className="mt-16 grid gap-4 border-t border-border pt-10 sm:grid-cols-2"
@@ -208,7 +209,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </article>
 
-          {/* Sidebar */}
           <aside className="hidden lg:block">
             <div className="sticky top-28 flex flex-col gap-8">
               <TableOfContents items={toc} />
@@ -258,9 +258,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </aside>
         </div>
 
-        {/* ---------------------------------------------------------- */}
-        {/* RELATED                                                    */}
-        {/* ---------------------------------------------------------- */}
         <section className="border-t border-border bg-background-2">
           <div className="shell section-y">
             <Reveal>
@@ -282,11 +279,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   );
 }
 
-function RelatedCard({
-  post,
-}: {
-  post: ReturnType<typeof getRelatedPosts>[number];
-}) {
+function RelatedCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
       <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.5)]">
