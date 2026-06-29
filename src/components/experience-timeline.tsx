@@ -412,52 +412,73 @@ function HorizontalScroll({
           </div>
         </div>
 
-        {/* Vertical side-rail navigator */}
-        <nav
-          aria-hidden="true"
-          className="pointer-events-none absolute right-[clamp(1.25rem,0.5rem+2vw,2.5rem)] top-1/2 hidden -translate-y-1/2 flex-col gap-5 lg:flex"
-        >
-          {items.map((item, index) => {
-            const on = active === index;
-            return (
-              <div key={`rail-${item.year}`} className="flex items-center justify-end gap-3">
-                <span
-                  className={cn(
-                    "font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-all duration-500",
-                    on ? "text-accent opacity-100" : "text-faint opacity-0",
-                  )}
-                >
-                  {item.year}
-                </span>
-                <span
-                  className={cn(
-                    "block rounded-full transition-all duration-500",
-                    on ? "h-6 w-1 bg-accent" : "h-1.5 w-1 bg-border-strong",
-                  )}
-                />
-              </div>
-            );
-          })}
-        </nav>
-
-        {/* Fixed overlay — counter + progress bottom */}
+        {/* Career spine — connects all roles into one journey */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0">
-          <div className="shell flex items-center gap-6 pb-[clamp(2rem,1.5rem+2vw,3.5rem)]">
-            <span className="font-mono text-sm tabular-nums text-foreground">
-              {String(active + 1).padStart(2, "0")}
-            </span>
-            <div className="relative h-px flex-1 overflow-hidden bg-border">
-              <m.span
-                style={{ width: progressWidth }}
-                className="absolute inset-y-0 left-0 bg-accent"
-              />
+          <div className="shell pb-[clamp(2rem,1.5rem+2vw,3.5rem)]">
+            <div className="mb-7 flex items-end justify-between gap-4">
+              <div className="flex items-baseline gap-3 overflow-hidden">
+                <span className="font-display text-lg font-semibold tracking-tight text-foreground">
+                  {items[active]?.role}
+                </span>
+                <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted-foreground sm:inline">
+                  {items[active]?.company}
+                </span>
+              </div>
+              <span className="shrink-0 font-mono text-sm tabular-nums text-faint">
+                <span className="text-accent">
+                  {String(active + 1).padStart(2, "0")}
+                </span>{" "}
+                / {String(items.length).padStart(2, "0")}
+              </span>
             </div>
-            <span className="font-mono text-sm tabular-nums text-faint">
-              {String(items.length).padStart(2, "0")}
-            </span>
-            <span className="hidden min-w-[8rem] text-right font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:inline">
-              {items[active]?.company}
-            </span>
+
+            <div className="relative">
+              <div className="absolute inset-x-1 top-[7px] h-px bg-border" />
+              <m.div
+                style={{ width: progressWidth }}
+                className="absolute left-1 top-[7px] h-px bg-accent"
+              />
+              <ol className="relative flex items-start justify-between">
+                {items.map((item, index) => {
+                  const on = active === index;
+                  const passed = active >= index;
+                  return (
+                    <li
+                      key={`node-${item.year}-${item.company}`}
+                      className="relative flex flex-col items-center"
+                    >
+                      <span className="grid h-[15px] place-items-center">
+                        {on ? (
+                          <span className="absolute inline-flex size-[15px] animate-ping rounded-full bg-accent/40" />
+                        ) : null}
+                        <span
+                          className={cn(
+                            "relative rounded-full transition-all duration-500",
+                            on
+                              ? "size-[11px] bg-accent shadow-[0_0_14px_3px_rgb(var(--accent-rgb)/0.5)]"
+                              : passed
+                                ? "size-[7px] bg-accent"
+                                : "size-[7px] bg-border-strong",
+                          )}
+                        />
+                      </span>
+                      <span
+                        className={cn(
+                          "mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-colors duration-500",
+                          on
+                            ? "text-accent"
+                            : passed
+                              ? "text-muted-foreground"
+                              : "text-faint",
+                        )}
+                      >
+                        {item.year}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
           </div>
         </div>
       </div>
