@@ -15,7 +15,16 @@ await p.setViewport({ width, height });
 await p.goto(process.env.SHOT_URL ?? "http://localhost:3111/", { waitUntil: "networkidle0" });
 
 await p.evaluate((sel) => {
-  const el = document.querySelector(sel);
+  let el;
+  if (sel.startsWith("text=")) {
+    const needle = sel.slice(5);
+    const heading = [...document.querySelectorAll("h1,h2,h3")].find((h) =>
+      h.textContent?.includes(needle),
+    );
+    el = heading?.closest("section") ?? heading;
+  } else {
+    el = document.querySelector(sel);
+  }
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - 60;
   window.scrollTo({ top, behavior: "instant" });
