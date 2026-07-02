@@ -28,7 +28,7 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
         <article className="relative grid overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-border-strong hover:bg-card group-data-[active=true]:border-border-strong group-data-[active=true]:bg-card lg:grid-cols-[1.4fr_1fr]">
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-0 transition-opacity duration-500 group-hover:opacity-40 group-data-[active=true]:opacity-40" />
           <div className="relative p-8 sm:p-10">
-            <span className="rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-accent">
+            <span className="rounded-sm border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-accent">
               {post.category}
             </span>
             <h2 className="mt-8 max-w-2xl font-display text-[clamp(1.75rem,1.3rem+1.8vw,2.8rem)] font-semibold leading-[1.04] tracking-tight transition-colors group-hover:text-accent group-data-[active=true]:text-accent">

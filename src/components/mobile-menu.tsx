@@ -30,15 +30,15 @@ export function MobileMenu() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-x-3 top-[72px] z-50 rounded-2xl border border-border-strong glass p-3 shadow-2xl shadow-black/40"
+            className="absolute inset-x-3 top-[72px] z-50 rounded-lg border border-border-strong glass p-3 shadow-2xl shadow-black/40"
           >
             <MobileNavLinks items={navItems} onNavigate={() => setOpen(false)} />
             <a
               href={`mailto:${profile.email}`}
               onClick={() => setOpen(false)}
-              className="mt-3 flex items-center justify-center rounded-full bg-accent px-4 py-3 text-sm font-medium text-accent-foreground"
+              className="mt-3 flex items-center justify-center rounded-md bg-accent px-4 py-3 font-mono text-[0.72rem] uppercase tracking-[0.12em] text-accent-foreground"
             >
-              Start a project
+              Get in touch
             </a>
             <div className="mt-3 flex items-center gap-2 px-1 pt-1">
               {socials.map((item) => {

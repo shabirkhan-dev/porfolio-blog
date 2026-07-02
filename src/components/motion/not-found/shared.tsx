@@ -67,7 +67,7 @@ export function NotFoundActions({
         whileTap={whileTap}
         whileHover={whileHover}
         transition={SPRING_PRESS}
-        className="inline-flex h-11 select-none items-center justify-center rounded-full border border-border bg-card px-6 text-sm font-medium text-foreground transition-colors hover:bg-primary/5"
+        className="inline-flex h-11 select-none items-center justify-center rounded-md border border-border bg-card px-6 font-mono text-[0.72rem] uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-primary/5"
       >
         {browseLabel}
       </motion.a>

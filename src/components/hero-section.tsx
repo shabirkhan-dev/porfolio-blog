@@ -1,100 +1,32 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { m, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowDownRight, Download } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { Corners } from "@/components/corners";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
+import { HeroLocalTime } from "@/components/hero-local-time";
 import { LinkButton } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 type ProofItem = { value: string; label: string };
 
 type HeroSectionProps = {
+  name: string;
+  title: string;
   lead: string;
   location: string;
   proof: ProofItem[];
 };
 
-function useLocalTime(timeZone = "Asia/Karachi") {
-  const [time, setTime] = useState<string | null>(null);
-
-  useEffect(() => {
-    const format = () => {
-      setTime(
-        new Intl.DateTimeFormat("en-US", {
-          timeZone,
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        }).format(new Date()),
-      );
-    };
-    format();
-    const id = window.setInterval(format, 60_000);
-    return () => window.clearInterval(id);
-  }, [timeZone]);
-
-  return time;
-}
-
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.11, delayChildren: 0.12 },
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: { y: "108%", opacity: 0 },
-  visible: {
-    y: "0%",
-    opacity: 1,
-    transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-const fadeVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: 0.55,
-    },
-  },
-};
-
-function HeroLine({
-  children,
-  className,
-  reducedMotion,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  reducedMotion: boolean;
-}) {
-  if (reducedMotion) {
-    return <span className={cn("block", className)}>{children}</span>;
-  }
-
-  return (
-    <span className={cn("block overflow-hidden pb-[0.08em]", className)}>
-      <m.span variants={lineVariants} className="block">
-        {children}
-      </m.span>
-    </span>
-  );
-}
-
-export function HeroSection({ lead, location, proof }: HeroSectionProps) {
-  const reducedMotion = useReducedMotion();
-  const localTime = useLocalTime();
-
-  const HeadlineTag = reducedMotion ? "h1" : m.h1;
-
+/**
+ * Server-rendered hero. The headline is in the initial HTML and animates with
+ * pure CSS (no hydration dependency), so the LCP element paints immediately.
+ * Only the local-time chip and the deferred canvas are client islands.
+ */
+export function HeroSection({
+  name,
+  title,
+  lead,
+  location,
+  proof,
+}: HeroSectionProps) {
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
       <DeferredHeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
@@ -109,193 +41,118 @@ export function HeroSection({ lead, location, proof }: HeroSectionProps) {
             <span className="relative inline-flex size-2 rounded-full bg-accent" />
           </span>
           <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-            Available — {location}
+            Available for work — {location}
           </span>
         </div>
-        <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint sm:inline">
-          {localTime ? `${localTime} · GMT+5` : "Islamabad · GMT+5"}
-        </span>
+        <HeroLocalTime />
       </div>
 
-      {/* Headline + CTAs */}
+      {/* Identity + headline + CTAs */}
       <div className="shell relative flex flex-1 flex-col justify-center py-20">
-        <HeadlineTag
-          {...(!reducedMotion && {
-            variants: containerVariants,
-            initial: "hidden",
-            animate: "visible",
-          })}
-          className="t-display max-w-[16ch]"
-        >
-          <HeroLine reducedMotion={!!reducedMotion}>I engineer</HeroLine>
-          <HeroLine reducedMotion={!!reducedMotion}>products that feel</HeroLine>
-          <HeroLine reducedMotion={!!reducedMotion}>
-            <span className="relative inline-block font-serif font-normal italic text-accent">
+        <p className="hero-fade font-mono text-[0.72rem] uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="text-foreground">{name}</span>
+          <span aria-hidden="true" className="mx-3 text-faint">
+            //
+          </span>
+          <span className="text-accent">{title}</span>
+        </p>
+
+        {/* No entrance animation on the headline — it is the LCP element and
+            should paint with the first frame. Motion lives in the underline,
+            cursor, and the staggered elements around it. */}
+        <h1 className="t-display mt-7 max-w-[16ch]">
+          <span className="block">I engineer</span>
+          <span className="block">products that feel</span>
+          <span className="block">
+            <span className="relative inline-block text-accent">
               inevitable.
-              {!reducedMotion ? (
-                <m.span
-                  aria-hidden="true"
-                  className="absolute -bottom-1 left-0 h-px w-full origin-left bg-accent"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{
-                    delay: 0.72,
-                    duration: 0.85,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                />
-              ) : (
-                <span
-                  aria-hidden="true"
-                  className="absolute -bottom-1 left-0 h-px w-full bg-accent/70"
-                />
-              )}
-              {!reducedMotion ? (
-                <m.span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -inset-x-4 -inset-y-2 -z-10 rounded-full bg-accent/[0.08] blur-xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 1.2 }}
-                />
-              ) : null}
+              <span aria-hidden="true" className="cursor-blink" />
+              <span
+                aria-hidden="true"
+                className="hero-underline absolute -bottom-1 left-0 h-px w-full bg-accent"
+              />
             </span>
-          </HeroLine>
-        </HeadlineTag>
+          </span>
+        </h1>
 
-        {reducedMotion ? (
-          <p className="t-lead mt-10 max-w-lg">{lead}</p>
-        ) : (
-          <m.p
-            variants={fadeVariants}
-            initial="hidden"
-            animate="visible"
-            className="t-lead mt-10 max-w-lg"
-          >
-            {lead}
-          </m.p>
-        )}
+        <p
+          className="t-lead hero-fade mt-10 max-w-lg"
+          style={{ animationDelay: "0.5s" }}
+        >
+          {lead}
+        </p>
 
-        {reducedMotion ? (
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <LinkButton href="#work" size="lg">
-              View selected work
-              <ArrowDownRight aria-hidden="true" size={18} />
-            </LinkButton>
-            <LinkButton href="/resume" variant="secondary" size="lg">
-              Download résumé
-              <Download aria-hidden="true" size={17} />
-            </LinkButton>
-            <Link
-              href="/blog"
-              className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
-            >
-              Read the journal
-            </Link>
-          </div>
-        ) : (
-          <m.div
-            variants={fadeVariants}
-            initial="hidden"
-            animate="visible"
-            className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+        <div
+          className="hero-fade mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+          style={{ animationDelay: "0.62s" }}
+        >
+          <LinkButton href="#work" size="lg">
+            View selected work
+            <ArrowDownRight
+              aria-hidden="true"
+              size={18}
+              className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:translate-y-0.5"
+            />
+          </LinkButton>
+          <LinkButton href="/resume" variant="secondary" size="lg">
+            View résumé
+            <ArrowUpRight
+              aria-hidden="true"
+              size={17}
+              className="transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"
+            />
+          </LinkButton>
+          <Link
+            href="/blog"
+            className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
           >
-            <LinkButton href="#work" size="lg">
-              View selected work
-              <ArrowDownRight
-                aria-hidden="true"
-                size={18}
-                className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:translate-y-0.5"
-              />
-            </LinkButton>
-            <LinkButton href="/resume" variant="secondary" size="lg">
-              Download résumé
-              <Download
-                aria-hidden="true"
-                size={17}
-                className="transition-transform duration-300 group-hover/btn:translate-y-0.5"
-              />
-            </LinkButton>
-            <Link
-              href="/blog"
-              className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
-            >
-              Read the journal
-            </Link>
-          </m.div>
-        )}
+            Read my writing
+          </Link>
+        </div>
       </div>
 
-      {/* Inline proof strip */}
-      <div className="shell relative pb-14">
-        {reducedMotion ? (
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-border pt-6 font-mono text-[0.66rem] uppercase tracking-[0.12em] text-muted-foreground">
+      {/* Proof — technical stat grid */}
+      <div className="shell relative pb-16">
+        <div className="hero-fade relative" style={{ animationDelay: "0.8s" }}>
+          <Corners />
+          <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
             {proof.map((item, index) => (
-              <span key={item.label} className="inline-flex items-center gap-3">
-                {index > 0 ? (
-                  <span aria-hidden="true" className="text-faint">
-                    ·
+              <div
+                key={item.label}
+                className={`group relative px-5 py-5 transition-colors duration-300 hover:bg-accent/[0.04] sm:px-6 ${
+                  index % 2 === 1 ? "border-l border-border" : ""
+                } ${index >= 2 ? "border-t border-border lg:border-t-0 lg:border-l" : ""}`}
+              >
+                <dt className="flex items-baseline justify-between gap-2 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span
+                    aria-hidden="true"
+                    className="size-1 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                </dt>
+                <dd className="mt-3">
+                  <span className="font-display text-[clamp(1.6rem,1.3rem+1.2vw,2.4rem)] font-medium leading-none tracking-tight text-foreground">
+                    {item.value}
                   </span>
-                ) : null}
-                <span>
-                  <span className="text-foreground">{item.value}</span>{" "}
-                  {item.label}
-                </span>
-              </span>
-            ))}
-          </div>
-        ) : (
-          <m.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-border pt-6 font-mono text-[0.66rem] uppercase tracking-[0.12em] text-muted-foreground"
-          >
-            {proof.map((item, index) => (
-              <span key={item.label} className="inline-flex items-center gap-3">
-                {index > 0 ? (
-                  <span aria-hidden="true" className="text-faint">
-                    ·
+                  <span className="mt-2 block text-xs leading-5 text-muted-foreground">
+                    {item.label}
                   </span>
-                ) : null}
-                <span>
-                  <span className="text-foreground">{item.value}</span>{" "}
-                  {item.label}
-                </span>
-              </span>
+                </dd>
+              </div>
             ))}
-          </m.div>
-        )}
+          </dl>
+        </div>
       </div>
 
       {/* Scroll cue */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center">
-        {reducedMotion ? (
-          <span className="font-mono text-[0.58rem] uppercase tracking-[0.2em] text-faint">
-            Scroll
-          </span>
-        ) : (
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="font-mono text-[0.58rem] uppercase tracking-[0.2em] text-faint">
-              Scroll
-            </span>
-            <m.span
-              aria-hidden="true"
-              className="block h-8 w-px origin-top bg-accent/50"
-              animate={{ scaleY: [0.3, 1, 0.3] }}
-              transition={{
-                duration: 2.4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </m.div>
-        )}
+      <div
+        className="hero-fade pointer-events-none absolute inset-x-0 bottom-4 flex justify-center"
+        style={{ animationDelay: "1.1s" }}
+      >
+        <span
+          aria-hidden="true"
+          className="scroll-cue block h-8 w-px bg-accent/50"
+        />
       </div>
     </section>
   );

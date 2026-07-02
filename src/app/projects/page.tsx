@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
+import { Corners } from "@/components/corners";
 import { CaseStudyCard } from "@/components/portfolio/case-study-card";
-import { Reveal, WordReveal } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import { Magnetic } from "@/components/magnetic";
 import { Marquee } from "@/components/marquee";
 import { LinkButton } from "@/components/ui/button";
@@ -44,12 +45,9 @@ export default function ProjectsPage() {
             </Reveal>
 
             <h1 className="t-display mt-8">
-              <WordReveal as="span" text="Serious product" className="block" />
+              <span className="block">Serious product</span>
               <span className="block">
-                systems,{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  built to hold.
-                </span>
+                systems, <span className="text-accent">built to hold.</span>
               </span>
             </h1>
 
@@ -111,15 +109,14 @@ export default function ProjectsPage() {
 
         {/* CTA */}
         <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
-          <Reveal>
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,4rem)] py-[clamp(2.5rem,2rem+4vw,5rem)]">
+          <Reveal className="relative">
+            <Corners />
+            <div className="relative overflow-hidden rounded-lg border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,4rem)] py-[clamp(2.5rem,2rem+4vw,5rem)]">
               <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
               <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
                 <h2 className="t-h2 max-w-3xl">
                   A product that needs senior technical ownership and a{" "}
-                  <span className="font-serif font-normal italic text-accent">
-                    refined interface?
-                  </span>
+                  <span className="text-accent">refined interface?</span>
                 </h2>
                 <Magnetic>
                   <LinkButton

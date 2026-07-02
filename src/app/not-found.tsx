@@ -26,7 +26,7 @@ export default function NotFound() {
             homeHref="/"
             homeLabel="Back home"
             browseHref="/blog"
-            browseLabel="Read the journal"
+            browseLabel="Read my writing"
           />
         </div>
       </main>

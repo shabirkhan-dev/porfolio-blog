@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { Reveal, WordReveal } from "@/components/motion";
+import { Corners } from "@/components/corners";
+import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
 import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
@@ -27,12 +28,9 @@ export default function LabPage() {
             </Reveal>
 
             <h1 className="t-display mt-8">
-              <WordReveal as="span" text="Where experiments" className="block" />
+              <span className="block">Where experiments</span>
               <span className="block">
-                get{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  room to breathe.
-                </span>
+                get <span className="text-accent">room to breathe.</span>
               </span>
             </h1>
 
@@ -62,9 +60,10 @@ export default function LabPage() {
         <section className="shell section-y">
           <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
             {labExperiments.map((item, index) => (
-              <Reveal key={item.title} delay={index * 0.05}>
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background-2 p-8 transition-colors duration-500 hover:border-border-strong">
-                  <div className="pointer-events-none absolute inset-0 hairline-grid opacity-0 transition-opacity duration-500 group-hover:opacity-40" />
+              <Reveal key={item.title} delay={index * 0.05} className="relative">
+                <Corners />
+                <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background-2 p-8 transition-colors duration-500 hover:border-border-strong">
+                  <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
                   <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
                     {item.category}
                   </span>
@@ -79,7 +78,7 @@ export default function LabPage() {
                       {item.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
+                          className="rounded-sm border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
                         >
                           {tag}
                         </span>
@@ -107,7 +106,7 @@ export default function LabPage() {
 
         <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
           <Reveal>
-            <div className="rounded-2xl border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,3rem)] py-[clamp(2rem,1.5rem+3vw,3.5rem)]">
+            <div className="rounded-lg border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,3rem)] py-[clamp(2rem,1.5rem+3vw,3.5rem)]">
               <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
                 Main portfolio
               </p>

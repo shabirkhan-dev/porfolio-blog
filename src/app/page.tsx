@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
+import { AsciiField } from "@/components/ascii-field";
 import { EngineRoom } from "@/components/engine-room";
 import { Reveal } from "@/components/motion";
 import { HeroSection } from "@/components/hero-section";
@@ -39,6 +40,8 @@ export default async function Home() {
       <SiteHeader />
       <main>
         <HeroSection
+          name={profile.name}
+          title={profile.title}
           lead={profile.hero}
           location={profile.location}
           proof={proof}
@@ -68,10 +71,9 @@ export default async function Home() {
           <div className="grid items-center gap-16 lg:grid-cols-[0.65fr_1.35fr] lg:gap-24">
             <Reveal>
               <ScalesFrame className="mx-auto w-full max-w-[17rem]">
-                <div className="relative grid aspect-square place-items-center">
-                  <div className="absolute inset-0 hairline-grid opacity-50" />
-                  <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_50%_42%,rgb(var(--accent-rgb)/0.18),transparent_62%)]" />
-                  <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-semibold leading-none tracking-tight text-accent">
+                <div className="relative grid aspect-square place-items-center overflow-hidden">
+                  <AsciiField className="absolute inset-0 h-full w-full" cell={13} />
+                  <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-medium leading-none tracking-tight text-accent">
                     {profile.initials}
                   </span>
                 </div>
@@ -79,19 +81,38 @@ export default async function Home() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <span className="eyebrow">About</span>
+              <div className="flex items-center gap-4">
+                <span className="eyebrow">About</span>
+                <span className="font-mono text-xs text-faint">/ 01</span>
+              </div>
               <h2 className="t-h2 mt-6 max-w-lg text-balance">
                 Calm on the surface.{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  Disciplined
-                </span>{" "}
-                underneath.
+                <span className="text-accent">Disciplined</span> underneath.
               </h2>
               <p className="mt-6 max-w-lg text-[0.95rem] leading-7 text-muted-foreground">
                 {profile.intro}
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
+              <dl className="mt-8 grid max-w-lg gap-y-2 border-t border-border pt-6 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-2 sm:gap-x-8">
+                <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <dt className="text-faint">Currently</dt>
+                  <dd className="text-foreground">Founder @ Rabtx</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <dt className="text-faint">Experience</dt>
+                  <dd className="text-foreground">6+ years, full-stack</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <dt className="text-faint">Based in</dt>
+                  <dd className="text-foreground">Islamabad · GMT+5</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <dt className="text-faint">Open to</dt>
+                  <dd className="text-accent">Remote senior roles</dd>
+                </div>
+              </dl>
+
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
                 <a
                   href={profile.github}
                   target="_blank"
@@ -128,7 +149,7 @@ export default async function Home() {
         {/* SELECTED WORK — bento */}
         <section id="work" className="shell section-y">
           <SectionHeading
-            index="01"
+            index="03"
             eyebrow="Selected work"
             title="Proof, not promises."
             description={
@@ -148,29 +169,41 @@ export default async function Home() {
         </section>
 
         {/* PHILOSOPHY — compressed */}
-        <section className="relative overflow-hidden border-y border-border bg-background-2">
+        <section
+          id="approach"
+          className="relative overflow-hidden border-y border-border bg-background-2"
+        >
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
           <div className="shell section-y relative">
-            <Reveal className="max-w-xl">
-              <span className="eyebrow">Approach</span>
-              <h2 className="t-h2 mt-6 text-balance">
-                How I{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  think
-                </span>{" "}
-                about building.
-              </h2>
+            <Reveal>
+              <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
+                <div className="max-w-xl">
+                  <div className="flex items-center gap-4">
+                    <span className="eyebrow">Approach</span>
+                    <span className="font-mono text-xs text-faint">/ 04</span>
+                  </div>
+                  <h2 className="t-h2 mt-6 text-balance">
+                    How I <span className="text-accent">think</span> about
+                    building.
+                  </h2>
+                </div>
+                <p className="max-w-sm pb-1 text-[0.95rem] leading-7 text-muted-foreground">
+                  Four principles that decide what gets built, in what order,
+                  and what gets deliberately left out.
+                </p>
+              </div>
             </Reveal>
 
-            <div className="mt-20 grid gap-x-16 gap-y-14 sm:grid-cols-2">
+            <div className="mt-14 grid gap-5 sm:grid-cols-2">
               {philosophy.map((item, index) => {
                 const Icon = item.icon;
                 return (
-                  <Reveal key={item.title} delay={index * 0.05}>
+                  <Reveal key={item.title} delay={index * 0.05} className="h-full">
                     <PrincipleCard
                       index={index}
                       title={item.title}
                       body={item.body}
+                      practice={item.practice}
                       icon={<Icon aria-hidden="true" size={17} />}
                     />
                   </Reveal>
@@ -185,7 +218,7 @@ export default async function Home() {
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(90%_70%_at_50%_50%,black,transparent_85%)]" />
           <div className="shell section-y relative">
             <SectionHeading
-              index="02"
+              index="05"
               eyebrow="Toolkit"
               title="The stack I ship with."
             />
@@ -204,8 +237,8 @@ export default async function Home() {
         {/* JOURNAL */}
         <section className="shell section-y">
           <SectionHeading
-            index="04"
-            eyebrow="Journal"
+            index="07"
+            eyebrow="Writing"
             title="Notes from the work."
             description={
               <Link
@@ -235,7 +268,7 @@ export default async function Home() {
         <section className="section-y border-y border-border bg-background-2">
           <div className="shell">
             <SectionHeading
-              index="05"
+              index="08"
               eyebrow="Endorsements"
               title="Trusted by people I've shipped with."
             />

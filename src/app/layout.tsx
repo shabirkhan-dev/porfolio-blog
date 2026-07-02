@@ -1,40 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Inter,
-  Bricolage_Grotesque,
-  Instrument_Serif,
-  JetBrains_Mono,
-} from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { DeferredChrome } from "@/components/deferred-chrome";
 import { MotionProvider } from "@/components/motion-provider";
-import { RandomAccentScript } from "@/components/random-accent";
 import { ThemeScript } from "@/components/theme-toggle";
 
+// `display: "optional"` keeps LCP honest: text paints once with the
+// size-adjusted fallback and never re-paints late when the webfont lands.
+// Body font is not preloaded — its metrics-adjusted fallback is near
+// identical, and skipping the preload keeps it off the critical path.
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
+  display: "optional",
+  preload: false,
 });
 
-const bricolage = Bricolage_Grotesque({
+const grotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-bricolage",
-  display: "swap",
-});
-
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
-  display: "swap",
+  variable: "--font-grotesk",
+  display: "optional",
 });
 
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
-  display: "swap",
+  display: "optional",
 });
 
 export const metadata: Metadata = {
@@ -80,10 +71,37 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#1a1814" },
-    { media: "(prefers-color-scheme: light)", color: "#f7f3ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#111214" },
+    { media: "(prefers-color-scheme: light)", color: "#f9fafa" },
   ],
   colorScheme: "light dark",
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Shabir Khan",
+  jobTitle: "Senior Full-Stack Engineer",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev",
+  email: "mailto:shabirkhan.dev@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Islamabad",
+    addressCountry: "PK",
+  },
+  sameAs: [
+    "https://github.com/shabirkhan-dev",
+    "https://linkedin.com/in/shabirkhan23",
+  ],
+  knowsAbout: [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "React Native",
+    "PostgreSQL",
+    "AI workflows",
+  ],
 };
 
 export default function RootLayout({
@@ -96,11 +114,15 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${inter.variable} ${bricolage.variable} ${instrument.variable} ${jetbrains.variable} scroll-smooth`}
+      className={`${inter.variable} ${grotesk.variable} ${jetbrains.variable} scroll-smooth`}
     >
       <head>
         <ThemeScript />
-        <RandomAccentScript />
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body suppressHydrationWarning>
         <MotionProvider>

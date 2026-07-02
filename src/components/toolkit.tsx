@@ -14,6 +14,7 @@ import {
   TerminalSquare,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Corners } from "@/components/corners";
 import type { StackIconName } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -36,111 +37,6 @@ type StackGroup = {
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-function CategoryArt({ iconName }: { iconName: StackIconName }) {
-  if (iconName === "frontend") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-6 top-6 size-32 text-accent/20"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <rect x="8" y="8" width="44" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
-        <rect x="68" y="8" width="44" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
-        <rect x="8" y="68" width="104" height="44" rx="8" stroke="currentColor" strokeWidth="1" />
-      </svg>
-    );
-  }
-  if (iconName === "backend") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-6 top-6 size-32 text-accent/20"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <circle cx="60" cy="24" r="10" stroke="currentColor" strokeWidth="1" />
-        <circle cx="24" cy="96" r="10" stroke="currentColor" strokeWidth="1" />
-        <circle cx="96" cy="96" r="10" stroke="currentColor" strokeWidth="1" />
-        <path d="M60 34 L24 86 M60 34 L96 86" stroke="currentColor" strokeWidth="1" />
-      </svg>
-    );
-  }
-  if (iconName === "mobile") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-8 top-8 size-28 text-accent/20"
-        viewBox="0 0 80 120"
-        fill="none"
-      >
-        <rect x="16" y="8" width="48" height="104" rx="10" stroke="currentColor" strokeWidth="1" />
-        <rect x="28" y="20" width="24" height="4" rx="2" fill="currentColor" />
-        <circle cx="40" cy="100" r="4" stroke="currentColor" strokeWidth="1" />
-      </svg>
-    );
-  }
-  if (iconName === "database") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-6 top-6 size-32 text-accent/20"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <ellipse cx="60" cy="28" rx="40" ry="14" stroke="currentColor" strokeWidth="1" />
-        <path d="M20 28 V72 C20 84 36 92 60 92 C84 92 100 84 100 72 V28" stroke="currentColor" strokeWidth="1" />
-        <path d="M20 50 C20 62 36 70 60 70 C84 70 100 62 100 50" stroke="currentColor" strokeWidth="1" />
-      </svg>
-    );
-  }
-  if (iconName === "devops") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-6 top-6 size-32 text-accent/20"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <path d="M20 60 H100 M60 20 V100" stroke="currentColor" strokeWidth="1" />
-        <circle cx="60" cy="60" r="18" stroke="currentColor" strokeWidth="1" />
-        <circle cx="60" cy="60" r="6" fill="currentColor" />
-      </svg>
-    );
-  }
-  if (iconName === "ai") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute right-6 top-6 size-32 text-accent/20"
-        viewBox="0 0 120 120"
-        fill="none"
-      >
-        <circle cx="60" cy="60" r="8" stroke="currentColor" strokeWidth="1" />
-        {[0, 60, 120, 180, 240, 300].map((deg) => (
-          <g key={deg} transform={`rotate(${deg} 60 60)`}>
-            <circle cx="60" cy="20" r="5" stroke="currentColor" strokeWidth="1" />
-            <path d="M60 28 L60 52" stroke="currentColor" strokeWidth="1" />
-          </g>
-        ))}
-      </svg>
-    );
-  }
-  return (
-    <svg
-      aria-hidden
-      className="absolute right-6 top-6 size-32 text-accent/20"
-      viewBox="0 0 120 120"
-      fill="none"
-    >
-      <path d="M16 88 L44 32 L76 64 L104 24" stroke="currentColor" strokeWidth="1" />
-      <circle cx="44" cy="32" r="5" stroke="currentColor" strokeWidth="1" />
-      <circle cx="76" cy="64" r="5" stroke="currentColor" strokeWidth="1" />
-      <circle cx="104" cy="24" r="5" stroke="currentColor" strokeWidth="1" />
-    </svg>
-  );
-}
 
 export function Toolkit({ groups }: { groups: StackGroup[] }) {
   const [active, setActive] = useState(0);
@@ -194,10 +90,12 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
       </div>
 
       {/* Desktop console */}
-      <div
-        ref={listRef}
-        className="hidden overflow-hidden rounded-2xl border border-border bg-background lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
-      >
+      <div className="relative hidden lg:block">
+        <Corners />
+        <div
+          ref={listRef}
+          className="grid overflow-hidden rounded-lg border border-border-strong bg-background lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
+        >
         {/* Left index */}
         <div className="relative border-r border-border">
           <div
@@ -230,7 +128,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
               >
                 <span
                   className={cn(
-                    "relative z-10 grid size-7 place-items-center rounded-full border font-mono text-[0.62rem] tabular-nums transition-all duration-300",
+                    "relative z-10 grid size-7 place-items-center rounded-sm border font-mono text-[0.62rem] tabular-nums transition-all duration-300",
                     isActive
                       ? "border-accent bg-accent text-accent-foreground"
                       : "border-border bg-background text-faint group-hover/row:border-border-strong",
@@ -277,8 +175,6 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
               transition={{ duration: 0.38, ease }}
               className="relative flex h-full flex-col p-8 sm:p-9"
             >
-              <CategoryArt iconName={current.iconName} />
-
               <span
                 aria-hidden
                 className="pointer-events-none absolute -left-2 bottom-4 select-none font-display text-[9rem] font-semibold leading-none text-foreground/[0.03]"
@@ -286,16 +182,10 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                 {String(active + 1).padStart(2, "0")}
               </span>
 
-              <div className="flex items-start justify-between gap-4">
-                <div className="relative">
-                  <span className="absolute -inset-2 animate-[spin_14s_linear_infinite] rounded-2xl border border-dashed border-accent/30" />
-                  <span className="relative grid size-14 place-items-center rounded-xl border border-accent/30 bg-accent/[0.08] text-accent">
-                    <ActiveIcon aria-hidden size={24} />
-                  </span>
-                </div>
-                <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
-                  {String(active + 1).padStart(2, "0")} /{" "}
-                  {String(groups.length).padStart(2, "0")}
+              <div className="relative w-fit">
+                <span className="absolute -inset-2 animate-[spin_14s_linear_infinite] rounded-lg border border-dashed border-accent/30" />
+                <span className="relative grid size-14 place-items-center rounded-md border border-accent/30 bg-accent/[0.08] text-accent">
+                  <ActiveIcon aria-hidden size={24} />
                 </span>
               </div>
 
@@ -305,7 +195,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
               <h3 className="mt-3 font-display text-[clamp(2rem,1.4rem+1.8vw,2.85rem)] font-semibold leading-[1.02] tracking-tight">
                 {current.title}
               </h3>
-              <p className="mt-4 max-w-md font-serif text-lg italic leading-relaxed text-muted-foreground">
+              <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
                 {current.focus}
               </p>
               <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
@@ -332,7 +222,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                         delay: 0.08 + i * 0.05,
                         ease,
                       }}
-                      className="group/pill flex items-center justify-between rounded-xl border border-border bg-background/60 px-4 py-3 transition-colors duration-300 hover:border-accent/35 hover:bg-card"
+                      className="group/pill flex items-center justify-between rounded-md border border-border bg-background/60 px-4 py-3 transition-colors duration-300 hover:border-accent/35 hover:bg-card"
                     >
                       <span className="font-mono text-[0.72rem] text-foreground">
                         {item}
@@ -344,11 +234,12 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
               </div>
             </motion.div>
           </AnimatePresence>
+          </div>
         </div>
       </div>
 
       {/* Mobile accordion */}
-      <div className="overflow-hidden rounded-2xl border border-border lg:hidden">
+      <div className="overflow-hidden rounded-lg border border-border lg:hidden">
         {groups.map((group, index) => {
           const Icon = iconRegistry[group.iconName];
           const isOpen = openMobile === index;
@@ -365,7 +256,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
               >
                 <span
                   className={cn(
-                    "grid size-7 place-items-center rounded-full border font-mono text-[0.62rem]",
+                    "grid size-7 place-items-center rounded-sm border font-mono text-[0.62rem]",
                     isOpen
                       ? "border-accent bg-accent text-accent-foreground"
                       : "border-border text-faint",
@@ -399,7 +290,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                     className="overflow-hidden"
                   >
                     <div className="space-y-4 px-5 pb-6">
-                      <p className="font-serif text-base italic leading-relaxed text-muted-foreground">
+                      <p className="text-base leading-relaxed text-muted-foreground">
                         {group.focus}
                       </p>
                       <p className="text-sm leading-7 text-muted-foreground">
@@ -409,7 +300,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                         {group.items.map((item) => (
                           <span
                             key={item}
-                            className="flex items-center justify-between rounded-xl border border-border bg-background-2 px-4 py-3 font-mono text-[0.72rem]"
+                            className="flex items-center justify-between rounded-md border border-border bg-background-2 px-4 py-3 font-mono text-[0.72rem]"
                           >
                             {item}
                             <span className="size-1.5 rounded-full bg-accent" />

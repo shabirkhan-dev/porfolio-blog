@@ -31,16 +31,28 @@ export const profile = {
   github: "https://github.com/shabirkhan-dev",
   linkedin: "https://linkedin.com/in/shabirkhan23",
   hero:
-    "Senior full-stack engineer building calm, production-grade software across SaaS, mobile, dashboards, APIs, and AI systems.",
+    "TypeScript-first engineer with 6+ years shipping production systems — React frontends serving 100k+ users, Node.js APIs, React Native apps, and delivery pipelines with security built in.",
   intro:
     "Six years shipping SaaS, admin systems, mobile apps, and AI workflows. I care about the boring parts that make software survive: state, latency, permissions, release flow, and the details users never see.",
 };
 
+export const education = {
+  degree: "ICS — Intermediate in Computer Science",
+  school: "GCCE Gilgit",
+  year: "Completed 2021",
+};
+
+export const languages = [
+  { name: "Urdu", level: "Native" },
+  { name: "English", level: "Professional" },
+];
+
 export const navItems = [
   { href: "/", label: "Home" },
-  { href: "/#work", label: "Work" },
-  { href: "/blog", label: "Journal" },
+  { href: "/projects", label: "Work" },
+  { href: "/blog", label: "Writing" },
   { href: "/lab", label: "Lab" },
+  { href: "/resume", label: "Résumé" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -54,13 +66,15 @@ export const socials = [
 /** Compact "core stack" shown as a quiet static strip under the hero. */
 export const coreStack = [
   "TypeScript",
+  "React",
   "Next.js",
-  "React Native",
   "Node.js",
+  "React Native",
   "PostgreSQL",
   "Redis",
-  "AI Workflows",
   "Docker",
+  "AWS",
+  "AI Workflows",
 ];
 
 export const proof = [
@@ -226,27 +240,50 @@ export const projects: Project[] = [
     tags: ["SaaS", "Frontend", "Scale"],
     visual: "monorepo",
   },
+  {
+    title: "Starter Kit",
+    slug: "starter-kit",
+    role: "Author and maintainer",
+    category: "Open source",
+    year: "2024 – Present",
+    tagline:
+      "Production-grade monorepo with polyglot services and automated security enforcement.",
+    built:
+      "TypeScript, Python, and Rust services, shared CI/CD pipelines, CodeQL, Dependabot, secret scanning",
+    stack: ["TypeScript", "Python", "Rust", "GitHub Actions", "CodeQL"],
+    impact: [
+      "One repo pattern reused across client and product builds",
+      "Security gates enforced automatically on every merge",
+    ],
+    metric: { value: "OSS", label: "open-source monorepo" },
+    tags: ["Open source", "DevEx", "Security"],
+    visual: "monorepo",
+  },
 ];
 
 export const philosophy = [
   {
     title: "Product judgment first",
     body: "Architecture only matters if it makes the product easier to ship and harder to break.",
+    practice: "Scope is cut before code — the smallest system that ships wins.",
     icon: Sparkles,
   },
   {
     title: "Systems, not screens",
     body: "Boundaries, contracts, and data flow designed together — not patched together later.",
+    practice: "API contracts and schema land before the first component does.",
     icon: Network,
   },
   {
     title: "Honest interfaces",
     body: "Trust comes from states that tell the truth: loading, empty, error, irreversible.",
+    practice: "Every screen ships with its failure states designed, not defaulted.",
     icon: AppWindow,
   },
   {
     title: "Boring where it counts",
     body: "Release flow, permissions, and observability should be invisible — until you need them.",
+    practice: "CI gates, CodeQL scans, and typed configs on every merge to main.",
     icon: ChartNoAxesCombined,
   },
 ];
@@ -302,7 +339,7 @@ export const stackGroups: StackGroup[] = [
     description: "Repeatable delivery with security and reliability built in.",
     focus: "Make shipping boring, observable, and safe by default.",
     iconName: "devops",
-    items: ["Docker", "AWS", "GitHub Actions", "CodeQL", "Linux"],
+    items: ["Docker", "AWS", "GitHub Actions", "Kafka", "CodeQL", "Linux"],
   },
   {
     title: "AI and automation",

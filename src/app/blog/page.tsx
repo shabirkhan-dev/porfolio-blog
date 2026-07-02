@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
 import { NewsletterBlock } from "@/components/blog/newsletter-block";
-import { Reveal, WordReveal } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
@@ -53,16 +53,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
           <div className="shell relative pb-14 pt-[clamp(3rem,2rem+6vw,6rem)]">
             <Reveal>
-              <span className="eyebrow">Editorial journal</span>
+              <span className="eyebrow">Writing</span>
             </Reveal>
 
             <h1 className="t-display mt-8">
-              <WordReveal as="span" text="Notes on" className="block" />
+              <span className="block">Notes on</span>
               <span className="block">
-                building{" "}
-                <span className="font-serif font-normal italic text-accent">
-                  with taste.
-                </span>
+                building <span className="text-accent">with taste.</span>
               </span>
             </h1>
 
@@ -117,7 +114,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                   <div className="relative flex min-h-72 flex-col justify-between border-t border-border bg-background-2 p-8 lg:border-l lg:border-t-0">
                     <div className="pointer-events-none absolute inset-0 hairline-grid opacity-60" />
                     <p className="relative font-mono text-xs uppercase tracking-[0.16em] text-faint">
-                      From the journal
+                      Featured essay
                     </p>
                     <p className="relative font-display text-[8rem] font-semibold leading-none tracking-tighter text-accent/15">
                       01
@@ -138,7 +135,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         ) : null}
 
         <section className="shell sticky top-16 z-30 py-6">
-          <div className="glass -mx-2 flex gap-2 overflow-x-auto rounded-full border border-border px-2 py-2">
+          <div className="glass -mx-2 flex gap-2 overflow-x-auto rounded-lg border border-border px-2 py-2">
             {["All", ...categories].map((item) => {
               const href =
                 item === "All"
@@ -151,7 +148,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                   key={item}
                   href={href}
                   className={cn(
-                    "shrink-0 rounded-full px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] transition",
+                    "shrink-0 rounded-md px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] transition",
                     active
                       ? "bg-accent text-accent-foreground"
                       : "text-muted-foreground hover:text-foreground",
@@ -189,8 +186,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 Nothing here yet
               </p>
               <p className="max-w-sm text-sm leading-7 text-muted-foreground">
-                No essays in this category for now. Browse everything in the
-                journal instead.
+                No essays in this category for now. Browse all writing
+                instead.
               </p>
               <Link
                 href="/blog"

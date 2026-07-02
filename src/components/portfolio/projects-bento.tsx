@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { Corners } from "@/components/corners";
 import { ProjectPreview } from "@/components/portfolio/project-preview";
 import type { Project } from "@/data/site";
 import { cn } from "@/lib/utils";
@@ -20,26 +21,31 @@ function TileShell({
   children: React.ReactNode;
 }) {
   return (
-    <Link
-      href={hrefFor(project)}
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-background-2 p-7 transition-colors duration-500 hover:border-border-strong sm:p-8",
-        className,
-      )}
-    >
-      <div className="pointer-events-none absolute inset-0 hairline-grid opacity-0 transition-opacity duration-500 group-hover:opacity-40" />
-      <div className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(70%_55%_at_50%_0%,rgb(var(--accent-rgb)/0.08),transparent_70%)]" />
-      {children}
-    </Link>
+    <span className={cn("relative block", className)}>
+      <Corners />
+      <Link
+        href={hrefFor(project)}
+        className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background-2 p-7 transition-colors duration-500 hover:border-border-strong sm:p-8"
+      >
+        <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+        <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(70%_55%_at_50%_0%,rgb(var(--accent-rgb)/0.07),transparent_70%)]" />
+        {children}
+      </Link>
+    </span>
   );
 }
 
-function MetaRow({ project }: { project: Project }) {
+function MetaRow({ project, index }: { project: Project; index: number }) {
   return (
     <div className="relative flex items-center justify-between gap-3">
-      <span className="inline-flex items-center rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent">
-        {project.category}
-      </span>
+      <div className="flex items-center gap-3">
+        <span className="font-mono text-[0.62rem] tabular-nums text-faint">
+          [{String(index + 1).padStart(2, "0")}]
+        </span>
+        <span className="inline-flex items-center rounded-sm border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent">
+          {project.category}
+        </span>
+      </div>
       <ArrowUpRight
         aria-hidden="true"
         size={18}
@@ -76,17 +82,17 @@ function Metric({
 }
 
 /* Featured — large tile with the product visual */
-function FeaturedTile({ project }: { project: Project }) {
+function FeaturedTile({ project, index }: { project: Project; index: number }) {
   return (
     <TileShell project={project} className="lg:col-span-2 lg:row-span-2">
-      <MetaRow project={project} />
+      <MetaRow project={project} index={index} />
 
       <div className="relative mt-6">
         <h3 className="font-display text-[clamp(1.9rem,1.4rem+1.8vw,2.9rem)] font-semibold leading-[0.98] tracking-tight transition-colors duration-300 group-hover:text-accent">
           {project.title}
         </h3>
         {project.subtitle ? (
-          <p className="mt-1.5 font-serif text-lg font-normal italic text-muted-foreground">
+          <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.14em] text-muted-foreground">
             {project.subtitle}
           </p>
         ) : null}
@@ -96,7 +102,7 @@ function FeaturedTile({ project }: { project: Project }) {
       </div>
 
       {/* product visual */}
-      <div className="relative mt-8 overflow-hidden rounded-2xl border border-border shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)] transition-colors duration-500 group-hover:border-border-strong">
+      <div className="relative mt-8 overflow-hidden rounded-md border border-border shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)] transition-colors duration-500 group-hover:border-border-strong">
         <div className="code-surface">
           <div className="code-header flex items-center gap-3 border-b px-4 py-2.5">
             <span className="flex gap-1.5">
@@ -128,10 +134,10 @@ function FeaturedTile({ project }: { project: Project }) {
 }
 
 /* Wide — title, tagline, metric */
-function WideTile({ project }: { project: Project }) {
+function WideTile({ project, index }: { project: Project; index: number }) {
   return (
     <TileShell project={project} className="lg:col-span-2">
-      <MetaRow project={project} />
+      <MetaRow project={project} index={index} />
       <div className="relative mt-6">
         <h3 className="font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.1rem)] font-semibold leading-tight tracking-tight transition-colors duration-300 group-hover:text-accent">
           {project.title}
@@ -151,10 +157,10 @@ function WideTile({ project }: { project: Project }) {
 }
 
 /* Small — compact tile */
-function SmallTile({ project }: { project: Project }) {
+function SmallTile({ project, index }: { project: Project; index: number }) {
   return (
     <TileShell project={project} className="lg:col-span-1">
-      <MetaRow project={project} />
+      <MetaRow project={project} index={index} />
       <div className="relative mt-6">
         <h3 className="font-display text-xl font-semibold leading-tight tracking-tight transition-colors duration-300 group-hover:text-accent">
           {project.title}
@@ -175,10 +181,10 @@ export function ProjectsBento({ projects }: { projects: Project[] }) {
 
   return (
     <div className="grid auto-rows-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:[grid-template-rows:repeat(2,minmax(15rem,1fr))]">
-      {featured ? <FeaturedTile project={featured} /> : null}
-      {wide ? <WideTile project={wide} /> : null}
-      {rest.map((project) => (
-        <SmallTile key={project.slug} project={project} />
+      {featured ? <FeaturedTile project={featured} index={0} /> : null}
+      {wide ? <WideTile project={wide} index={1} /> : null}
+      {rest.map((project, i) => (
+        <SmallTile key={project.slug} project={project} index={i + 2} />
       ))}
     </div>
   );

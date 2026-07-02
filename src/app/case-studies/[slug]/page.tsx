@@ -78,7 +78,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
               <h1 className="t-h1 mt-8">
                 {study.title}
-                <span className="mt-2 block font-serif text-[0.45em] font-normal italic text-muted-foreground">
+                <span className="mt-3 block font-mono text-[0.3em] font-normal uppercase tracking-[0.16em] text-muted-foreground">
                   {study.subtitle}
                 </span>
               </h1>
@@ -135,7 +135,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                   {study.stack.map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-border px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-muted-foreground"
+                      className="rounded-sm border border-border px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-muted-foreground"
                     >
                       {item}
                     </span>

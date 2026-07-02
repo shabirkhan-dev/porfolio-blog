@@ -25,7 +25,7 @@ export function CaseStudyCard({
       <article
         ref={ref}
         data-active={active}
-        className="relative overflow-hidden rounded-3xl border border-border bg-background-2 transition-colors duration-500 hover:border-border-strong group-data-[active=true]:border-border-strong"
+        className="relative overflow-hidden rounded-lg border border-border bg-background-2 transition-colors duration-500 hover:border-border-strong group-data-[active=true]:border-border-strong"
       >
         <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
           {/* ---- Text column ---- */}
@@ -38,7 +38,7 @@ export function CaseStudyCard({
             {/* meta row */}
             <div className="flex items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3 font-mono text-[0.64rem] uppercase tracking-[0.14em]">
-                <span className="inline-flex items-center rounded-full border border-accent/25 bg-accent/[0.08] px-3 py-1 text-accent">
+                <span className="inline-flex items-center rounded-sm border border-accent/25 bg-accent/[0.08] px-3 py-1 text-accent">
                   {project.category}
                 </span>
                 <span className="text-faint">{project.year}</span>
@@ -53,7 +53,7 @@ export function CaseStudyCard({
               {project.title}
             </h3>
             {project.subtitle ? (
-              <p className="mt-1.5 font-serif text-lg font-normal italic text-muted-foreground">
+              <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.14em] text-muted-foreground">
                 {project.subtitle}
               </p>
             ) : null}
@@ -106,7 +106,7 @@ export function CaseStudyCard({
                 {project.stack.map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-border px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint transition-colors duration-300 group-hover:border-border-strong"
+                    className="rounded-sm border border-border px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint transition-colors duration-300 group-hover:border-border-strong"
                   >
                     {item}
                   </span>

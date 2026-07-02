@@ -130,7 +130,7 @@ function createMarkdownComponents(): Components {
       return (
         <figure className="my-12 border-l-2 border-accent pl-6">
           <Quote aria-hidden="true" size={22} className="mb-4 text-accent" />
-          <blockquote className="font-serif text-[clamp(1.5rem,1.2rem+1.3vw,2.2rem)] italic leading-snug text-foreground [&>p]:m-0">
+          <blockquote className="font-display text-[clamp(1.4rem,1.15rem+1.2vw,2rem)] font-normal leading-snug tracking-tight text-foreground [&>p]:m-0">
             {children}
           </blockquote>
         </figure>
@@ -221,7 +221,7 @@ export function ArticleBody({ markdown }: { markdown: string }) {
       return (
         <figure className="my-12 border-l-2 border-accent pl-6">
           <Quote aria-hidden="true" size={22} className="mb-4 text-accent" />
-          <blockquote className="font-serif text-[clamp(1.5rem,1.2rem+1.3vw,2.2rem)] italic leading-snug text-foreground [&>p]:m-0">
+          <blockquote className="font-display text-[clamp(1.4rem,1.15rem+1.2vw,2rem)] font-normal leading-snug tracking-tight text-foreground [&>p]:m-0">
             {children}
           </blockquote>
         </figure>

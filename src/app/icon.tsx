@@ -13,13 +13,13 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#e9b069",
-          color: "#1a1814",
-          borderRadius: 11,
-          fontSize: 27,
-          fontWeight: 800,
-          letterSpacing: -1.5,
-          fontFamily: "sans-serif",
+          background: "#4ade80",
+          color: "#0c2916",
+          borderRadius: 8,
+          fontSize: 24,
+          fontWeight: 700,
+          letterSpacing: -1,
+          fontFamily: "monospace",
         }}
       >
         SK

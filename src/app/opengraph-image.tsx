@@ -6,10 +6,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OpengraphImage() {
-  const bg = "#1a1814";
-  const fg = "#f5f0e6";
-  const muted = "#a39e93";
-  const accent = "#e9b069";
+  const bg = "#111214";
+  const fg = "#ebeef0";
+  const muted = "#8b9096";
+  const accent = "#4ade80";
 
   return new ImageResponse(
     (
@@ -33,8 +33,8 @@ export default function OpengraphImage() {
             left: 40,
             right: 40,
             bottom: 40,
-            border: "1px solid rgba(245,240,230,0.08)",
-            borderRadius: 24,
+            border: "1px solid rgba(235,238,240,0.08)",
+            borderRadius: 12,
           }}
         />
 
@@ -55,11 +55,10 @@ export default function OpengraphImage() {
             style={{
               width: 14,
               height: 14,
-              borderRadius: 99,
               background: accent,
             }}
           />
-          Portfolio &amp; Journal
+          Portfolio &amp; Writing
         </div>
 
         {/* headline */}
@@ -87,7 +86,7 @@ export default function OpengraphImage() {
             }}
           >
             <span>Senior Full-Stack Engineer building products that feel&nbsp;</span>
-            <span style={{ color: accent, fontStyle: "italic" }}>
+            <span style={{ color: accent, fontFamily: "monospace" }}>
               inevitable.
             </span>
           </div>

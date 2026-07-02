@@ -49,7 +49,7 @@ export function SiteHeader() {
           className={cn(
             "flex items-center justify-between gap-4 transition-all duration-500 ease-out",
             scrolled
-              ? "mt-2 min-h-[3.25rem] rounded-full border border-border-strong glass-strong pl-3 pr-2 sm:mt-3 [box-shadow:var(--header-shadow)]"
+              ? "mt-2 min-h-[3.25rem] rounded-lg border border-border-strong glass-strong pl-3 pr-2 sm:mt-3 [box-shadow:var(--header-shadow)]"
               : "min-h-16",
           )}
         >
@@ -59,7 +59,7 @@ export function SiteHeader() {
           >
             <span
               className={cn(
-                "grid place-items-center rounded-md bg-accent font-display font-bold text-accent-foreground transition-all duration-500 group-hover:rotate-90",
+                "grid place-items-center rounded-sm bg-accent font-mono font-bold text-accent-foreground transition-all duration-500 group-hover:rotate-90",
                 scrolled ? "size-7 text-[0.7rem]" : "size-8 text-xs",
               )}
             >
@@ -67,10 +67,10 @@ export function SiteHeader() {
             </span>
             <span
               className={cn(
-                "font-display font-semibold tracking-tight transition-all duration-500",
+                "font-mono uppercase tracking-[0.1em] transition-all duration-500",
                 scrolled
-                  ? "hidden text-[0.8rem] md:block"
-                  : "hidden text-sm sm:block",
+                  ? "hidden text-[0.72rem] md:block"
+                  : "hidden text-[0.78rem] sm:block",
               )}
             >
               {profile.name}

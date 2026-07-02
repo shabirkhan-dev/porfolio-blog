@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { ResumeActions } from "@/components/resume-actions";
-import { experience, profile, projects, proof, stackGroups } from "@/data/site";
+import {
+  education,
+  experience,
+  languages,
+  profile,
+  projects,
+  proof,
+  stackGroups,
+} from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Résumé — Shabir Khan",
@@ -8,7 +16,7 @@ export const metadata: Metadata = {
     "Résumé of Shabir Khan, Senior Full-Stack Engineer — experience, skills, and selected work.",
 };
 
-const ACCENT = "#b0682f";
+const ACCENT = "#15803d";
 
 export default function ResumePage() {
   return (
@@ -179,6 +187,32 @@ export default function ResumePage() {
               ))}
             </div>
           </Section>
+
+          {/* Education & Languages */}
+          <div className="grid gap-x-8 sm:grid-cols-2">
+            <Section title="Education">
+              <div className="break-inside-avoid">
+                <p className="text-sm font-semibold text-zinc-900">
+                  {education.degree}
+                </p>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {education.school} · {education.year}
+                </p>
+              </div>
+            </Section>
+            <Section title="Languages">
+              <ul className="space-y-1">
+                {languages.map((lang) => (
+                  <li key={lang.name} className="text-sm text-zinc-700">
+                    <span className="font-semibold text-zinc-900">
+                      {lang.name}
+                    </span>{" "}
+                    <span className="text-zinc-500">— {lang.level}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          </div>
 
           <footer className="mt-8 border-t border-zinc-200 pt-5 text-center font-mono text-[0.62rem] uppercase tracking-[0.14em] text-zinc-400">
             {profile.name} · {profile.availability}

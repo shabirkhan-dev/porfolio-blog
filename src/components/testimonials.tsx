@@ -142,7 +142,7 @@ export function Testimonials({
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.4 }}
             >
-              <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
                 <span className="size-1.5 rounded-full bg-accent" />
                 {current.company}
               </span>

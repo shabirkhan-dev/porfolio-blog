@@ -28,34 +28,83 @@ type ExperienceItem = {
 };
 
 const HEADING = {
-  eyebrow: "Track record",
-  index: "03",
-  title: "Senior ownership across product and system.",
+  eyebrow: "Experience",
+  index: "06",
 };
 
-/** Safe scroll input range for per-panel parallax — always within [0, 1]. */
-function panelScrollRange(index: number, total: number): [number, number, number] {
-  if (total <= 1) return [0, 0.5, 1];
+/** One bold line, one accent word — same lockup every section uses. */
+function HeadingTitle() {
+  return (
+    <>
+      Where the <span className="text-accent">six years</span> went.
+    </>
+  );
+}
 
-  const step = 1 / (total - 1);
-  const center = index * step;
-  const half = step * 0.42;
+/**
+ * Dwell-zone scroll mapping. The progress domain is split into `total` equal
+ * segments; each panel HOLDS centered for most of its segment and the slide
+ * to the next panel happens in a narrow window (2×TRANSITION_HALF) around the
+ * segment boundary. Without this, panels only align at exact scroll points
+ * and readers spend most of the section looking at two clipped half-panels.
+ */
+const TRANSITION_HALF = 0.05;
 
-  let lo = Math.max(0, center - half);
-  let hi = Math.min(1, center + half);
-  let mid = Math.max(lo, Math.min(hi, center));
+function trackKeyframes(total: number): { inputs: number[]; outputs: string[] } {
+  const inputs: number[] = [0];
+  const outputs: string[] = ["0vw"];
+  for (let i = 1; i < total; i++) {
+    const boundary = i / total;
+    inputs.push(boundary - TRANSITION_HALF, boundary + TRANSITION_HALF);
+    outputs.push(`-${(i - 1) * 100}vw`, `-${i * 100}vw`);
+  }
+  inputs.push(1);
+  outputs.push(`-${(total - 1) * 100}vw`);
+  return { inputs, outputs };
+}
 
-  if (lo >= mid) mid = lo + (hi - lo) * 0.5;
-  if (mid >= hi) {
-    hi = Math.min(1, mid + 0.08);
-    if (mid >= hi) {
-      lo = Math.max(0, hi - 0.08);
-      mid = lo + (hi - lo) * 0.5;
-    }
+/**
+ * Per-panel keyframes aligned with trackKeyframes: slide in → hold → slide
+ * out. The first panel starts docked and the last ends docked. All inputs
+ * stay inside [0, 1] — they can become WAAPI keyframe offsets, which throw
+ * on out-of-range values.
+ */
+type PanelStop = "in" | "hold" | "out";
+
+function panelKeyframes(
+  index: number,
+  total: number,
+): { inputs: number[]; stops: PanelStop[] } {
+  const segStart = index / total;
+  const segEnd = (index + 1) / total;
+  const inputs: number[] = [];
+  const stops: PanelStop[] = [];
+
+  if (index === 0) {
+    inputs.push(0);
+    stops.push("hold");
+  } else {
+    inputs.push(segStart - TRANSITION_HALF, segStart + TRANSITION_HALF);
+    stops.push("in", "hold");
   }
 
-  return [lo, mid, hi];
+  if (index === total - 1) {
+    inputs.push(1);
+    stops.push("hold");
+  } else {
+    inputs.push(segEnd - TRANSITION_HALF, segEnd + TRANSITION_HALF);
+    stops.push("hold", "out");
+  }
+
+  return { inputs, stops };
 }
+
+const STOP_VALUES = {
+  yearX: { in: "30%", hold: "0%", out: "-30%" },
+  yearScale: { in: 1.08, hold: 1, out: 0.92 },
+  contentX: { in: "10%", hold: "0%", out: "-10%" },
+  fade: { in: 0.18, hold: 1, out: 0.18 },
+} as const;
 
 /* ------------------------------------------------------------------ */
 /* Active-driven metric counter                                        */
@@ -132,11 +181,11 @@ function Panel({
 }) {
   const isCurrent = /present|now/i.test(item.period + item.year);
 
-  const range = panelScrollRange(index, total);
-  const yearX = useTransform(progress, range, ["30%", "0%", "-30%"]);
-  const yearScale = useTransform(progress, range, [1.08, 1, 0.92]);
-  const contentX = useTransform(progress, range, ["10%", "0%", "-10%"]);
-  const fade = useTransform(progress, range, [0.18, 1, 0.18]);
+  const { inputs, stops } = panelKeyframes(index, total);
+  const yearX = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.yearX[s]));
+  const yearScale = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.yearScale[s]));
+  const contentX = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.contentX[s]));
+  const fade = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.fade[s]));
 
   return (
     <article className="relative flex h-screen w-screen shrink-0 items-center overflow-hidden">
@@ -237,7 +286,7 @@ function Panel({
             {item.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-border px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-faint"
+                className="rounded-sm border border-border px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-faint"
               >
                 {tag}
               </span>
@@ -272,7 +321,9 @@ function VerticalFallback({ items }: { items: ExperienceItem[] }) {
         <span className="eyebrow">{HEADING.eyebrow}</span>
         <span className="font-mono text-xs text-faint">/ {HEADING.index}</span>
       </div>
-      <h2 className="t-h2 mt-6 max-w-2xl">{HEADING.title}</h2>
+      <h2 className="t-h2 mt-6 max-w-2xl">
+        <HeadingTitle />
+      </h2>
 
       <ol className="mt-14 flex flex-col gap-5">
         {items.map((item, index) => {
@@ -325,7 +376,7 @@ function VerticalFallback({ items }: { items: ExperienceItem[] }) {
                 {item.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-border px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-faint"
+                    className="rounded-sm border border-border px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-faint"
                   >
                     {tag}
                   </span>
@@ -357,22 +408,26 @@ function HorizontalScroll({
     offset: ["start start", "end end"],
   });
 
-  const xRaw = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0vw", `-${(items.length - 1) * 100}vw`],
-  );
+  const keyframes = trackKeyframes(items.length);
+  const xRaw = useTransform(scrollYProgress, keyframes.inputs, keyframes.outputs);
   const x = useSpring(xRaw, { stiffness: 110, damping: 26, restDelta: 0.4 });
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (items.length <= 1) {
-      setActive(0);
-      return;
-    }
-    const next = Math.round(v * (items.length - 1));
+    const next = Math.min(items.length - 1, Math.floor(v * items.length));
     setActive((prev) => (prev === next ? prev : next));
   });
+
+  const jumpTo = (index: number) => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const runway = el.offsetHeight - window.innerHeight;
+    const start = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: start + ((index + 0.5) / items.length) * runway,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <section
@@ -399,11 +454,18 @@ function HorizontalScroll({
         {/* Fixed overlay — heading top-left */}
         <div className="pointer-events-none absolute inset-x-0 top-0">
           <div className="shell flex items-start justify-between pt-[clamp(2rem,1.5rem+2vw,3.5rem)]">
-            <div className="flex items-center gap-4">
-              <span className="eyebrow">{HEADING.eyebrow}</span>
-              <span className="font-mono text-xs text-faint">
-                / {HEADING.index}
-              </span>
+            <div>
+              <div className="flex items-center gap-4">
+                <span className="eyebrow">{HEADING.eyebrow}</span>
+                <span className="font-mono text-xs text-faint">
+                  / {HEADING.index}
+                </span>
+              </div>
+              {/* Sized between t-h3 and t-h2 so it never collides with the
+                  centered panel content on short viewports. */}
+              <h2 className="mt-4 font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-semibold leading-tight tracking-tight">
+                <HeadingTitle />
+              </h2>
             </div>
             <span className="hidden items-center gap-2 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-faint lg:inline-flex">
               <span className="size-1.5 rounded-full bg-accent" />
@@ -438,42 +500,50 @@ function HorizontalScroll({
                 style={{ width: progressWidth }}
                 className="absolute left-1 top-[7px] h-px bg-accent"
               />
-              <ol className="relative flex items-start justify-between">
+              <ol className="pointer-events-auto relative flex items-start justify-between">
                 {items.map((item, index) => {
                   const on = active === index;
                   const passed = active >= index;
                   return (
                     <li
                       key={`node-${item.year}-${item.company}`}
-                      className="relative flex flex-col items-center"
+                      className="relative"
                     >
-                      <span className="grid h-[15px] place-items-center">
-                        {on ? (
-                          <span className="absolute inline-flex size-[15px] animate-ping rounded-full bg-accent/40" />
-                        ) : null}
+                      <button
+                        type="button"
+                        onClick={() => jumpTo(index)}
+                        aria-label={`Go to ${item.role} at ${item.company}`}
+                        aria-current={on}
+                        className="flex cursor-pointer flex-col items-center"
+                      >
+                        <span className="grid h-[15px] place-items-center">
+                          {on ? (
+                            <span className="absolute inline-flex size-[15px] animate-ping rounded-full bg-accent/40" />
+                          ) : null}
+                          <span
+                            className={cn(
+                              "relative rounded-full transition-all duration-500",
+                              on
+                                ? "size-[11px] bg-accent shadow-[0_0_14px_3px_rgb(var(--accent-rgb)/0.5)]"
+                                : passed
+                                  ? "size-[7px] bg-accent"
+                                  : "size-[7px] bg-border-strong",
+                            )}
+                          />
+                        </span>
                         <span
                           className={cn(
-                            "relative rounded-full transition-all duration-500",
+                            "mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-colors duration-500",
                             on
-                              ? "size-[11px] bg-accent shadow-[0_0_14px_3px_rgb(var(--accent-rgb)/0.5)]"
+                              ? "text-accent"
                               : passed
-                                ? "size-[7px] bg-accent"
-                                : "size-[7px] bg-border-strong",
+                                ? "text-muted-foreground hover:text-foreground"
+                                : "text-faint hover:text-muted-foreground",
                           )}
-                        />
-                      </span>
-                      <span
-                        className={cn(
-                          "mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-colors duration-500",
-                          on
-                            ? "text-accent"
-                            : passed
-                              ? "text-muted-foreground"
-                              : "text-faint",
-                        )}
-                      >
-                        {item.year}
-                      </span>
+                        >
+                          {item.year}
+                        </span>
+                      </button>
                     </li>
                   );
                 })}

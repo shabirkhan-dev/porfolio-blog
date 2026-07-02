@@ -16,10 +16,10 @@ export function SiteFooter() {
               href={`mailto:${profile.email}`}
               className="group mt-7 block max-w-xl"
             >
-              <span className="block font-display text-[clamp(2.5rem,1.5rem+5vw,5.5rem)] font-semibold leading-[0.95] tracking-tight text-foreground transition-colors group-hover:text-accent">
+              <span className="block font-display text-[clamp(2.5rem,1.5rem+5vw,5.5rem)] font-medium leading-[0.95] tracking-tight text-foreground transition-colors group-hover:text-accent">
                 Let&apos;s build
               </span>
-              <span className="block font-serif text-[clamp(2.5rem,1.5rem+5vw,5.5rem)] font-normal italic leading-[0.95] text-faint transition-colors group-hover:text-accent">
+              <span className="text-stroke block font-display text-[clamp(2.5rem,1.5rem+5vw,5.5rem)] font-medium leading-[0.95] tracking-tight">
                 something sharp.
               </span>
             </a>
@@ -77,8 +77,12 @@ export function SiteFooter() {
         />
       </div>
 
-      <div className="shell flex flex-col gap-2 border-t border-border py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">
+      <div className="shell flex flex-col gap-4 border-t border-border py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">
         <p>© {year} Shabir Khan</p>
+        <span
+          aria-hidden="true"
+          className="barcode hidden h-5 w-44 text-foreground/25 sm:block"
+        />
         <p>Next.js · TypeScript · Tailwind · Bun</p>
       </div>
     </footer>

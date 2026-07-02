@@ -97,7 +97,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </h1>
 
               {post.standfirst ? (
-                <p className="mt-8 font-serif text-[clamp(1.4rem,1.1rem+1.1vw,2rem)] italic leading-relaxed text-muted-foreground">
+                <p className="mt-8 font-display text-[clamp(1.3rem,1.05rem+1vw,1.8rem)] font-normal leading-normal tracking-tight text-muted-foreground">
                   {post.standfirst}
                 </p>
               ) : (

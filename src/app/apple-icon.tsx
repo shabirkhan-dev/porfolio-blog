@@ -13,7 +13,7 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#1a1814",
+          background: "#111214",
           position: "relative",
         }}
       >
@@ -24,13 +24,13 @@ export default function AppleIcon() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "#e9b069",
-            color: "#1a1814",
-            borderRadius: 40,
-            fontSize: 96,
-            fontWeight: 800,
-            letterSpacing: -4,
-            fontFamily: "sans-serif",
+            background: "#4ade80",
+            color: "#0c2916",
+            borderRadius: 28,
+            fontSize: 88,
+            fontWeight: 700,
+            letterSpacing: -3,
+            fontFamily: "monospace",
           }}
         >
           SK
