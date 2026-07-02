@@ -29,7 +29,7 @@ type ExperienceItem = {
 
 const HEADING = {
   eyebrow: "Experience",
-  index: "06",
+  index: "05",
 };
 
 /** One bold line, one accent word — same lockup every section uses. */
@@ -189,18 +189,12 @@ function Panel({
 
   return (
     <article className="relative flex h-screen w-screen shrink-0 items-center overflow-hidden">
-      {/* Giant bleeding year — stroked + parallax */}
+      {/* Giant bleeding year — masked to the right half so it never smears
+          light patches behind the readable content. */}
       <m.span
         aria-hidden="true"
         style={{ x: yearX, scale: yearScale }}
-        className="text-stroke pointer-events-none absolute right-[-4vw] top-1/2 origin-right -translate-y-1/2 select-none font-display text-[40vw] font-bold leading-none tracking-tighter opacity-[0.45] lg:text-[32vw]"
-      >
-        {item.year}
-      </m.span>
-      <m.span
-        aria-hidden="true"
-        style={{ x: yearX, scale: yearScale }}
-        className="pointer-events-none absolute right-[-4vw] top-1/2 origin-right -translate-y-1/2 select-none font-display text-[40vw] font-bold leading-none tracking-tighter text-foreground/[0.02] lg:text-[32vw]"
+        className="text-stroke pointer-events-none absolute right-[-4vw] top-1/2 origin-right -translate-y-1/2 select-none font-display text-[40vw] font-bold leading-none tracking-tighter opacity-[0.3] [mask-image:linear-gradient(to_right,transparent_35%,black_75%)] lg:text-[32vw]"
       >
         {item.year}
       </m.span>
@@ -268,7 +262,10 @@ function Panel({
 
           <m.div
             variants={panelItem}
-            className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3"
+            className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border"
+            style={{
+              gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
+            }}
           >
             {item.metrics.map((metric) => (
               <div key={metric.label} className="bg-background-2 p-5">
@@ -336,7 +333,7 @@ function VerticalFallback({ items }: { items: ExperienceItem[] }) {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-background p-7 transition-colors duration-500 hover:border-border-strong"
+              className="group relative overflow-hidden rounded-lg border border-border bg-background p-7 transition-colors duration-500 hover:border-border-strong"
             >
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
@@ -360,7 +357,12 @@ function VerticalFallback({ items }: { items: ExperienceItem[] }) {
               <p className="mt-5 text-sm leading-7 text-muted-foreground">
                 {item.summary}
               </p>
-              <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
+              <div
+                className="mt-6 grid gap-px overflow-hidden rounded-md border border-border bg-border"
+                style={{
+                  gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
+                }}
+              >
                 {item.metrics.map((metric) => (
                   <div key={metric.label} className="bg-background p-4">
                     <p className="font-display text-xl font-semibold leading-none tracking-tight text-accent">

@@ -4,13 +4,14 @@ import { Corners } from "@/components/corners";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { HeroLocalTime } from "@/components/hero-local-time";
 import { LinkButton } from "@/components/ui/button";
+import { profile } from "@/data/site";
 
 type ProofItem = { value: string; label: string };
 
 type HeroSectionProps = {
   name: string;
   title: string;
-  lead: string;
+  lead: React.ReactNode;
   location: string;
   proof: ProofItem[];
 };
@@ -57,13 +58,12 @@ export function HeroSection({
           <span className="text-accent">{title}</span>
         </p>
 
-        {/* No entrance animation on the headline — it is the LCP element and
-            should paint with the first frame. Motion lives in the underline,
-            cursor, and the staggered elements around it. */}
+        {/* Headline animates with a transform-only line rise: opacity stays
+            at 1 so the LCP element still paints on the first frame. */}
         <h1 className="t-display mt-7 max-w-[16ch]">
-          <span className="block">I engineer</span>
-          <span className="block">products that feel</span>
-          <span className="block">
+          <span className="hero-line">I engineer</span>
+          <span className="hero-line">products that feel</span>
+          <span className="hero-line">
             <span className="relative inline-block text-accent">
               inevitable.
               <span aria-hidden="true" className="cursor-blink" />
@@ -102,12 +102,22 @@ export function HeroSection({
               className="transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"
             />
           </LinkButton>
-          <Link
-            href="/blog"
-            className="link-line ml-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
-          >
-            Read my writing
-          </Link>
+          <span className="ml-1 flex items-center gap-5">
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noreferrer"
+              className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              GitHub
+            </a>
+            <Link
+              href="/blog"
+              className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Writing
+            </Link>
+          </span>
         </div>
       </div>
 

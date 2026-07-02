@@ -442,7 +442,6 @@ export const labExperiments = [
     description:
       "Scroll-driven layer diagram showing how product surfaces map to underlying system decisions.",
     tags: ["Framer Motion", "Scroll", "Architecture"],
-    href: "/#engine-room",
   },
   {
     title: "AI workflow UI",

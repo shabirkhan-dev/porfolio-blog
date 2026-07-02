@@ -77,13 +77,43 @@ export function SiteFooter() {
         />
       </div>
 
+      {/* Colophon — the site itself is a shipped project; document it like one */}
+      <div className="shell border-t border-border py-7">
+        <dl className="grid gap-x-8 gap-y-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <dt className="text-faint">Stack</dt>
+            <dd className="mt-1.5 text-muted-foreground">
+              Next.js · React 19 · Tailwind v4 · Bun
+            </dd>
+          </div>
+          <div>
+            <dt className="text-faint">Type</dt>
+            <dd className="mt-1.5 text-muted-foreground">
+              Space Grotesk · Inter · JetBrains Mono
+            </dd>
+          </div>
+          <div>
+            <dt className="text-faint">Performance</dt>
+            <dd className="mt-1.5 text-muted-foreground">
+              Static-first · CSS-only LCP · 98 Lighthouse
+            </dd>
+          </div>
+          <div>
+            <dt className="text-faint">Built by</dt>
+            <dd className="mt-1.5 text-muted-foreground">
+              Designed and engineered by me
+            </dd>
+          </div>
+        </dl>
+      </div>
+
       <div className="shell flex flex-col gap-4 border-t border-border py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">
         <p>© {year} Shabir Khan</p>
         <span
           aria-hidden="true"
           className="barcode hidden h-5 w-44 text-foreground/25 sm:block"
         />
-        <p>Next.js · TypeScript · Tailwind · Bun</p>
+        <p>{profile.location} · Remote worldwide</p>
       </div>
     </footer>
   );

@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { DeferredChrome } from "@/components/deferred-chrome";
 import { MotionProvider } from "@/components/motion-provider";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeScript } from "@/components/theme-toggle";
 
 // `display: "optional"` keeps LCP honest: text paints once with the
@@ -127,6 +128,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <MotionProvider>
           <DeferredChrome />
+          <SmoothScroll />
           {children}
         </MotionProvider>
         <div className="grain" aria-hidden="true" />

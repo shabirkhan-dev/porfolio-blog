@@ -39,7 +39,7 @@ export function ContactSection() {
           <div>
             <div className="flex items-center gap-4">
               <span className="eyebrow">Contact</span>
-              <span className="font-mono text-xs text-faint">/ 09</span>
+              <span className="font-mono text-xs text-faint">/ 08</span>
             </div>
             <h2 className="t-h1 mt-6 max-w-[20ch] text-balance">
               Building a <span className="text-accent">serious</span> product?

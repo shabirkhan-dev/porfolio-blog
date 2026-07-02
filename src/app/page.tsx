@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
 import { AsciiField } from "@/components/ascii-field";
-import { EngineRoom } from "@/components/engine-room";
 import { Reveal } from "@/components/motion";
 import { HeroSection } from "@/components/hero-section";
 import { ScalesFrame } from "@/components/scales";
@@ -42,7 +41,16 @@ export default async function Home() {
         <HeroSection
           name={profile.name}
           title={profile.title}
-          lead={profile.hero}
+          lead={
+            <>
+              TypeScript-first engineer with{" "}
+              <span className="text-foreground">6+ years</span> shipping
+              production systems — React frontends serving{" "}
+              <span className="text-foreground">100k+ users</span>, Node.js
+              APIs, React Native apps, and delivery pipelines with security
+              built in.
+            </>
+          }
           location={profile.location}
           proof={proof}
         />
@@ -143,13 +151,10 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* SIGNATURE — Engine Room */}
-        <EngineRoom />
-
         {/* SELECTED WORK — bento */}
         <section id="work" className="shell section-y">
           <SectionHeading
-            index="03"
+            index="02"
             eyebrow="Selected work"
             title="Proof, not promises."
             description={
@@ -180,7 +185,7 @@ export default async function Home() {
                 <div className="max-w-xl">
                   <div className="flex items-center gap-4">
                     <span className="eyebrow">Approach</span>
-                    <span className="font-mono text-xs text-faint">/ 04</span>
+                    <span className="font-mono text-xs text-faint">/ 03</span>
                   </div>
                   <h2 className="t-h2 mt-6 text-balance">
                     How I <span className="text-accent">think</span> about
@@ -218,7 +223,7 @@ export default async function Home() {
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(90%_70%_at_50%_50%,black,transparent_85%)]" />
           <div className="shell section-y relative">
             <SectionHeading
-              index="05"
+              index="04"
               eyebrow="Toolkit"
               title="The stack I ship with."
             />
@@ -237,7 +242,7 @@ export default async function Home() {
         {/* JOURNAL */}
         <section className="shell section-y">
           <SectionHeading
-            index="07"
+            index="06"
             eyebrow="Writing"
             title="Notes from the work."
             description={
@@ -268,7 +273,7 @@ export default async function Home() {
         <section className="section-y border-y border-border bg-background-2">
           <div className="shell">
             <SectionHeading
-              index="08"
+              index="07"
               eyebrow="Endorsements"
               title="Trusted by people I've shipped with."
             />

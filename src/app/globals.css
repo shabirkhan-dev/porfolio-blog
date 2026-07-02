@@ -436,6 +436,27 @@
   animation: hero-line-up 0.88s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Headline line rise — transform-only so the LCP element still paints on
+   the first frame (opacity never drops below 1). */
+@keyframes hero-line-rise {
+  from {
+    transform: translateY(0.42em);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.hero-line {
+  display: block;
+  animation: hero-line-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-line:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.hero-line:nth-child(3) {
+  animation-delay: 0.14s;
+}
+
 @keyframes hero-fade-up {
   from {
     opacity: 0;
@@ -486,18 +507,27 @@
   }
 }
 
-/* Blinking terminal cursor block */
+/* Blinking terminal cursor — a slim bar, soft-blinked. A wide block at
+   display size reads as a rendering artifact, not a cursor. */
 .cursor-blink {
   display: inline-block;
-  width: 0.45em;
-  height: 0.78em;
-  margin-left: 0.08em;
+  width: clamp(3px, 0.06em, 6px);
+  height: 0.72em;
+  margin-left: 0.12em;
   background: var(--accent);
-  animation: cursor-blink 1.1s steps(2, start) infinite;
+  animation: cursor-blink 1.2s ease-in-out infinite;
 }
 @keyframes cursor-blink {
-  to {
-    visibility: hidden;
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  95% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -619,6 +649,24 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
   html { scroll-behavior: auto; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Lenis smooth scroll                                                 */
+/* ------------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+/* CSS smooth scrolling would double-ease Lenis's programmatic scrolls */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 /* ------------------------------------------------------------------ */

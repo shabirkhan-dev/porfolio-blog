@@ -232,24 +232,6 @@ export function Testimonials({
         </div>
       </div>
 
-      {/* Bottom company ticker */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 overflow-hidden opacity-[0.06]">
-        <motion.div
-          className="flex whitespace-nowrap font-display text-5xl font-bold tracking-tight"
-          animate={reduce ? undefined : { x: ["0%", "-50%"] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-        >
-          {[0, 1].map((dup) => (
-            <span key={dup} className="flex">
-              {items.map((t) => (
-                <span key={`${dup}-${t.author}`} className="mx-6">
-                  {t.company} •
-                </span>
-              ))}
-            </span>
-          ))}
-        </motion.div>
-      </div>
     </div>
   );
 }
@@ -269,7 +251,7 @@ function NavButton({
       aria-label={label}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className="group relative grid size-12 place-items-center overflow-hidden rounded-full border border-border-strong"
+      className="group relative grid size-12 place-items-center overflow-hidden rounded-md border border-border-strong"
     >
       <span className="absolute inset-0 translate-y-full bg-accent transition-transform duration-300 ease-out group-hover:translate-y-0" />
       <span className="relative z-10 text-foreground transition-colors duration-300 group-hover:text-accent-foreground">
