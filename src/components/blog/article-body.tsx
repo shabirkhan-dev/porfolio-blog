@@ -23,7 +23,7 @@ function Callout({
   children: React.ReactNode;
 }) {
   return (
-    <aside className="my-10 overflow-hidden rounded-xl border border-accent/25 bg-accent/[0.06] p-6">
+    <aside className="my-10 overflow-hidden rounded-lg border border-accent/25 bg-accent/[0.06] p-6">
       {label ? (
         <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-accent">
           {label}
@@ -46,7 +46,7 @@ function CodeBlock({
   code: string;
 }) {
   return (
-    <div className="code-surface my-10 overflow-hidden rounded-xl border border-border">
+    <div className="code-surface my-10 overflow-hidden rounded-lg border border-border">
       <div className="code-header flex items-center justify-between border-b px-5 py-3 font-mono text-[0.66rem] uppercase tracking-[0.14em]">
         <span className="flex items-center gap-2">
           <span className="flex gap-1.5">

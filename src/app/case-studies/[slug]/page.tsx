@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { ProjectPreview } from "@/components/portfolio/project-preview";
+import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
@@ -120,14 +121,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <Reveal>
-              <div className="overflow-hidden rounded-2xl border border-border">
+              <div className="relative overflow-hidden rounded-lg border border-border">
+                <Corners />
                 <ProjectPreview
                   visual={slug === "autobay" ? "marketplace" : "dashboard"}
                   title={study.title}
                 />
               </div>
 
-              <div className="mt-8 rounded-xl border border-border bg-background-2 p-6">
+              <div className="relative mt-8 rounded-lg border border-border bg-background-2 p-6">
+                <Corners />
                 <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
                   Stack
                 </p>
@@ -143,7 +146,8 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl border border-border bg-background-2 p-6">
+              <div className="relative mt-6 rounded-lg border border-border bg-background-2 p-6">
+                <Corners />
                 <p className="font-display text-base font-semibold tracking-tight">
                   Building a serious product?
                 </p>

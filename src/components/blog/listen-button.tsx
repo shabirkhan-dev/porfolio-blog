@@ -138,13 +138,13 @@ export function ListenButton({ text }: { text: string }) {
     status === "playing" ? "Pause" : status === "paused" ? "Resume" : "Listen";
 
   return (
-    <div className="mt-8 inline-flex w-full max-w-sm items-center gap-3 rounded-full border border-border bg-background-2 p-1.5 pr-4 sm:w-auto">
+    <div className="mt-8 inline-flex w-full max-w-sm items-center gap-3 rounded-md border border-border bg-background-2 p-1.5 pr-4 sm:w-auto">
       <button
         type="button"
         onClick={toggle}
         aria-pressed={status === "playing"}
         aria-label={`${label} article audio`}
-        className="grid size-10 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
+        className="grid size-10 shrink-0 place-items-center rounded-sm bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
       >
         {status === "playing" ? (
           <Pause aria-hidden="true" size={16} />
@@ -174,7 +174,7 @@ export function ListenButton({ text }: { text: string }) {
           type="button"
           onClick={stop}
           aria-label="Stop article audio"
-          className="grid size-7 shrink-0 place-items-center rounded-full text-faint transition-colors hover:text-accent"
+          className="grid size-7 shrink-0 place-items-center rounded-sm text-faint transition-colors hover:text-accent"
         >
           <Square aria-hidden="true" size={13} />
         </button>

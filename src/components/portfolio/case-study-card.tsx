@@ -63,7 +63,7 @@ export function CaseStudyCard({
             </p>
 
             {/* impact — the proof, given prominence */}
-            <div className="mt-8 rounded-2xl border border-border bg-background/60 p-5 sm:p-6">
+            <div className="mt-8 rounded-lg border border-border bg-background/60 p-5 sm:p-6">
               <p className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-accent">
                 Impact
               </p>
@@ -135,7 +135,7 @@ export function CaseStudyCard({
             <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_30%,rgb(var(--accent-rgb)/0.06),transparent_70%)]" />
 
-            <div className="relative w-full overflow-hidden rounded-2xl border border-border shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)] transition-all duration-500 group-hover:border-border-strong group-data-[active=true]:border-border-strong">
+            <div className="relative w-full overflow-hidden rounded-lg border border-border shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)] transition-all duration-500 group-hover:border-border-strong group-data-[active=true]:border-border-strong">
               <div className="code-surface">
                 <div className="code-header flex items-center gap-3 border-b px-4 py-3">
                   <span className="flex gap-1.5">

@@ -58,7 +58,7 @@ export function NotFoundActions({
         whileTap={whileTap}
         whileHover={whileHover}
         transition={SPRING_PRESS}
-        className="inline-flex h-11 select-none items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        className="inline-flex h-11 select-none items-center justify-center rounded-md bg-accent px-6 font-mono text-[0.72rem] uppercase tracking-[0.12em] text-accent-foreground transition-colors hover:bg-accent/90"
       >
         {homeLabel}
       </motion.a>

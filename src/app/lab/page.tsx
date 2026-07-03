@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
-import { LinkButton } from "@/components/ui/button";
+import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { labExperiments } from "@/data/site";
@@ -106,18 +106,12 @@ export default function LabPage() {
 
         <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
           <Reveal>
-            <div className="rounded-lg border border-border bg-background-2 px-[clamp(1.5rem,1rem+3vw,3rem)] py-[clamp(2rem,1.5rem+3vw,3.5rem)]">
-              <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
-                Main portfolio
-              </p>
-              <h2 className="t-h2 mt-4 max-w-xl">
-                Looking for hireable, production-focused work?
-              </h2>
-              <LinkButton href="/#work" variant="secondary" size="lg" className="mt-8">
-                View selected work
-                <ArrowUpRight aria-hidden="true" size={16} />
-              </LinkButton>
-            </div>
+            <PageCta
+              label="Main portfolio"
+              title="Looking for hireable, production-focused work?"
+              href="/#work"
+              button="View selected work"
+            />
           </Reveal>
         </section>
       </main>

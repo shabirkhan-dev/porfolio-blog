@@ -5,7 +5,9 @@ import { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
 import { ArticleBody } from "@/components/blog/article-body";
 import { ListenButton } from "@/components/blog/listen-button";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
+import { SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -107,7 +109,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               )}
 
               <div className="mt-10 flex items-center gap-4 border-t border-border pt-6">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-display text-xs font-bold text-accent-foreground">
+                <span className="grid size-11 shrink-0 place-items-center rounded-sm bg-accent font-display text-xs font-bold text-accent-foreground">
                   {profile.initials}
                 </span>
                 <div>
@@ -128,7 +130,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="shell grid gap-12 py-[clamp(2.5rem,2rem+3vw,4.5rem)] lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-16 xl:justify-center">
           <article className="min-w-0 max-w-[44rem]">
             {post.takeaways && post.takeaways.length > 0 ? (
-              <Reveal className="mb-12 rounded-xl border border-border bg-background-2 p-6 sm:p-7">
+              <Reveal className="mb-12 rounded-lg border border-border bg-background-2 p-6 sm:p-7">
                 <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-accent">
                   What you&apos;ll take away
                 </p>
@@ -157,7 +159,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {previous ? (
                 <Link
                   href={`/blog/${previous.slug}`}
-                  className="group rounded-xl border border-border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
+                  className="group rounded-lg border border-border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
                 >
                   <span className="inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
                     <ArrowLeft
@@ -177,7 +179,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {next ? (
                 <Link
                   href={`/blog/${next.slug}`}
-                  className="group rounded-xl border border-border p-5 text-right transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
+                  className="group rounded-lg border border-border p-5 text-right transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card"
                 >
                   <span className="inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
                     Next
@@ -241,8 +243,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
               <Link
                 href="/#contact"
-                className="group rounded-xl border border-border bg-background-2 p-5 transition-colors hover:border-accent/40"
+                className="group relative block rounded-lg border border-border bg-background-2 p-5 transition-colors duration-300 hover:border-accent/40"
               >
+                <Corners />
                 <p className="font-display text-base font-semibold tracking-tight">
                   Building something serious?
                 </p>
@@ -260,10 +263,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <section className="border-t border-border bg-background-2">
           <div className="shell section-y">
-            <Reveal>
-              <span className="eyebrow">Related writing</span>
-              <h2 className="t-h2 mt-6">Continue reading</h2>
-            </Reveal>
+            <SectionHeading eyebrow="Related writing" title="Continue reading" />
             <div className="mt-12 grid gap-4 md:grid-cols-3">
               {relatedPosts.map((related, index) => (
                 <Reveal key={related.slug} delay={index * 0.05}>
@@ -282,7 +282,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 function RelatedCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.5)]">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.5)]">
         <span className="pointer-events-none absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
