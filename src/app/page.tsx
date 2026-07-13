@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { ArticleCard } from "@/components/blog/article-card";
 import { NewsletterBlock } from "@/components/blog/newsletter-block";
+import { WritingPreview } from "@/components/blog/writing-preview";
 import { AsciiField } from "@/components/ascii-field";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
@@ -36,9 +36,23 @@ import { getGithubContributions } from "@/lib/github-contributions";
 import { GithubActivitySection } from "@/components/github-activity";
 
 export default async function Home() {
-  const writingPreview = (await getPublishedPosts()).slice(0, 3);
+  const posts = await getPublishedPosts();
+  const writingPreview = posts.slice(0, 5);
   const workProjects = projects.slice(0, 4);
   const githubActivity = await getGithubContributions("shabirkhan-dev");
+  const newsletterCover = posts[0]
+    ? {
+        title: posts[0].title,
+        href: `/blog/${posts[0].slug}`,
+        label: "Latest note",
+      }
+    : undefined;
+  const newsletterItems = posts.slice(1, 4).map((post) => ({
+    category: post.category,
+    title: post.title,
+    readingTime: post.readingTime.replace(/\s*read$/i, ""),
+    href: `/blog/${post.slug}`,
+  }));
 
   return (
     <div className="page-shell min-h-screen">
@@ -234,7 +248,7 @@ export default async function Home() {
             <SectionHeading
               index="06"
               eyebrow="Writing"
-              title="Notes from the work."
+              title="Judgment from shipping."
               description={
                 <Link
                   href="/blog"
@@ -246,20 +260,15 @@ export default async function Home() {
               }
             />
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-3">
-              {writingPreview.map((post, index) => (
-                <Reveal
-                  key={post.slug}
-                  delay={index * 0.05}
-                  className={index === 0 ? "lg:col-span-3" : ""}
-                >
-                  <ArticleCard post={post} featured={index === 0} />
-                </Reveal>
-              ))}
-            </div>
+            <Reveal className="mt-10">
+              <WritingPreview posts={writingPreview} />
+            </Reveal>
 
             <Reveal className="mt-10">
-              <NewsletterBlock />
+              <NewsletterBlock
+                cover={newsletterCover}
+                items={newsletterItems}
+              />
             </Reveal>
           </BoxedSection>
 

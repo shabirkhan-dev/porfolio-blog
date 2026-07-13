@@ -25,29 +25,29 @@ export type NewsletterBlockProps = {
 };
 
 const DEFAULT_COVER = {
-  title: "The invisible work behind a fast interface",
-  href: "/blog/interfaces-that-feel-inevitable",
+  title: "Mobile that feels native, not wrapped",
+  href: "/blog/mobile-that-feels-native-not-wrapped",
   label: "Latest note",
 };
 
 const DEFAULT_ITEMS: NewsletterIssueItem[] = [
   {
-    category: "Motion",
-    title: "Why the best transitions disappear into the task",
-    readingTime: "6 min",
-    href: "/blog",
-  },
-  {
-    category: "Systems",
-    title: "A field guide to interface rhythm",
+    category: "Engineering",
+    title: "Make shipping boring on purpose",
     readingTime: "4 min",
-    href: "/blog",
+    href: "/blog/make-shipping-boring-on-purpose",
   },
   {
-    category: "Process",
-    title: "Shipping the boring parts that keep software alive",
-    readingTime: "8 min",
-    href: "/blog",
+    category: "Product",
+    title: "Failure states are the product",
+    readingTime: "4 min",
+    href: "/blog/failure-states-are-the-product",
+  },
+  {
+    category: "Frontend",
+    title: "Interfaces that feel inevitable",
+    readingTime: "4 min",
+    href: "/blog/interfaces-that-feel-inevitable",
   },
 ];
 

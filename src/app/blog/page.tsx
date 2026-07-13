@@ -8,7 +8,7 @@ import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { categories } from "@/data/posts";
-import { getFeaturedPost, getPostsByCategory } from "@/data/posts.server";
+import { getFeaturedPost, getPostsByCategory, getPublishedPosts } from "@/data/posts.server";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -28,10 +28,24 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const activeCategory = category ?? "All";
   const featuredPost = await getFeaturedPost();
   const allInCategory = await getPostsByCategory(activeCategory);
+  const allPosts = await getPublishedPosts();
   const showFeatured = Boolean(featuredPost) && activeCategory === "All";
   const filteredPosts = showFeatured
     ? allInCategory.filter((post) => post.slug !== featuredPost!.slug)
     : allInCategory;
+  const newsletterCover = allPosts[0]
+    ? {
+        title: allPosts[0].title,
+        href: `/blog/${allPosts[0].slug}`,
+        label: "Latest note",
+      }
+    : undefined;
+  const newsletterItems = allPosts.slice(1, 4).map((post) => ({
+    category: post.category,
+    title: post.title,
+    readingTime: post.readingTime.replace(/\s*read$/i, ""),
+    href: `/blog/${post.slug}`,
+  }));
 
   return (
     <div className="page-shell min-h-screen">
@@ -43,12 +57,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <div className="max-w-2xl">
                 <span className="eyebrow">Writing</span>
                 <h1 className="t-h2 mt-3 text-balance">
-                  Notes on building{" "}
-                  <span className="text-accent">with taste.</span>
+                  Notes from shipping{" "}
+                  <span className="text-accent">real systems.</span>
                 </h1>
                 <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
-                  Engineering judgment, system design, and the quieter parts of
-                  shipping real software.
+                  Interfaces, architecture, AI, release craft — judgment from
+                  work that had to hold in production.
                 </p>
               </div>
               <p className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint sm:pb-1">
@@ -135,7 +149,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
           <BoxedSection pad="compact">
             <Reveal>
-              <NewsletterBlock />
+              <NewsletterBlock
+                cover={newsletterCover}
+                items={newsletterItems}
+              />
             </Reveal>
           </BoxedSection>
 
