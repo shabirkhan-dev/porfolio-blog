@@ -159,15 +159,19 @@ export type Project = {
   role: string;
   category: string;
   year: string;
+  /** One sentence: what this product actually is. */
   tagline: string;
   built: string;
   stack: string[];
   impact: string[];
-  /** Headline metric used on scannable bento tiles. */
+  /** Single proof line under the summary. */
   metric: { value: string; label: string };
   tags: string[];
   visual: string;
   caseStudy?: boolean;
+  /** Public repo when the work can be shown. */
+  github?: string;
+  liveUrl?: string;
 };
 
 export const projects: Project[] = [
@@ -176,9 +180,10 @@ export const projects: Project[] = [
     subtitle: "Kansai Group",
     slug: "autobay",
     role: "Lead frontend, backend, and DevOps",
-    category: "Marketplace & operations",
+    category: "Marketplace",
     year: "2022 – 2023",
-    tagline: "Production marketplace and internal operations system.",
+    tagline:
+      "Vehicle marketplace and dealer ops — listings, live inventory sync, and a companion mobile app.",
     built:
       "Next.js admin, React Native app, CodeIgniter APIs, WebSockets, Redis, Docker, Nginx, MySQL",
     stack: [
@@ -205,7 +210,8 @@ export const projects: Project[] = [
     role: "Product architect and lead engineer",
     category: "Multi-tenant SaaS",
     year: "2025 – Present",
-    tagline: "AI-powered attendance, analytics, and school operations.",
+    tagline:
+      "School operations platform — attendance, role dashboards, and AI insights across many tenants.",
     built:
       "Multi-tenant Next.js admin, Node.js APIs, PostgreSQL, Redis, structured AI insight pipelines",
     stack: ["Next.js", "Node.js", "PostgreSQL", "Redis", "LLM APIs"],
@@ -214,10 +220,11 @@ export const projects: Project[] = [
       "Structured AI insights without exposing raw student data",
       "Role-scoped dashboards for staff and network operators",
     ],
-    metric: { value: "Multi‑tenant", label: "one codebase, many schools" },
+    metric: { value: "1→N", label: "tenants, one codebase" },
     tags: ["SaaS", "AI", "Multi-tenant"],
     visual: "dashboard",
     caseStudy: true,
+    github: "https://github.com/shabirkhan-dev/school-os",
   },
   {
     title: "RedCore",
@@ -225,7 +232,8 @@ export const projects: Project[] = [
     role: "Founder and systems architect",
     category: "Security tooling",
     year: "In development",
-    tagline: "Modular security platform with policy enforcement and workflow automation.",
+    tagline:
+      "Security operations platform — scan, review, and enforce policy through automated workflows.",
     built:
       "TypeScript core, Rust performance modules, policy engine, workflow automation layer",
     stack: ["TypeScript", "Rust", "Policy engines", "Workflow automation"],
@@ -233,17 +241,19 @@ export const projects: Project[] = [
       "Operator-grade platform for repeatable security workflows",
       "Policy enforcement designed into the delivery path",
     ],
-    metric: { value: "Rust", label: "performance-critical core" },
+    metric: { value: "Rust", label: "hot path for enforcement" },
     tags: ["Security", "Automation", "Systems"],
     visual: "security",
+    github: "https://github.com/shabirkhan-dev/redcore",
   },
   {
     title: "Excelorithm EMS",
     slug: "excelorithm-ems",
     role: "Lead frontend engineer",
-    category: "Employee management platform",
+    category: "Workforce SaaS",
     year: "2023 – 2025",
-    tagline: "100k+ user platform for workforce management and operations.",
+    tagline:
+      "Employee management platform for attendance, approvals, and day-to-day workforce ops at scale.",
     built:
       "React frontend architecture, component standards, performance optimization, SSR/SSG strategy",
     stack: ["React", "TypeScript", "Node.js", "Redis"],
@@ -252,9 +262,9 @@ export const projects: Project[] = [
       "Improved page-load performance by 35%",
       "Reduced server load by 20% through render discipline",
     ],
-    metric: { value: "100k+", label: "users served" },
+    metric: { value: "100k+", label: "users in production" },
     tags: ["SaaS", "Frontend", "Scale"],
-    visual: "monorepo",
+    visual: "workforce",
   },
   {
     title: "Starter Kit",
@@ -263,7 +273,7 @@ export const projects: Project[] = [
     category: "Open source",
     year: "2024 – Present",
     tagline:
-      "Production-grade monorepo with polyglot services and automated security enforcement.",
+      "Production monorepo starter — polyglot services with CI, CodeQL, and secret scanning built in.",
     built:
       "TypeScript, Python, and Rust services, shared CI/CD pipelines, CodeQL, Dependabot, secret scanning",
     stack: ["TypeScript", "Python", "Rust", "GitHub Actions", "CodeQL"],
@@ -271,9 +281,10 @@ export const projects: Project[] = [
       "One repo pattern reused across client and product builds",
       "Security gates enforced automatically on every merge",
     ],
-    metric: { value: "OSS", label: "open-source monorepo" },
+    metric: { value: "CI+", label: "security gates on merge" },
     tags: ["Open source", "DevEx", "Security"],
     visual: "monorepo",
+    github: "https://github.com/shabirkhan-dev/starter",
   },
 ];
 

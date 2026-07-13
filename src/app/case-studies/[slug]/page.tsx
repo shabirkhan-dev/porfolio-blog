@@ -10,7 +10,7 @@ import { LinkButton } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { caseStudies, getCaseStudyBySlug } from "@/data/case-studies";
-import { profile } from "@/data/site";
+import { profile, projects } from "@/data/site";
 
 type CaseStudyPageProps = {
   params: Promise<{ slug: string }>;
@@ -52,6 +52,8 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     notFound();
   }
 
+  const project = projects.find((item) => item.slug === slug);
+
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
@@ -91,6 +93,18 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <p className="mt-4 font-mono text-xs uppercase tracking-[0.14em] text-faint">
                 {study.role}
               </p>
+
+              {project?.github ? (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 border border-border px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
+                >
+                  View on GitHub
+                  <ArrowUpRight aria-hidden="true" size={13} />
+                </a>
+              ) : null}
             </Reveal>
           </div>
         </header>
@@ -124,7 +138,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <div className="relative overflow-hidden rounded-lg border border-border">
                 <Corners />
                 <ProjectPreview
-                  visual={slug === "autobay" ? "marketplace" : "dashboard"}
+                  visual={project?.visual ?? (slug === "autobay" ? "marketplace" : "dashboard")}
                   title={study.title}
                 />
               </div>

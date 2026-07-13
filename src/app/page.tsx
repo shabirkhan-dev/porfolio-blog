@@ -141,7 +141,7 @@ export default async function Home() {
             <SectionHeading
               index="02"
               eyebrow="Selected work"
-              title="Proof, not promises."
+              title="What I ship looks like this."
               description={
                 <Link
                   href="/projects"

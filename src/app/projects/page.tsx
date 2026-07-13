@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { CaseStudyCard } from "@/components/portfolio/case-study-card";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
 import { PageCta } from "@/components/page-cta";
+import { ProjectsBento } from "@/components/portfolio/projects-bento";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { profile, projects } from "@/data/site";
@@ -13,21 +13,6 @@ export const metadata: Metadata = {
   description:
     "Selected product, platform, SaaS, AI, mobile, infrastructure, and systems work by Shabir Khan.",
 };
-
-const pillars = [
-  {
-    title: "Product architecture",
-    body: "Service boundaries, data models, and delivery paths designed together so the product can evolve without chaos.",
-  },
-  {
-    title: "Interface craft",
-    body: "Calm, intentional surfaces where hierarchy, states, and motion earn trust from real users.",
-  },
-  {
-    title: "Production systems",
-    body: "CI/CD, security gates, and observability built into the workflow — not bolted on after launch.",
-  },
-];
 
 export default function ProjectsPage() {
   return (
@@ -49,16 +34,16 @@ export default function ProjectsPage() {
             </Reveal>
 
             <h1 className="t-display mt-5">
-              <span className="block">Serious product</span>
+              <span className="block">Products you can</span>
               <span className="block">
-                systems, <span className="text-accent">built to hold.</span>
+                read at a glance — <span className="text-accent">then go deeper.</span>
               </span>
             </h1>
 
             <Reveal delay={0.12} className="mt-6 max-w-lg border-t border-border pt-5">
               <p className="t-lead">
-                Architecture-heavy product work — SaaS, marketplaces, security
-                tooling, AI workflows, and delivery foundations.
+                Preview, one clear sentence, the stack that mattered, and GitHub
+                when the work is public.
               </p>
             </Reveal>
           </BoxedSection>
@@ -79,35 +64,11 @@ export default function ProjectsPage() {
             </div>
           </BoxedStrip>
 
-          <BoxedSection pad="compact">
-            <div className="grid border-y border-border md:grid-cols-3">
-              {pillars.map((item, index) => (
-                <Reveal
-                  key={item.title}
-                  delay={index * 0.05}
-                  className="border-border px-1 py-6 md:px-8 md:[&:not(:last-child)]:border-r"
-                >
-                  <span className="font-mono text-xs text-faint">0{index + 1}</span>
-                  <p className="mt-4 font-display text-xl font-semibold tracking-tight">
-                    {item.title}
-                  </p>
-                  <p className="mt-2.5 text-sm leading-7 text-muted-foreground">
-                    {item.body}
-                  </p>
-                </Reveal>
-              ))}
-            </div>
-          </BoxedSection>
-
           <BoxedSection>
-            <h2 className="sr-only">Case studies</h2>
-            <div className="flex flex-col gap-6 lg:gap-8">
-              {projects.map((project, index) => (
-                <Reveal key={project.slug} delay={index * 0.04}>
-                  <CaseStudyCard project={project} index={index + 1} />
-                </Reveal>
-              ))}
-            </div>
+            <h2 className="sr-only">Projects</h2>
+            <Reveal>
+              <ProjectsBento projects={projects} variant="page" />
+            </Reveal>
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>
