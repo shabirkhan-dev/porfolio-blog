@@ -138,25 +138,25 @@ export function ListenButton({ text }: { text: string }) {
     status === "playing" ? "Pause" : status === "paused" ? "Resume" : "Listen";
 
   return (
-    <div className="mt-8 inline-flex w-full max-w-sm items-center gap-3 rounded-md border border-border bg-background-2 p-1.5 pr-4 sm:w-auto">
+    <div className="inline-flex w-full max-w-sm items-center gap-3 border border-border bg-background-2 p-1.5 pr-3 sm:w-auto">
       <button
         type="button"
         onClick={toggle}
         aria-pressed={status === "playing"}
         aria-label={`${label} article audio`}
-        className="grid size-10 shrink-0 place-items-center rounded-sm bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
+        className="grid size-8 shrink-0 place-items-center bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
       >
         {status === "playing" ? (
-          <Pause aria-hidden="true" size={16} />
+          <Pause aria-hidden="true" size={14} />
         ) : (
-          <Play aria-hidden="true" size={16} className="translate-x-px" />
+          <Play aria-hidden="true" size={14} className="translate-x-px" />
         )}
       </button>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <span className="inline-flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-foreground/80">
-          <Headphones aria-hidden="true" size={13} className="text-accent" />
-          {active ? `${label} · listening` : "Listen to this essay"}
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-foreground/80">
+          <Headphones aria-hidden="true" size={12} className="text-accent" />
+          {active ? `${label} · listening` : "Listen"}
         </span>
         <span
           aria-hidden="true"

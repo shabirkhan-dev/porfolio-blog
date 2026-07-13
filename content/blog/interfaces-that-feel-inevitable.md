@@ -5,7 +5,7 @@ category: Frontend
 excerpt: "How I design frontend systems so the product feels calm, decisive, and hard to misuse — without drowning the user in chrome."
 summary: "A practical take on hierarchy, state design, and motion restraint when shipping production interfaces."
 standfirst: "Good interfaces disappear into the work. The craft is deciding what the user never has to think about."
-featured: true
+featured: false
 publishedAt: 2026-03-12
 takeaways:
   - "Hierarchy is a product decision, not a styling pass."
