@@ -34,16 +34,12 @@ export default function ProjectsPage() {
             </Reveal>
 
             <h1 className="t-display mt-5">
-              <span className="block">Selected systems</span>
-              <span className="block">
-                with <span className="text-accent">real surfaces.</span>
-              </span>
+              <span className="block">Work.</span>
             </h1>
 
             <Reveal delay={0.12} className="mt-6 max-w-lg border-t border-border pt-5">
               <p className="t-lead">
-                Large product shots, a one-line brief, and GitHub when the work
-                is public.
+                Product shots, a short brief, and GitHub when it’s public.
               </p>
             </Reveal>
           </BoxedSection>
