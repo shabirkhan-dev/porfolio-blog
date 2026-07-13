@@ -8,13 +8,13 @@ export function SiteFooter() {
 
   return (
     <footer className="relative overflow-hidden border-t border-border bg-background-2">
-      <div className="shell pb-12 pt-[clamp(4rem,3rem+4vw,6rem)]">
-        <div className="grid gap-14 lg:grid-cols-[1.5fr_1fr]">
+      <div className="shell pb-10 pt-[clamp(2.5rem,2rem+3vw,4rem)]">
+        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <span className="eyebrow">Open for work · {profile.location}</span>
             <a
               href={`mailto:${profile.email}`}
-              className="group mt-7 block max-w-xl"
+              className="group mt-5 block max-w-xl"
             >
               <span className="block font-display text-[clamp(2.5rem,1.5rem+5vw,5.5rem)] font-medium leading-[0.95] tracking-tight text-foreground transition-colors group-hover:text-accent">
                 Let&apos;s build
@@ -23,7 +23,7 @@ export function SiteFooter() {
                 something sharp.
               </span>
             </a>
-            <p className="link-line mt-8 inline-block font-mono text-sm text-muted-foreground">
+            <p className="link-line mt-6 inline-block font-mono text-sm text-muted-foreground">
               {profile.email}
             </p>
           </div>
@@ -73,7 +73,7 @@ export function SiteFooter() {
       >
         <FooterLogoDots
           text="shabir"
-          className="h-[clamp(7rem,22vw,17rem)] w-full"
+          className="h-[clamp(5rem,16vw,12rem)] w-full"
         />
       </div>
 

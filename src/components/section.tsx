@@ -23,7 +23,7 @@ export function SectionHeading({
     <Reveal
       className={cn(
         align === "between"
-          ? "flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"
+          ? "flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
           : "max-w-3xl",
         className,
       )}
@@ -35,7 +35,7 @@ export function SectionHeading({
             <span className="font-mono text-xs text-faint">/ {index}</span>
           ) : null}
         </div>
-        <h2 className="t-h2 mt-6">{title}</h2>
+        <h2 className="t-h2 mt-4">{title}</h2>
       </div>
       {description ? (
         <p className="max-w-sm text-sm leading-7 text-muted-foreground sm:text-right">

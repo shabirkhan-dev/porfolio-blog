@@ -1,31 +1,78 @@
 import "server-only";
 
-import type { Database } from "@/lib/supabase/database.types";
-import { createStaticClient } from "@/lib/supabase/static";
+import { cache } from "react";
+import fs from "node:fs/promises";
+import path from "node:path";
+import matter from "gray-matter";
 import {
   estimateReadingTimeFromMarkdown,
-  isSupabaseConfigured,
   type BlogCategory,
   type BlogPost,
+  type PostStatus,
 } from "@/data/posts";
 
-type PostRow = Database["public"]["Tables"]["posts"]["Row"];
+const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
-function rowToPost(row: PostRow): BlogPost {
+type PostFrontmatter = {
+  title?: string;
+  slug?: string;
+  category?: BlogCategory;
+  excerpt?: string;
+  summary?: string;
+  standfirst?: string;
+  takeaways?: string[];
+  featured?: boolean;
+  status?: PostStatus;
+  draft?: boolean;
+  publishedAt?: string | Date;
+  date?: string | Date;
+};
+
+function toIsoDate(value: string | Date | undefined, fallback: string) {
+  if (!value) return fallback;
+  if (value instanceof Date) return value.toISOString();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? fallback : parsed.toISOString();
+}
+
+function fileToPost(filename: string, raw: string): BlogPost | null {
+  const { data, content } = matter(raw);
+  const frontmatter = data as PostFrontmatter;
+  const body = content.trim();
+  const slug =
+    frontmatter.slug?.trim() || filename.replace(/\.md$/i, "");
+
+  if (!frontmatter.title?.trim() || !body) {
+    console.warn(`Skipping invalid post: ${filename}`);
+    return null;
+  }
+
+  const status: PostStatus =
+    frontmatter.draft === true
+      ? "draft"
+      : (frontmatter.status ?? "published");
+
+  if (status !== "published") return null;
+
+  const publishedAt = toIsoDate(
+    frontmatter.publishedAt ?? frontmatter.date,
+    new Date(0).toISOString(),
+  );
+
   return {
-    id: row.id,
-    title: row.title,
-    slug: row.slug,
-    category: row.category as BlogCategory,
-    publishedAt: row.published_at ?? row.created_at,
-    readingTime: estimateReadingTimeFromMarkdown(row.body),
-    featured: row.featured,
-    excerpt: row.excerpt,
-    summary: row.summary,
-    standfirst: row.standfirst ?? undefined,
-    takeaways: row.takeaways?.length ? row.takeaways : undefined,
-    body: row.body,
-    status: row.status,
+    id: slug,
+    title: frontmatter.title.trim(),
+    slug,
+    category: frontmatter.category ?? "Engineering",
+    publishedAt,
+    readingTime: estimateReadingTimeFromMarkdown(body),
+    featured: Boolean(frontmatter.featured),
+    excerpt: frontmatter.excerpt?.trim() || frontmatter.summary?.trim() || "",
+    summary: frontmatter.summary?.trim() || frontmatter.excerpt?.trim() || "",
+    standfirst: frontmatter.standfirst?.trim() || undefined,
+    takeaways: frontmatter.takeaways?.length ? frontmatter.takeaways : undefined,
+    body,
+    status,
   };
 }
 
@@ -33,41 +80,35 @@ function sortByPublishedDesc(a: BlogPost, b: BlogPost) {
   return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
 }
 
-export async function getPublishedPosts(): Promise<BlogPost[]> {
-  if (!isSupabaseConfigured()) return [];
+const loadPublishedPosts = cache(async (): Promise<BlogPost[]> => {
+  let entries: string[];
 
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
-
-  if (error) {
-    console.error("getPublishedPosts:", error.message);
+  try {
+    entries = await fs.readdir(CONTENT_DIR);
+  } catch {
     return [];
   }
 
-  return (data ?? []).map(rowToPost).sort(sortByPublishedDesc);
+  const posts: BlogPost[] = [];
+
+  for (const entry of entries) {
+    if (!entry.endsWith(".md")) continue;
+
+    const raw = await fs.readFile(path.join(CONTENT_DIR, entry), "utf8");
+    const post = fileToPost(entry, raw);
+    if (post) posts.push(post);
+  }
+
+  return posts.sort(sortByPublishedDesc);
+});
+
+export async function getPublishedPosts(): Promise<BlogPost[]> {
+  return loadPublishedPosts();
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  if (!isSupabaseConfigured()) return null;
-
-  const supabase = createStaticClient();
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("slug", slug)
-    .eq("status", "published")
-    .maybeSingle();
-
-  if (error) {
-    console.error("getPostBySlug:", error.message);
-    return null;
-  }
-
-  return data ? rowToPost(data) : null;
+  const posts = await loadPublishedPosts();
+  return posts.find((post) => post.slug === slug) ?? null;
 }
 
 export async function getFeaturedPost(): Promise<BlogPost | null> {

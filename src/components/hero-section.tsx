@@ -29,13 +29,13 @@ export function HeroSection({
   proof,
 }: HeroSectionProps) {
   return (
-    <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
+    <section className="relative isolate flex min-h-[min(100svh,52rem)] flex-col overflow-hidden">
       <DeferredHeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-b from-transparent to-background" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-background" />
 
       {/* Top meta */}
-      <div className="shell flex items-center justify-between pt-[clamp(2rem,1rem+4vw,4rem)]">
+      <div className="shell flex items-center justify-between pt-[clamp(1.5rem,1rem+2.5vw,2.75rem)]">
         <div className="flex items-center gap-3">
           <span className="relative flex size-2">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
@@ -49,7 +49,7 @@ export function HeroSection({
       </div>
 
       {/* Identity + headline + CTAs */}
-      <div className="shell relative flex flex-1 flex-col justify-center py-20">
+      <div className="shell relative flex flex-1 flex-col justify-center py-10 sm:py-12">
         <p className="hero-fade font-mono text-[0.72rem] uppercase tracking-[0.2em] text-muted-foreground">
           <span className="text-foreground">{name}</span>
           <span aria-hidden="true" className="mx-3 text-faint">
@@ -60,7 +60,7 @@ export function HeroSection({
 
         {/* Headline animates with a transform-only line rise: opacity stays
             at 1 so the LCP element still paints on the first frame. */}
-        <h1 className="t-display mt-7 max-w-[16ch]">
+        <h1 className="t-display mt-5 max-w-[16ch]">
           <span className="hero-line">I engineer</span>
           <span className="hero-line">products that feel</span>
           <span className="hero-line">
@@ -76,14 +76,14 @@ export function HeroSection({
         </h1>
 
         <p
-          className="t-lead hero-fade mt-10 max-w-lg"
+          className="t-lead hero-fade mt-6 max-w-lg"
           style={{ animationDelay: "0.5s" }}
         >
           {lead}
         </p>
 
         <div
-          className="hero-fade mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="hero-fade mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
           style={{ animationDelay: "0.62s" }}
         >
           <LinkButton href="#work" size="lg">
@@ -122,14 +122,14 @@ export function HeroSection({
       </div>
 
       {/* Proof — technical stat grid */}
-      <div className="shell relative pb-16">
+      <div className="shell relative pb-8 sm:pb-10">
         <div className="hero-fade relative" style={{ animationDelay: "0.8s" }}>
           <Corners />
           <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
             {proof.map((item, index) => (
               <div
                 key={item.label}
-                className={`group relative px-5 py-5 transition-colors duration-300 hover:bg-accent/[0.04] sm:px-6 ${
+                className={`group relative px-4 py-4 transition-colors duration-300 hover:bg-accent/[0.04] sm:px-5 sm:py-5 ${
                   index % 2 === 1 ? "border-l border-border" : ""
                 } ${index >= 2 ? "border-t border-border lg:border-t-0 lg:border-l" : ""}`}
               >
@@ -140,11 +140,11 @@ export function HeroSection({
                     className="size-1 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   />
                 </dt>
-                <dd className="mt-3">
+                <dd className="mt-2.5">
                   <span className="font-display text-[clamp(1.6rem,1.3rem+1.2vw,2.4rem)] font-medium leading-none tracking-tight text-foreground">
                     {item.value}
                   </span>
-                  <span className="mt-2 block text-xs leading-5 text-muted-foreground">
+                  <span className="mt-1.5 block text-xs leading-5 text-muted-foreground">
                     {item.label}
                   </span>
                 </dd>

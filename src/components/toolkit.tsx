@@ -78,7 +78,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
   }, [groups.length]);
 
   return (
-    <div className="mt-16">
+    <div className="mt-10">
       {/* Meta strip */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
         <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">

@@ -1,7 +1,4 @@
-import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { slugifyHeading } from "@/data/site";
-
-export { isSupabaseConfigured };
 
 export type BlogCategory =
   | "Engineering"

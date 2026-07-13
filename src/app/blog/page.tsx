@@ -10,8 +10,6 @@ import { categories } from "@/data/posts";
 import { getFeaturedPost, getPostsByCategory } from "@/data/posts.server";
 import { cn } from "@/lib/utils";
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: "Writing",
   description:
@@ -40,19 +38,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <main>
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-14 pt-[clamp(3rem,2rem+6vw,6rem)]">
+          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+4vw,4rem)]">
             <Reveal>
               <span className="eyebrow">Writing</span>
             </Reveal>
 
-            <h1 className="t-display mt-8">
+            <h1 className="t-display mt-5">
               <span className="block">Notes on</span>
               <span className="block">
                 building <span className="text-accent">with taste.</span>
               </span>
             </h1>
 
-            <Reveal delay={0.12} className="mt-10 max-w-lg border-t border-border pt-8">
+            <Reveal delay={0.12} className="mt-6 max-w-lg border-t border-border pt-5">
               <p className="t-lead">
                 Notes on engineering judgment, system design, and the quieter
                 parts of shipping real software.
@@ -105,15 +103,15 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </section>
 
         {showFeatured && featuredPost ? (
-          <section className="shell pt-[clamp(3rem,2rem+4vw,5rem)]">
+          <section className="shell pt-[clamp(2rem,1.25rem+3vw,3.5rem)]">
             <Reveal>
               <ArticleCard post={featuredPost} featured />
             </Reveal>
           </section>
         ) : null}
 
-        <section className="shell pb-[clamp(3rem,2rem+3vw,5rem)] pt-[clamp(2rem,1.5rem+3vw,4rem)]">
-          <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border pb-5">
+        <section className="shell pb-[clamp(2rem,1.25rem+2.5vw,3.5rem)] pt-[clamp(1.5rem,1rem+2vw,2.75rem)]">
+          <div className="mb-6 flex items-baseline justify-between gap-4 border-b border-border pb-4">
             <h2 className="font-display text-lg font-semibold tracking-tight">
               {activeCategory === "All" ? "All essays" : activeCategory}
             </h2>
@@ -132,7 +130,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border py-20 text-center">
+            <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border py-14 text-center">
               <p className="font-display text-xl font-semibold tracking-tight">
                 Nothing here yet
               </p>
@@ -149,7 +147,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           )}
         </section>
 
-        <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
+        <section className="shell pb-[clamp(2.5rem,2rem+3vw,4.5rem)]">
           <Reveal>
             <PageCta
               label="Hire me"

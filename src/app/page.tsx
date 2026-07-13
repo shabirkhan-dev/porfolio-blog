@@ -28,8 +28,6 @@ import {
 } from "@/data/site";
 import { getPublishedPosts } from "@/data/posts.server";
 
-export const revalidate = 3600;
-
 export default async function Home() {
   const writingPreview = (await getPublishedPosts()).slice(0, 3);
   const workProjects = projects.slice(0, 4);
@@ -76,7 +74,7 @@ export default async function Home() {
 
         {/* ABOUT — compressed */}
         <section className="shell section-y">
-          <div className="grid items-center gap-16 lg:grid-cols-[0.65fr_1.35fr] lg:gap-24">
+          <div className="grid items-center gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-14">
             <Reveal>
               <ScalesFrame className="mx-auto w-full max-w-[17rem]">
                 <div className="relative grid aspect-square place-items-center overflow-hidden">
@@ -93,15 +91,15 @@ export default async function Home() {
                 <span className="eyebrow">About</span>
                 <span className="font-mono text-xs text-faint">/ 01</span>
               </div>
-              <h2 className="t-h2 mt-6 max-w-lg text-balance">
+              <h2 className="t-h2 mt-4 max-w-lg text-balance">
                 Calm on the surface.{" "}
                 <span className="text-accent">Disciplined</span> underneath.
               </h2>
-              <p className="mt-6 max-w-lg text-[0.95rem] leading-7 text-muted-foreground">
+              <p className="mt-4 max-w-lg text-[0.95rem] leading-7 text-muted-foreground">
                 {profile.intro}
               </p>
 
-              <dl className="mt-8 grid max-w-lg gap-y-2 border-t border-border pt-6 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-2 sm:gap-x-8">
+              <dl className="mt-6 grid max-w-lg gap-y-2 border-t border-border pt-5 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-2 sm:gap-x-8">
                 <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
                   <dt className="text-faint">Currently</dt>
                   <dd className="text-foreground">Founder @ Rabtx</dd>
@@ -120,7 +118,7 @@ export default async function Home() {
                 </div>
               </dl>
 
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
                 <a
                   href={profile.github}
                   target="_blank"
@@ -168,7 +166,7 @@ export default async function Home() {
             }
           />
 
-          <Reveal className="mt-16">
+          <Reveal className="mt-10">
             <ProjectsBento projects={workProjects} />
           </Reveal>
         </section>
@@ -187,7 +185,7 @@ export default async function Home() {
                     <span className="eyebrow">Approach</span>
                     <span className="font-mono text-xs text-faint">/ 03</span>
                   </div>
-                  <h2 className="t-h2 mt-6 text-balance">
+                  <h2 className="t-h2 mt-4 text-balance">
                     How I <span className="text-accent">think</span> about
                     building.
                   </h2>
@@ -199,7 +197,7 @@ export default async function Home() {
               </div>
             </Reveal>
 
-            <div className="mt-14 grid gap-5 sm:grid-cols-2">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {philosophy.map((item, index) => {
                 const Icon = item.icon;
                 return (
@@ -228,7 +226,7 @@ export default async function Home() {
               title="The stack I ship with."
             />
 
-            <Reveal className="mt-16">
+            <Reveal className="mt-10">
               <HomeToolkit groups={stackGroups} />
             </Reveal>
           </div>
@@ -256,7 +254,7 @@ export default async function Home() {
             }
           />
 
-          <div className="mt-20 grid gap-5 lg:grid-cols-3">
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
             {writingPreview.map((post, index) => (
               <Reveal
                 key={post.slug}
@@ -278,7 +276,7 @@ export default async function Home() {
               title="Trusted by people I've shipped with."
             />
           </div>
-          <div className="mt-16">
+          <div className="mt-10">
             <HomeTestimonials items={testimonials} />
           </div>
         </section>

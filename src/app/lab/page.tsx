@@ -22,19 +22,19 @@ export default function LabPage() {
       <main>
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-14 pt-[clamp(3rem,2rem+6vw,6rem)]">
+          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+4vw,4rem)]">
             <Reveal>
               <span className="eyebrow">Lab</span>
             </Reveal>
 
-            <h1 className="t-display mt-8">
+            <h1 className="t-display mt-5">
               <span className="block">Where experiments</span>
               <span className="block">
                 get <span className="text-accent">room to breathe.</span>
               </span>
             </h1>
 
-            <Reveal delay={0.12} className="mt-10 max-w-xl border-t border-border pt-8">
+            <Reveal delay={0.12} className="mt-6 max-w-xl border-t border-border pt-5">
               <p className="t-lead">
                 Interactive systems, motion studies, 3D interface concepts, and
                 AI UI prototypes. The main portfolio stays hireable — this is
@@ -104,7 +104,7 @@ export default function LabPage() {
           </div>
         </section>
 
-        <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
+        <section className="shell pb-[clamp(2.5rem,2rem+3vw,4.5rem)]">
           <Reveal>
             <PageCta
               label="Main portfolio"

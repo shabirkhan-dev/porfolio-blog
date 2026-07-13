@@ -58,7 +58,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
       <main>
         <header className="relative overflow-hidden border-b border-border">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-14 pt-[clamp(3rem,2rem+5vw,5rem)]">
+          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+3.5vw,3.75rem)]">
             <Reveal>
               <Link
                 href="/#work"
@@ -72,12 +72,12 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 Back to work
               </Link>
 
-              <div className="mt-10 flex flex-wrap items-center gap-2">
+              <div className="mt-6 flex flex-wrap items-center gap-2">
                 <Badge tone="accent">Case study</Badge>
                 <Badge tone="muted">{study.year}</Badge>
               </div>
 
-              <h1 className="t-h1 mt-8">
+              <h1 className="t-h1 mt-5">
                 {study.title}
                 <span className="mt-3 block font-mono text-[0.3em] font-normal uppercase tracking-[0.16em] text-muted-foreground">
                   {study.subtitle}

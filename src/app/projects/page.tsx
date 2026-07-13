@@ -37,19 +37,19 @@ export default function ProjectsPage() {
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-14 pt-[clamp(3rem,2rem+6vw,6rem)]">
+          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+4vw,4rem)]">
             <Reveal>
               <span className="eyebrow">Selected work</span>
             </Reveal>
 
-            <h1 className="t-display mt-8">
+            <h1 className="t-display mt-5">
               <span className="block">Serious product</span>
               <span className="block">
                 systems, <span className="text-accent">built to hold.</span>
               </span>
             </h1>
 
-            <Reveal delay={0.12} className="mt-10 max-w-lg border-t border-border pt-8">
+            <Reveal delay={0.12} className="mt-6 max-w-lg border-t border-border pt-5">
               <p className="t-lead">
                 Architecture-heavy product work — SaaS, marketplaces, security
                 tooling, AI workflows, and delivery foundations.
@@ -73,19 +73,19 @@ export default function ProjectsPage() {
         </section>
 
         {/* Pillars */}
-        <section className="shell pt-[clamp(3rem,2rem+4vw,5rem)]">
+        <section className="shell pt-[clamp(2rem,1.25rem+3vw,3.5rem)]">
           <div className="grid border-y border-border md:grid-cols-3">
             {pillars.map((item, index) => (
               <Reveal
                 key={item.title}
                 delay={index * 0.05}
-                className="border-border px-1 py-8 md:px-8 md:[&:not(:last-child)]:border-r"
+                className="border-border px-1 py-6 md:px-8 md:[&:not(:last-child)]:border-r"
               >
                 <span className="font-mono text-xs text-faint">0{index + 1}</span>
-                <p className="mt-5 font-display text-xl font-semibold tracking-tight">
+                <p className="mt-4 font-display text-xl font-semibold tracking-tight">
                   {item.title}
                 </p>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                <p className="mt-2.5 text-sm leading-7 text-muted-foreground">
                   {item.body}
                 </p>
               </Reveal>
@@ -96,7 +96,7 @@ export default function ProjectsPage() {
         {/* Case studies */}
         <section className="shell section-y">
           <h2 className="sr-only">Case studies</h2>
-          <div className="flex flex-col gap-8 lg:gap-10">
+          <div className="flex flex-col gap-6 lg:gap-8">
             {projects.map((project, index) => (
               <Reveal key={project.slug} delay={index * 0.04}>
                 <CaseStudyCard project={project} index={index + 1} />
@@ -106,7 +106,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* CTA */}
-        <section className="shell pb-[clamp(4rem,3rem+5vw,7rem)]">
+        <section className="shell pb-[clamp(2.5rem,2rem+3vw,4.5rem)]">
           <Reveal>
             <Magnetic>
               <PageCta

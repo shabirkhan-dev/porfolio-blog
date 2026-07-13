@@ -33,24 +33,24 @@ const channels = [
 
 export function ContactSection() {
   return (
-    <section id="contact" className="shell pb-[clamp(5rem,4rem+5vw,8rem)] pt-[clamp(2rem,1rem+3vw,4rem)]">
-      <div className="grid gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-20">
+    <section id="contact" className="shell pb-[clamp(3.5rem,2.5rem+4vw,5.5rem)] pt-[clamp(1.5rem,1rem+2vw,2.75rem)]">
+      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-12">
         <div className="flex flex-col lg:justify-between">
           <div>
             <div className="flex items-center gap-4">
               <span className="eyebrow">Contact</span>
               <span className="font-mono text-xs text-faint">/ 08</span>
             </div>
-            <h2 className="t-h1 mt-6 max-w-[20ch] text-balance">
+            <h2 className="t-h1 mt-4 max-w-[20ch] text-balance">
               Building a <span className="text-accent">serious</span> product?
             </h2>
-            <p className="mt-6 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+            <p className="mt-4 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
               Whether you&apos;re hiring a senior engineer or need a product
               built end to end — I can design the system, ship the interface,
               and make the architecture hold under real use.
             </p>
 
-            <div className="mt-10">
+            <div className="mt-8">
               <Magnetic>
                 <LinkButton href={`mailto:${profile.email}`} size="lg">
                   Start a conversation
@@ -60,7 +60,7 @@ export function ContactSection() {
             </div>
           </div>
 
-          <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-2.5 border-t border-border pt-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-faint lg:mt-16">
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2.5 border-t border-border pt-5 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-faint lg:mt-12">
             <span className="flex items-center gap-2 text-accent">
               <span className="size-1.5 animate-pulse rounded-full bg-accent" />
               Open to senior roles

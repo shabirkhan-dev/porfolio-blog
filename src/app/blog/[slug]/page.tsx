@@ -26,8 +26,6 @@ import {
 import { profile } from "@/data/site";
 import { formatDate } from "@/lib/format";
 
-export const revalidate = 3600;
-
 type BlogPostPageProps = {
   params: Promise<{
     slug: string;
@@ -74,7 +72,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <main>
         <header id="top" className="relative overflow-hidden border-b border-border scroll-mt-24">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_90%_at_50%_0%,black,transparent_80%)]" />
-          <div className="mx-auto w-full max-w-3xl px-[var(--gutter)] pb-14 pt-[clamp(2.5rem,1.5rem+4vw,4.5rem)]">
+          <div className="mx-auto w-full max-w-3xl px-[var(--gutter)] pb-8 pt-[clamp(1.75rem,1rem+3vw,3.25rem)]">
             <Reveal>
               <Link
                 href="/blog"
@@ -88,27 +86,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 Back to writing
               </Link>
 
-              <div className="mt-10 flex flex-wrap items-center gap-2">
+              <div className="mt-6 flex flex-wrap items-center gap-2">
                 <Badge tone="accent">{post.category}</Badge>
                 <Badge tone="muted">{formatDate(post.publishedAt)}</Badge>
                 <Badge tone="muted">{readingTime}</Badge>
               </div>
 
-              <h1 className="t-h1 mt-8 !text-[clamp(2.4rem,1.6rem+3.4vw,4.2rem)]">
+              <h1 className="t-h1 mt-5 !text-[clamp(2.4rem,1.6rem+3.4vw,4.2rem)]">
                 {post.title}
               </h1>
 
               {post.standfirst ? (
-                <p className="mt-8 font-display text-[clamp(1.3rem,1.05rem+1vw,1.8rem)] font-normal leading-normal tracking-tight text-muted-foreground">
+                <p className="mt-5 font-display text-[clamp(1.3rem,1.05rem+1vw,1.8rem)] font-normal leading-normal tracking-tight text-muted-foreground">
                   {post.standfirst}
                 </p>
               ) : (
-                <p className="mt-8 text-lg leading-8 text-muted-foreground">
+                <p className="mt-5 text-lg leading-8 text-muted-foreground">
                   {post.summary}
                 </p>
               )}
 
-              <div className="mt-10 flex items-center gap-4 border-t border-border pt-6">
+              <div className="mt-7 flex items-center gap-4 border-t border-border pt-5">
                 <span className="grid size-11 shrink-0 place-items-center rounded-sm bg-accent font-display text-xs font-bold text-accent-foreground">
                   {profile.initials}
                 </span>
@@ -127,14 +125,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </header>
 
-        <div className="shell grid gap-12 py-[clamp(2.5rem,2rem+3vw,4.5rem)] lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-16 xl:justify-center">
+        <div className="shell grid gap-10 py-[clamp(1.75rem,1.25rem+2vw,3rem)] lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-12 xl:justify-center">
           <article className="min-w-0 max-w-[44rem]">
             {post.takeaways && post.takeaways.length > 0 ? (
-              <Reveal className="mb-12 rounded-lg border border-border bg-background-2 p-6 sm:p-7">
+              <Reveal className="mb-8 rounded-lg border border-border bg-background-2 p-5 sm:p-6">
                 <p className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-accent">
                   What you&apos;ll take away
                 </p>
-                <ul className="mt-5 space-y-3">
+                <ul className="mt-4 space-y-2.5">
                   {post.takeaways.map((item) => (
                     <li
                       key={item}
@@ -154,7 +152,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             <nav
               aria-label="More essays"
-              className="mt-16 grid gap-4 border-t border-border pt-10 sm:grid-cols-2"
+              className="mt-10 grid gap-4 border-t border-border pt-7 sm:grid-cols-2"
             >
               {previous ? (
                 <Link
