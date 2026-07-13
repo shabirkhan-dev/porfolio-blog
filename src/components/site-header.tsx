@@ -70,7 +70,7 @@ export function SiteHeader() {
                 >
                   Résumé
                 </Link>
-                <ThemeToggle className="size-9 rounded-sm" />
+                <ThemeToggle />
                 <LinkButton
                   href={`mailto:${profile.email}`}
                   aria-label={`Email ${profile.name}`}

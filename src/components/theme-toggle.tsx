@@ -161,7 +161,7 @@ export function ThemeToggle({
   variant = "circle-blur",
   start = "bottom-up",
   className,
-  iconClassName = "size-[17px]",
+  iconClassName = "size-3.5 sm:size-4",
 }: {
   variant?: ThemeVariant;
   start?: RectStart;
@@ -182,7 +182,7 @@ export function ThemeToggle({
       }
       onClick={toggle}
       className={cn(
-        "group relative grid min-h-11 min-w-11 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent",
+        "group relative grid size-8 place-items-center overflow-hidden rounded-sm border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent sm:size-9",
         className,
       )}
     >

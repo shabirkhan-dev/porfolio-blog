@@ -87,100 +87,132 @@ const panelItem: Variants = {
   hide: { opacity: 0, y: 14 },
 };
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: index * 0.06,
-    },
-  }),
-};
-
 function VerticalFallback({ items }: { items: ExperienceItem[] }) {
+  const [open, setOpen] = useState(0);
+
   return (
     <div>
-      <div className="flex items-center gap-4">
-        <span className="eyebrow">{HEADING.eyebrow}</span>
-        <span className="font-mono text-xs text-faint">/ {HEADING.index}</span>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <span className="eyebrow">{HEADING.eyebrow}</span>
+          <span className="font-mono text-xs text-faint">/ {HEADING.index}</span>
+        </div>
+        <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint">
+          Tap a role
+        </span>
       </div>
-      <h2 className="t-h2 mt-4 max-w-2xl">
+      <h2 className="t-h2 mt-3 max-w-2xl text-[clamp(1.55rem,1.2rem+1.4vw,2.25rem)]">
         <HeadingTitle />
       </h2>
 
-      <ol className="mt-10 flex flex-col gap-4">
+      <ol className="relative mt-8 border-l border-border pl-5">
         {items.map((item, index) => {
           const isCurrent = /present|now/i.test(item.period + item.year);
+          const expanded = open === index;
+
           return (
-            <m.li
-              key={`${item.company}-${item.role}`}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="group relative overflow-hidden rounded-lg border border-border bg-background p-6 transition-colors duration-500 hover:border-border-strong"
-            >
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-                  {item.year}
-                </span>
-                {isCurrent ? (
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">
-                    <span className="size-1.5 rounded-full bg-accent" />
-                    Current
-                  </span>
-                ) : null}
-              </div>
-              <h3 className="mt-4 font-display text-[clamp(1.35rem,1.1rem+1vw,1.85rem)] font-semibold leading-tight tracking-tight">
-                {item.role}
-              </h3>
-              <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                {item.company}
-                <span className="mx-2 text-faint">/</span>
-                {item.period}
-              </p>
-              <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                {item.summary}
-              </p>
-              <div
-                className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border"
-                style={{
-                  gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
-                }}
+            <li key={`${item.company}-${item.role}`} className="relative pb-3 last:pb-0">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute -left-[1.41rem] top-3 size-2.5 rounded-full border-2 border-background",
+                  expanded || isCurrent ? "bg-accent" : "bg-border-strong",
+                )}
+              />
+
+              <button
+                type="button"
+                aria-expanded={expanded}
+                onClick={() => setOpen(expanded ? -1 : index)}
+                className={cn(
+                  "w-full border border-border bg-background-2 text-left transition-colors",
+                  expanded
+                    ? "border-border-strong"
+                    : "active:border-border-strong",
+                )}
               >
-                {item.metrics.map((metric) => (
-                  <div key={metric.label} className="bg-background p-3.5">
-                    <p className="font-display text-xl font-semibold leading-none tracking-tight text-accent">
-                      {metric.value}
-                    </p>
-                    <p className="mt-2 text-[0.7rem] leading-4 text-muted-foreground">
-                      {metric.label}
+                <div className="flex items-start justify-between gap-3 px-3.5 py-3.5">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent">
+                        {item.year}
+                      </span>
+                      {isCurrent ? (
+                        <span className="inline-flex items-center gap-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-accent">
+                          <span className="size-1 rounded-full bg-accent" />
+                          Now
+                        </span>
+                      ) : null}
+                    </div>
+                    <h3 className="mt-1.5 font-display text-[1.15rem] font-semibold leading-tight tracking-tight">
+                      {item.role}
+                    </h3>
+                    <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground">
+                      {item.company}
+                      <span className="mx-1.5 text-faint">·</span>
+                      {item.period}
                     </p>
                   </div>
-                ))}
-              </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
                   <span
-                    key={tag}
-                    className="rounded-sm border border-border px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-faint"
+                    aria-hidden="true"
+                    className={cn(
+                      "mt-1 shrink-0 font-mono text-sm text-faint transition-transform duration-300",
+                      expanded && "rotate-45 text-accent",
+                    )}
                   >
-                    {tag}
+                    +
                   </span>
-                ))}
-              </div>
-            </m.li>
+                </div>
+
+                <div
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-300 ease-out",
+                    expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div className="border-t border-border px-3.5 pb-4 pt-3">
+                      <p className="text-sm leading-6 text-muted-foreground">
+                        {item.summary}
+                      </p>
+                      <div
+                        className="mt-3.5 grid gap-px overflow-hidden border border-border bg-border"
+                        style={{
+                          gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
+                        }}
+                      >
+                        {item.metrics.map((metric) => (
+                          <div key={metric.label} className="bg-background px-2.5 py-2.5">
+                            <p className="font-display text-lg font-semibold leading-none tracking-tight text-accent">
+                              {metric.value}
+                            </p>
+                            <p className="mt-1.5 text-[0.62rem] leading-4 text-muted-foreground">
+                              {metric.label}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {item.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="border border-border px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.1em] text-faint"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </li>
           );
         })}
       </ol>
     </div>
   );
 }
-
 function Panel({
   item,
   active,
@@ -720,7 +752,7 @@ export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
   }, []);
 
   if (isDesktop === null) {
-    return <div className="min-h-[22rem]" aria-hidden />;
+    return <div className="min-h-[12rem]" aria-hidden />;
   }
 
   if (!isDesktop) {
