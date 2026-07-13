@@ -72,7 +72,7 @@ export default async function Home() {
             </div>
           </BoxedStrip>
 
-          <BoxedSection>
+          <BoxedSection id="about">
             <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-14">
               <Reveal>
                 <ScalesFrame className="mx-auto w-full max-w-[17rem]">
@@ -240,7 +240,7 @@ export default async function Home() {
             </Reveal>
           </BoxedSection>
 
-          <BoxedSection tone="muted">
+          <BoxedSection id="experience" tone="muted">
             <HomeExperienceTimeline items={experience} />
           </BoxedSection>
 

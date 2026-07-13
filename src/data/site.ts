@@ -491,46 +491,75 @@ export const experience: ExperienceItem[] = [
 ];
 export const labExperiments = [
   {
-    title: "Vector field hero",
-    category: "Motion",
+    title: "Hero typewriter + pronounce",
+    category: "Interaction",
     description:
-      "Cursor-reactive particle field powering the homepage hero — calm, performant, and scroll-aware.",
-    tags: ["Canvas", "Interaction", "Performance"],
+      "Live on the homepage — craft-line typewriter with a speak-my-name control. Small interaction, clear ownership of the brand.",
+    tags: ["Speech", "Motion", "A11y"],
     href: "/",
+    status: "live" as const,
   },
   {
-    title: "Engine Room layers",
-    category: "Systems visualization",
-    description:
-      "Scroll-driven layer diagram showing how product surfaces map to underlying system decisions.",
-    tags: ["Framer Motion", "Scroll", "Architecture"],
-  },
-  {
-    title: "AI workflow UI",
-    category: "AI prototype",
-    description:
-      "Structured input/output panels for LLM features — verification-first, not chat-first.",
-    tags: ["AI", "Product UI", "TypeScript"],
-  },
-  {
-    title: "3D interface concepts",
-    category: "Visual engineering",
-    description:
-      "Spatial navigation studies for dashboard and admin tools — depth without losing clarity.",
-    tags: ["Three.js", "3D", "UX"],
-  },
-  {
-    title: "Motion primitives",
-    category: "Interaction design",
-    description:
-      "Reusable reveal, stagger, and magnetic interaction patterns used across the portfolio.",
-    tags: ["Framer Motion", "Components"],
-  },
-  {
-    title: "Generative typography",
+    title: "ASCII portrait field",
     category: "Creative code",
     description:
-      "Procedural letterform experiments exploring display type as a living surface.",
-    tags: ["Canvas", "Typography"],
+      "The About monogram sits on a reactive ASCII field — atmosphere without a stock photo.",
+    tags: ["Canvas", "About"],
+    href: "/#about",
+    status: "live" as const,
+  },
+  {
+    title: "Core stack shuffle",
+    category: "UI system",
+    description:
+      "Timed skill rotation under the hero — one centered row, not a noisy marquee.",
+    tags: ["React", "Timing"],
+    href: "/",
+    status: "live" as const,
+  },
+  {
+    title: "GitHub contribution board",
+    category: "Data UI",
+    description:
+      "Real contribution graph for shabirkhan-dev — proof of cadence, not a vanity badge dump.",
+    tags: ["GitHub API", "SVG"],
+    href: "/",
+    status: "live" as const,
+  },
+  {
+    title: "Experience scroll-trap",
+    category: "Motion systems",
+    description:
+      "Desktop career carousel that holds scroll while roles advance, then releases — accordion on mobile.",
+    tags: ["Framer", "UX"],
+    href: "/#experience",
+    status: "live" as const,
+  },
+  {
+    title: "Essay listen mode",
+    category: "Reading UX",
+    description:
+      "Speech synthesis for long essays with chunked playback — useful when you want the argument hands-free.",
+    tags: ["Web Speech", "Blog"],
+    href: "/blog/building-multi-tenant-admin-systems",
+    status: "live" as const,
+  },
+  {
+    title: "Starter Kit monorepo",
+    category: "Open source",
+    description:
+      "Production monorepo pattern with CI, CodeQL, and secret scanning — the release path as a product.",
+    tags: ["TypeScript", "CI", "Security"],
+    href: "https://github.com/shabirkhan-dev/starter",
+    status: "oss" as const,
+  },
+  {
+    title: "School OS",
+    category: "Product systems",
+    description:
+      "Multi-tenant school operations platform — attendance, roles, and AI insights in one codebase.",
+    tags: ["Next.js", "Tenancy", "AI"],
+    href: "https://github.com/shabirkhan-dev/school-os",
+    status: "oss" as const,
   },
 ];
