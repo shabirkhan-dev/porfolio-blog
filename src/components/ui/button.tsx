@@ -14,9 +14,9 @@ const buttonVariants = cva(
         subtle: "bg-foreground text-background hover:bg-foreground/90",
       },
       size: {
-        sm: "h-9 px-4 text-[0.66rem]",
-        md: "h-11 px-5 text-[0.72rem]",
-        lg: "h-12 px-7 text-[0.78rem]",
+        sm: "h-9 px-3.5 text-[0.62rem] sm:px-4 sm:text-[0.66rem]",
+        md: "h-10 px-4 text-[0.66rem] sm:h-11 sm:px-5 sm:text-[0.72rem]",
+        lg: "h-10 px-4 text-[0.66rem] sm:h-11 sm:px-5 sm:text-[0.72rem] md:h-12 md:px-7 md:text-[0.78rem]",
       },
     },
     defaultVariants: {

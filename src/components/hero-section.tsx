@@ -74,25 +74,25 @@ export function HeroSection({
             </p>
 
             <div
-              className="hero-fade mt-7 flex flex-wrap items-center gap-x-6 gap-y-3"
+              className="hero-fade mt-6 flex flex-wrap items-center gap-x-5 gap-y-2.5 sm:mt-7 sm:gap-x-6"
               style={{ animationDelay: "0.35s" }}
             >
-              <LinkButton href="#work" size="lg">
+              <LinkButton href="#work" size="md" className="sm:h-11 md:h-12 md:px-7 md:text-[0.78rem]">
                 Selected work
-                <ArrowDownRight aria-hidden="true" size={18} />
+                <ArrowDownRight aria-hidden="true" className="size-4 md:size-[18px]" />
               </LinkButton>
               <Link
                 href="/resume"
-                className="link-line inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="link-line inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs"
               >
                 Résumé
-                <ArrowUpRight aria-hidden="true" size={13} />
+                <ArrowUpRight aria-hidden="true" size={12} className="sm:size-[13px]" />
               </Link>
               <a
                 href={profile.github}
                 target="_blank"
                 rel="noreferrer"
-                className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="link-line font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs"
               >
                 GitHub
               </a>
