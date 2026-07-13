@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { caseStudies } from "@/data/case-studies";
+import { getLabSlugs } from "@/data/lab";
 import { getPublishedPosts } from "@/data/posts.server";
 
 const SITE_URL =
@@ -31,5 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...caseStudyRoutes, ...postRoutes];
+  const labRoutes: MetadataRoute.Sitemap = getLabSlugs().map((slug) => ({
+    url: `${SITE_URL}/lab/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.55,
+  }));
+
+  return [...staticRoutes, ...caseStudyRoutes, ...postRoutes, ...labRoutes];
 }

@@ -6,17 +6,13 @@ import { Reveal } from "@/components/motion";
 import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { labExperiments } from "@/data/site";
+import { labExperiments } from "@/data/lab";
 
 export const metadata: Metadata = {
   title: "Lab",
   description:
-    "Working studies from Shabir Khan — live interactions, reading UX, and open systems you can open.",
+    "Interactive UI experiments — live previews and source for buttons, motion, forms, and failure states.",
 };
-
-function isExternal(href: string) {
-  return href.startsWith("http");
-}
 
 export default function LabPage() {
   return (
@@ -29,103 +25,77 @@ export default function LabPage() {
               <div className="max-w-2xl">
                 <span className="eyebrow">Lab</span>
                 <h1 className="t-h2 mt-3 text-balance">
-                  Working studies —{" "}
-                  <span className="text-accent">not vaporware.</span>
+                  Components you can{" "}
+                  <span className="text-accent">try and copy.</span>
                 </h1>
                 <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
-                  Live pieces from this site and open systems you can click into.
-                  Lab stays the name: short, honest, and for craft that isn&apos;t a
-                  case study yet.
+                  Live previews with source — primitives, motion, form states,
+                  and failure UI from the same system as the site.
                 </p>
               </div>
               <p className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint sm:pb-1">
-                {labExperiments.length} studies
+                {labExperiments.length} experiments
               </p>
             </div>
           </BoxedSection>
 
           <BoxedSection pad="compact">
-            <div className="divide-y divide-border border-y border-border">
-              {labExperiments.map((item, index) => {
-                const external = item.href ? isExternal(item.href) : false;
-                const cta =
-                  item.status === "oss"
-                    ? "GitHub"
-                    : item.status === "live"
-                      ? "Open live"
-                      : "Explore";
-
-                const body = (
-                  <>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.58rem] uppercase tracking-[0.14em]">
-                      <span className="tabular-nums text-faint">
-                        {String(index + 1).padStart(2, "0")}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {labExperiments.map((item, index) => (
+                <Reveal key={item.slug} delay={index * 0.03}>
+                  <Link
+                    href={`/lab/${item.slug}`}
+                    className="group flex h-full flex-col border border-border bg-background-2 p-5 transition-colors hover:border-border-strong sm:p-6"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-accent">
+                        {item.category}
                       </span>
-                      <span className="text-accent">{item.category}</span>
-                      <span className="text-faint">
-                        {item.status === "oss" ? "Open source" : "Live on site"}
+                      <span className="font-mono text-[0.56rem] tabular-nums text-faint">
+                        {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>
 
-                    <h2 className="mt-3 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-accent sm:text-2xl">
+                    <h2 className="mt-4 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-accent">
                       {item.title}
                     </h2>
-                    <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
+                    <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">
                       {item.description}
                     </p>
 
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                      <ul className="flex flex-wrap gap-x-3 gap-y-1">
-                        {item.tags.map((tag) => (
+                    <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
+                      <ul className="flex flex-wrap gap-x-2.5 gap-y-1">
+                        {item.tags.slice(0, 3).map((tag) => (
                           <li
                             key={tag}
-                            className="font-mono text-[0.56rem] uppercase tracking-[0.12em] text-faint"
+                            className="font-mono text-[0.54rem] uppercase tracking-[0.12em] text-faint"
                           >
                             {tag}
                           </li>
                         ))}
                       </ul>
-                      {item.href ? (
-                        <span className="inline-flex items-center gap-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-foreground">
-                          {cta}
-                          <ArrowUpRight
-                            aria-hidden="true"
-                            size={13}
-                            className="text-accent"
-                          />
-                        </span>
-                      ) : null}
+                      <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-foreground">
+                        Open
+                        <ArrowUpRight
+                          aria-hidden
+                          size={12}
+                          className="text-accent"
+                        />
+                      </span>
                     </div>
-                  </>
-                );
-
-                return (
-                  <Reveal key={item.title} delay={index * 0.03}>
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        target={external ? "_blank" : undefined}
-                        rel={external ? "noreferrer" : undefined}
-                        className="group block py-6 transition-colors sm:py-7"
-                      >
-                        {body}
-                      </Link>
-                    ) : (
-                      <div className="py-6 sm:py-7">{body}</div>
-                    )}
-                  </Reveal>
-                );
-              })}
+                  </Link>
+                </Reveal>
+              ))}
             </div>
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>
             <Reveal>
               <PageCta
-                label="Main portfolio"
-                title="Looking for hireable, production-focused work?"
+                label="Selected work"
+                title="Need the production systems these patterns ship inside?"
                 href="/#work"
-                button="View selected work"
+                button="View work"
               />
             </Reveal>
           </BoxedSection>
