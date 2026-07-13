@@ -4,29 +4,13 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { BoxedPage, BoxedSection } from "@/components/boxed-section";
 import { LabDemoFrame } from "@/components/lab/lab-demo-frame";
-import {
-  ActionSwapDemo,
-  ButtonSystemDemo,
-  CountUpMetricsDemo,
-  FailureStatesDemo,
-  FieldStatesDemo,
-  MagneticCtaDemo,
-} from "@/components/lab/lab-demos";
+import { labDemoMap } from "@/components/lab/lab-demos";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getLabExperiment, getLabSlugs, labExperiments } from "@/data/lab";
 
 type LabExperimentPageProps = {
   params: Promise<{ slug: string }>;
-};
-
-const demos: Record<string, React.ReactNode> = {
-  "button-system": <ButtonSystemDemo />,
-  "magnetic-cta": <MagneticCtaDemo />,
-  "count-up-metrics": <CountUpMetricsDemo />,
-  "action-swap": <ActionSwapDemo />,
-  "failure-states": <FailureStatesDemo />,
-  "field-states": <FieldStatesDemo />,
 };
 
 export function generateStaticParams() {
@@ -50,9 +34,9 @@ export default async function LabExperimentPage({
 }: LabExperimentPageProps) {
   const { slug } = await params;
   const experiment = getLabExperiment(slug);
-  const preview = demos[slug];
+  const Demo = labDemoMap[slug as keyof typeof labDemoMap];
 
-  if (!experiment || !preview) {
+  if (!experiment || !Demo) {
     notFound();
   }
 
@@ -62,6 +46,7 @@ export default async function LabExperimentPage({
     index >= 0 && index < labExperiments.length - 1
       ? labExperiments[index + 1]
       : null;
+  const flush = slug === "iron-field";
 
   return (
     <div className="page-shell min-h-screen">
@@ -85,31 +70,27 @@ export default async function LabExperimentPage({
               <p className="mt-4 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
                 <span className="text-accent">{experiment.category}</span>
                 <span className="mx-2 text-border-strong">·</span>
-                Experiment
+                Signature
               </p>
 
-              <h1 className="mt-3 font-display text-[clamp(1.6rem,1.2rem+1.4vw,2.4rem)] font-semibold leading-[1.08] tracking-tight">
+              <h1 className="mt-3 font-display text-[clamp(1.7rem,1.25rem+1.5vw,2.6rem)] font-semibold leading-[1.06] tracking-tight">
                 {experiment.title}
               </h1>
               <p className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">
                 {experiment.description}
               </p>
-
-              <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
-                {experiment.tags.map((tag) => (
-                  <li
-                    key={tag}
-                    className="font-mono text-[0.56rem] uppercase tracking-[0.12em] text-faint"
-                  >
-                    {tag}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent">
+                {experiment.instruction}
+              </p>
             </div>
           </BoxedSection>
 
           <BoxedSection pad="compact">
-            <LabDemoFrame preview={preview} code={experiment.code} />
+            <LabDemoFrame
+              flush={flush}
+              preview={<Demo />}
+              code={experiment.code}
+            />
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>
@@ -137,7 +118,7 @@ export default async function LabExperimentPage({
                   <p className="font-mono text-[0.56rem] uppercase tracking-[0.14em] text-faint">
                     Next
                   </p>
-                  <p className="mt-2 inline-flex items-center gap-1 font-display text-base font-semibold tracking-tight group-hover:text-accent">
+                  <p className="mt-2 inline-flex items-center justify-end gap-1 font-display text-base font-semibold tracking-tight group-hover:text-accent">
                     {next.title}
                     <ArrowUpRight aria-hidden size={14} className="text-accent" />
                   </p>

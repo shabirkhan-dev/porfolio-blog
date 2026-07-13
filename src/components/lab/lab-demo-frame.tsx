@@ -7,9 +7,15 @@ import { cn } from "@/lib/utils";
 type LabDemoFrameProps = {
   preview: React.ReactNode;
   code: string;
+  /** Full-bleed stage for canvas pieces. */
+  flush?: boolean;
 };
 
-export function LabDemoFrame({ preview, code }: LabDemoFrameProps) {
+export function LabDemoFrame({
+  preview,
+  code,
+  flush = false,
+}: LabDemoFrameProps) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
 
@@ -29,8 +35,8 @@ export function LabDemoFrame({ preview, code }: LabDemoFrameProps) {
         <div className="flex gap-1" role="tablist" aria-label="Demo view">
           {(
             [
-              ["preview", "Preview"],
-              ["code", "Code"],
+              ["preview", "Result"],
+              ["code", "Notes"],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -57,20 +63,20 @@ export function LabDemoFrame({ preview, code }: LabDemoFrameProps) {
             onClick={copy}
             className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
           >
-            {copied ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
+            {copied ? (
+              <Check size={12} className="text-accent" />
+            ) : (
+              <Copy size={12} />
+            )}
             {copied ? "Copied" : "Copy"}
           </button>
         ) : null}
       </div>
 
       {tab === "preview" ? (
-        <div className="relative min-h-[16rem] bg-background p-6 sm:min-h-[18rem] sm:p-8">
-          <div className="relative flex min-h-[12rem] items-center justify-center sm:min-h-[14rem]">
-            {preview}
-          </div>
-        </div>
+        <div className={cn(flush ? "p-0" : "p-5 sm:p-7")}>{preview}</div>
       ) : (
-        <pre className="max-h-[28rem] overflow-auto bg-[#0c0c0c] p-5 text-[0.78rem] leading-6 text-[#e8e4dc] sm:p-6">
+        <pre className="max-h-[22rem] overflow-auto bg-[#0c0c0c] p-5 text-[0.78rem] leading-6 text-[#e8e4dc] sm:p-6">
           <code>{code}</code>
         </pre>
       )}
