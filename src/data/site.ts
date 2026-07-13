@@ -168,6 +168,8 @@ export type Project = {
   metric: { value: string; label: string };
   tags: string[];
   visual: string;
+  /** Real UI screenshot under /public/projects. */
+  image: string;
   caseStudy?: boolean;
   /** Public repo when the work can be shown. */
   github?: string;
@@ -202,6 +204,7 @@ export const projects: Project[] = [
     metric: { value: "50%", label: "lighter API payloads" },
     tags: ["Marketplace", "Mobile", "DevOps"],
     visual: "marketplace",
+    image: "/projects/autobay.webp",
     caseStudy: true,
   },
   {
@@ -223,6 +226,7 @@ export const projects: Project[] = [
     metric: { value: "1→N", label: "tenants, one codebase" },
     tags: ["SaaS", "AI", "Multi-tenant"],
     visual: "dashboard",
+    image: "/projects/school-os.webp",
     caseStudy: true,
     github: "https://github.com/shabirkhan-dev/school-os",
   },
@@ -244,6 +248,7 @@ export const projects: Project[] = [
     metric: { value: "Rust", label: "hot path for enforcement" },
     tags: ["Security", "Automation", "Systems"],
     visual: "security",
+    image: "/projects/redcore.webp",
     github: "https://github.com/shabirkhan-dev/redcore",
   },
   {
@@ -265,6 +270,7 @@ export const projects: Project[] = [
     metric: { value: "100k+", label: "users in production" },
     tags: ["SaaS", "Frontend", "Scale"],
     visual: "workforce",
+    image: "/projects/excelorithm-ems.webp",
   },
   {
     title: "Starter Kit",
@@ -284,6 +290,7 @@ export const projects: Project[] = [
     metric: { value: "CI+", label: "security gates on merge" },
     tags: ["Open source", "DevEx", "Security"],
     visual: "monorepo",
+    image: "/projects/starter-kit.webp",
     github: "https://github.com/shabirkhan-dev/starter",
   },
 ];

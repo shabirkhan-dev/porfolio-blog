@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { ProjectPreview } from "@/components/portfolio/project-preview";
 import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
@@ -135,12 +135,18 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <Reveal>
-              <div className="relative overflow-hidden rounded-lg border border-border">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-border">
                 <Corners />
-                <ProjectPreview
-                  visual={project?.visual ?? (slug === "autobay" ? "marketplace" : "dashboard")}
-                  title={study.title}
-                />
+                {project?.image ? (
+                  <Image
+                    src={project.image}
+                    alt={`${study.title} interface`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 480px"
+                    className="object-cover object-top"
+                    priority
+                  />
+                ) : null}
               </div>
 
               <div className="relative mt-8 rounded-lg border border-border bg-background-2 p-6">
