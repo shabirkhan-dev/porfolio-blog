@@ -1,59 +1,59 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { Corners } from "@/components/corners";
 import { useActiveOnScroll } from "@/lib/use-active-on-scroll";
+import { cn } from "@/lib/utils";
 
 export function PrincipleCard({
   index,
   title,
   body,
   practice,
-  icon,
+  proof,
 }: {
   index: number;
   title: string;
   body: string;
   practice: string;
-  icon: ReactNode;
+  proof?: string;
 }) {
-  const { ref, active } = useActiveOnScroll<HTMLDivElement>();
+  const { ref, active } = useActiveOnScroll<HTMLElement>();
 
   return (
-    <div
+    <article
       ref={ref}
       data-active={active}
-      className="group relative flex h-full flex-col rounded-lg border border-border bg-background p-7 transition-colors duration-500 hover:border-accent/30 data-[active=true]:border-accent/30 sm:p-8"
+      className={cn(
+        "group relative grid gap-5 border-t border-border py-7 transition-colors sm:grid-cols-[4.5rem_1fr] sm:gap-8 sm:py-8",
+        "data-[active=true]:border-accent/40",
+      )}
     >
-      <Corners />
-      <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-40 group-data-[active=true]:opacity-40" />
-
-      <div className="relative flex items-center justify-between gap-4">
-        <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
-          Principle{" "}
-          <span className="text-accent">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-        </span>
-        <span className="grid size-10 place-items-center rounded-md border border-border text-faint transition-colors duration-500 group-hover:border-accent/40 group-hover:text-accent group-data-[active=true]:border-accent/40 group-data-[active=true]:text-accent">
-          {icon}
-        </span>
+      <div className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
+        <span className="text-accent">{String(index + 1).padStart(2, "0")}</span>
+        <span className="mt-1 block text-[0.58rem] tracking-[0.14em]">Rule</span>
       </div>
 
-      <h3 className="t-h3 relative mt-6">{title}</h3>
-      <p className="relative mt-3 text-sm leading-7 text-muted-foreground">
-        {body}
-      </p>
-
-      <div className="relative mt-auto border-t border-border pt-5">
-        <p className="flex gap-2.5 font-mono text-[0.68rem] leading-6 text-muted-foreground">
-          <span className="shrink-0 uppercase tracking-[0.14em] text-accent">
-            In practice
-          </span>
-          <span className="text-faint">—</span>
-          {practice}
+      <div className="min-w-0">
+        <h3 className="font-display text-[clamp(1.2rem,1.05rem+0.7vw,1.55rem)] font-semibold tracking-tight transition-colors group-data-[active=true]:text-accent">
+          {title}
+        </h3>
+        <p className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">
+          {body}
         </p>
+
+        <div className="mt-5 grid gap-3 border-l-2 border-accent/35 pl-4 sm:mt-6">
+          <p className="text-sm leading-6 text-foreground/90">
+            <span className="mr-2 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent">
+              Do
+            </span>
+            {practice}
+          </p>
+          {proof ? (
+            <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-faint">
+              Seen in — {proof}
+            </p>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

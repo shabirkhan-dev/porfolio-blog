@@ -1,12 +1,8 @@
 import {
-  AppWindow,
-  ChartNoAxesCombined,
   Github,
   Linkedin,
   Mail,
-  Network,
   Phone,
-  Sparkles,
 } from "lucide-react";
 
 
@@ -281,30 +277,38 @@ export const projects: Project[] = [
   },
 ];
 
+/**
+ * Operating rules — concrete, testable habits that shape what ships.
+ * No decoration: each rule names the decision and where it showed up.
+ */
 export const philosophy = [
   {
-    title: "Product judgment first",
-    body: "Architecture only matters if it makes the product easier to ship and harder to break.",
-    practice: "Scope is cut before code — the smallest system that ships wins.",
-    icon: Sparkles,
+    title: "Cut the problem before the stack",
+    body: "Most overbuilt software starts as an unclear job. I write the one outcome the system must produce, then delete everything that does not serve it.",
+    practice:
+      "Ship the thinnest vertical slice that can be used by a real user — then grow deliberately.",
+    proof: "Autobay · School OS",
   },
   {
-    title: "Systems, not screens",
-    body: "Boundaries, contracts, and data flow designed together — not patched together later.",
-    practice: "API contracts and schema land before the first component does.",
-    icon: Network,
+    title: "Contracts before components",
+    body: "UI is cheap to change; bad API and data boundaries are not. Schema, auth, and service contracts land early so screens are not inventing rules under pressure.",
+    practice:
+      "No feature UI until the route, payload, and failure modes are written down.",
+    proof: "School OS · RedCore",
   },
   {
-    title: "Honest interfaces",
-    body: "Trust comes from states that tell the truth: loading, empty, error, irreversible.",
-    practice: "Every screen ships with its failure states designed, not defaulted.",
-    icon: AppWindow,
+    title: "Failure states are product",
+    body: "Loading, empty, error, and irreversible actions decide whether people trust the software. I design those states with the happy path — not as leftovers.",
+    practice:
+      "Every shipped screen has an explicit empty and error path, not a blank spinner forever.",
+    proof: "Excelorithm EMS · Rabtx",
   },
   {
-    title: "Boring where it counts",
-    body: "Release flow, permissions, and observability should be invisible — until you need them.",
-    practice: "CI gates, CodeQL scans, and typed configs on every merge to main.",
-    icon: ChartNoAxesCombined,
+    title: "The release path is part of the product",
+    body: "If shipping requires tribal knowledge, the system is already failing. CI, security gates, and typed config should be boring and unavoidable.",
+    practice:
+      "Merge to main means checks ran — CodeQL, secrets, and deploy discipline included.",
+    proof: "Starter Kit · Rabtx",
   },
 ];
 

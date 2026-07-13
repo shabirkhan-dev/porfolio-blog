@@ -167,39 +167,35 @@ export default async function Home() {
             }
           >
             <Reveal>
-              <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-                <div className="max-w-xl">
-                  <div className="flex items-center gap-4">
-                    <span className="eyebrow">Approach</span>
-                    <span className="font-mono text-xs text-faint">/ 03</span>
-                  </div>
-                  <h2 className="t-h2 mt-4 text-balance">
-                    How I <span className="text-accent">think</span> about
-                    building.
-                  </h2>
+              <div className="max-w-2xl">
+                <div className="flex items-center gap-4">
+                  <span className="eyebrow">Approach</span>
+                  <span className="font-mono text-xs text-faint">/ 03</span>
                 </div>
-                <p className="max-w-sm pb-1 text-[0.95rem] leading-7 text-muted-foreground">
-                  Four principles that decide what gets built, in what order,
-                  and what gets deliberately left out.
+                <h2 className="t-h2 mt-4 text-balance">
+                  Rules I actually{" "}
+                  <span className="text-accent">ship by.</span>
+                </h2>
+                <p className="mt-4 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
+                  Not slogans — decision filters. These are the checks that decide
+                  what gets built, what waits, and what gets cut before it becomes
+                  debt.
                 </p>
               </div>
             </Reveal>
 
-            <div className="mt-10 grid gap-5 sm:grid-cols-2">
-              {philosophy.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <Reveal key={item.title} delay={index * 0.05} className="h-full">
-                    <PrincipleCard
-                      index={index}
-                      title={item.title}
-                      body={item.body}
-                      practice={item.practice}
-                      icon={<Icon aria-hidden="true" size={17} />}
-                    />
-                  </Reveal>
-                );
-              })}
+            <div className="mt-8 border-b border-border sm:mt-10">
+              {philosophy.map((item, index) => (
+                <Reveal key={item.title} delay={index * 0.04}>
+                  <PrincipleCard
+                    index={index}
+                    title={item.title}
+                    body={item.body}
+                    practice={item.practice}
+                    proof={item.proof}
+                  />
+                </Reveal>
+              ))}
             </div>
           </BoxedSection>
 
