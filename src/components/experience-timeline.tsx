@@ -4,12 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   animate,
   m,
-  useMotionValueEvent,
   useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
   type Variants,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -32,89 +27,12 @@ const HEADING = {
   index: "05",
 };
 
-/** One bold line, one accent word — same lockup every section uses. */
 function HeadingTitle() {
   return (
     <>
       Where the <span className="text-accent">six years</span> went.
     </>
   );
-}
-
-/**
- * Dwell-zone scroll mapping. The progress domain is split into `total` equal
- * segments; each panel HOLDS centered for most of its segment and the slide
- * to the next panel happens in a narrow window (2×TRANSITION_HALF) around the
- * segment boundary. Without this, panels only align at exact scroll points
- * and readers spend most of the section looking at two clipped half-panels.
- */
-const TRANSITION_HALF = 0.05;
-
-function trackKeyframes(total: number): { inputs: number[]; outputs: string[] } {
-  const inputs: number[] = [0];
-  const outputs: string[] = ["0vw"];
-  for (let i = 1; i < total; i++) {
-    const boundary = i / total;
-    inputs.push(boundary - TRANSITION_HALF, boundary + TRANSITION_HALF);
-    outputs.push(`-${(i - 1) * 100}vw`, `-${i * 100}vw`);
-  }
-  inputs.push(1);
-  outputs.push(`-${(total - 1) * 100}vw`);
-  return { inputs, outputs };
-}
-
-/**
- * Per-panel keyframes aligned with trackKeyframes: slide in → hold → slide
- * out. The first panel starts docked and the last ends docked. All inputs
- * stay inside [0, 1] — they can become WAAPI keyframe offsets, which throw
- * on out-of-range values.
- */
-type PanelStop = "in" | "hold" | "out";
-
-function panelKeyframes(
-  index: number,
-  total: number,
-): { inputs: number[]; stops: PanelStop[] } {
-  const segStart = index / total;
-  const segEnd = (index + 1) / total;
-  const inputs: number[] = [];
-  const stops: PanelStop[] = [];
-
-  if (index === 0) {
-    inputs.push(0);
-    stops.push("hold");
-  } else {
-    inputs.push(segStart - TRANSITION_HALF, segStart + TRANSITION_HALF);
-    stops.push("in", "hold");
-  }
-
-  if (index === total - 1) {
-    inputs.push(1);
-    stops.push("hold");
-  } else {
-    inputs.push(segEnd - TRANSITION_HALF, segEnd + TRANSITION_HALF);
-    stops.push("hold", "out");
-  }
-
-  return { inputs, stops };
-}
-
-const STOP_VALUES = {
-  yearX: { in: "30%", hold: "0%", out: "-30%" },
-  yearScale: { in: 1.08, hold: 1, out: 0.92 },
-  contentX: { in: "10%", hold: "0%", out: "-10%" },
-  fade: { in: 0.18, hold: 1, out: 0.18 },
-} as const;
-
-/* ------------------------------------------------------------------ */
-/* Active-driven metric counter                                        */
-/* ------------------------------------------------------------------ */
-function parseMetric(value: string) {
-  const match = value.match(/^(\D*)([\d.]+)(.*)$/);
-  if (!match) return null;
-  const [, prefix, num, suffix] = match;
-  const decimals = num.includes(".") ? num.split(".")[1].length : 0;
-  return { prefix, target: parseFloat(num), suffix, decimals };
 }
 
 function MetricValue({
@@ -126,94 +44,170 @@ function MetricValue({
   active: boolean;
   reduced: boolean;
 }) {
-  const parsed = parseMetric(value);
-  const [display, setDisplay] = useState(parsed ? 0 : value);
+  const ref = useRef<HTMLSpanElement>(null);
+  const numeric = Number(String(value).replace(/[^\d.]/g, ""));
+  const isNumeric = Number.isFinite(numeric) && /\d/.test(value);
 
   useEffect(() => {
-    if (!parsed) return;
-    if (!active || reduced) {
-      setDisplay(active ? value : 0);
+    if (!ref.current || !isNumeric || reduced) return;
+    if (!active) {
+      ref.current.textContent = value;
       return;
     }
-    const controls = animate(0, parsed.target, {
-      duration: 1.2,
+    const controls = animate(0, numeric, {
+      duration: 0.9,
       ease: [0.22, 1, 0.36, 1],
-      onUpdate: (latest) =>
-        setDisplay(`${parsed.prefix}${latest.toFixed(parsed.decimals)}${parsed.suffix}`),
+      onUpdate: (v) => {
+        if (!ref.current) return;
+        const rounded = Number.isInteger(numeric)
+          ? Math.round(v).toString()
+          : v.toFixed(1);
+        ref.current.textContent = value.replace(/[\d.]+/, rounded);
+      },
     });
     return () => controls.stop();
-  }, [active, reduced, value]);
+  }, [active, isNumeric, numeric, reduced, value]);
 
-  if (!parsed) return <>{value}</>;
-  return <>{typeof display === "number" ? value : display}</>;
+  return <span ref={ref}>{value}</span>;
 }
 
-/* ------------------------------------------------------------------ */
-/* Full-screen immersive panel (desktop)                               */
-/* ------------------------------------------------------------------ */
 const panelContent: Variants = {
+  show: {
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
   hide: {},
-  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
+
 const panelItem: Variants = {
-  hide: { opacity: 0, y: 26 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
+  hide: { opacity: 0, y: 14 },
 };
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1] as const,
+      delay: index * 0.06,
+    },
+  }),
+};
+
+function VerticalFallback({ items }: { items: ExperienceItem[] }) {
+  return (
+    <div>
+      <div className="flex items-center gap-4">
+        <span className="eyebrow">{HEADING.eyebrow}</span>
+        <span className="font-mono text-xs text-faint">/ {HEADING.index}</span>
+      </div>
+      <h2 className="t-h2 mt-4 max-w-2xl">
+        <HeadingTitle />
+      </h2>
+
+      <ol className="mt-10 flex flex-col gap-4">
+        {items.map((item, index) => {
+          const isCurrent = /present|now/i.test(item.period + item.year);
+          return (
+            <m.li
+              key={`${item.company}-${item.role}`}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="group relative overflow-hidden rounded-lg border border-border bg-background p-6 transition-colors duration-500 hover:border-border-strong"
+            >
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
+                  {item.year}
+                </span>
+                {isCurrent ? (
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">
+                    <span className="size-1.5 rounded-full bg-accent" />
+                    Current
+                  </span>
+                ) : null}
+              </div>
+              <h3 className="mt-4 font-display text-[clamp(1.35rem,1.1rem+1vw,1.85rem)] font-semibold leading-tight tracking-tight">
+                {item.role}
+              </h3>
+              <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                {item.company}
+                <span className="mx-2 text-faint">/</span>
+                {item.period}
+              </p>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                {item.summary}
+              </p>
+              <div
+                className="mt-5 grid gap-px overflow-hidden rounded-md border border-border bg-border"
+                style={{
+                  gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
+                }}
+              >
+                {item.metrics.map((metric) => (
+                  <div key={metric.label} className="bg-background p-3.5">
+                    <p className="font-display text-xl font-semibold leading-none tracking-tight text-accent">
+                      {metric.value}
+                    </p>
+                    <p className="mt-2 text-[0.7rem] leading-4 text-muted-foreground">
+                      {metric.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {item.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-sm border border-border px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-faint"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </m.li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
 
 function Panel({
   item,
-  index,
-  total,
-  progress,
   active,
   reduced,
 }: {
   item: ExperienceItem;
-  index: number;
-  total: number;
-  progress: MotionValue<number>;
   active: boolean;
   reduced: boolean;
 }) {
   const isCurrent = /present|now/i.test(item.period + item.year);
 
-  const { inputs, stops } = panelKeyframes(index, total);
-  const yearX = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.yearX[s]));
-  const yearScale = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.yearScale[s]));
-  const contentX = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.contentX[s]));
-  const fade = useTransform(progress, inputs, stops.map((s) => STOP_VALUES.fade[s]));
-
   return (
-    <article className="relative flex h-screen w-screen shrink-0 items-center overflow-hidden">
-      {/* Giant bleeding year — masked to the right half so it never smears
-          light patches behind the readable content. */}
-      <m.span
+    <article className="relative flex h-full w-full shrink-0 items-stretch overflow-hidden">
+      <span
         aria-hidden="true"
-        style={{ x: yearX, scale: yearScale }}
-        className="text-stroke pointer-events-none absolute right-[-4vw] top-1/2 origin-right -translate-y-1/2 select-none font-display text-[40vw] font-bold leading-none tracking-tighter opacity-[0.3] [mask-image:linear-gradient(to_right,transparent_35%,black_75%)] lg:text-[32vw]"
+        className="text-stroke pointer-events-none absolute right-[-2vw] top-1/2 origin-right -translate-y-1/2 select-none font-display text-[28vw] font-bold leading-none tracking-tighter opacity-[0.22] [mask-image:linear-gradient(to_right,transparent_30%,black_75%)] lg:text-[18vw]"
       >
         {item.year}
-      </m.span>
-      <div className="pointer-events-none absolute inset-0 hairline-grid opacity-[0.25] [mask-image:radial-gradient(80%_80%_at_30%_50%,black,transparent_80%)]" />
-      <m.div
-        aria-hidden="true"
-        animate={{ opacity: active ? 1 : 0 }}
-        transition={{ duration: 0.8 }}
-        className="pointer-events-none absolute left-[8%] top-1/2 size-[42vw] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-rgb)/0.08),transparent_70%)] blur-2xl"
-      />
+      </span>
+      <div className="pointer-events-none absolute inset-0 hairline-grid opacity-[0.2] [mask-image:radial-gradient(80%_80%_at_30%_50%,black,transparent_80%)]" />
 
       <m.div
-        style={{ x: contentX, opacity: fade }}
         variants={panelContent}
         initial={false}
-        animate={reduced ? "show" : active ? "show" : "hide"}
-        className="shell relative grid w-full gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+        animate={reduced || active ? "show" : "hide"}
+        className="relative grid w-full gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-10"
       >
-        {/* Left — identity */}
         <div>
           <m.div variants={panelItem} className="flex items-center gap-4">
             <span className="font-mono text-sm uppercase tracking-[0.18em] text-accent">
@@ -234,14 +228,14 @@ function Panel({
 
           <m.h3
             variants={panelItem}
-            className="mt-7 max-w-[15ch] font-display text-[clamp(2.5rem,1.5rem+4.5vw,6rem)] font-semibold leading-[0.95] tracking-[-0.03em]"
+            className="mt-5 max-w-[15ch] font-display text-[clamp(2rem,1.3rem+2.8vw,3.75rem)] font-semibold leading-[0.95] tracking-[-0.03em]"
           >
             {item.role}
           </m.h3>
 
           <m.p
             variants={panelItem}
-            className="mt-7 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground"
+            className="mt-4 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground"
           >
             {item.company}
             <span className="mx-3 text-faint">/</span>
@@ -251,35 +245,38 @@ function Panel({
           </m.p>
         </div>
 
-        {/* Right — narrative + metrics */}
-        <div className="lg:pl-8">
+        <div className="lg:pl-6">
           <m.p
             variants={panelItem}
-            className="max-w-md text-[1.05rem] leading-8 text-muted-foreground"
+            className="max-w-md text-[1rem] leading-7 text-muted-foreground"
           >
             {item.summary}
           </m.p>
 
           <m.div
             variants={panelItem}
-            className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border"
+            className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border"
             style={{
               gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
             }}
           >
             {item.metrics.map((metric) => (
-              <div key={metric.label} className="bg-background-2 p-5">
-                <p className="font-display text-[clamp(1.6rem,1.2rem+1.4vw,2.6rem)] font-semibold leading-none tracking-tight text-accent">
-                  <MetricValue value={metric.value} active={active} reduced={reduced} />
+              <div key={metric.label} className="bg-background p-4">
+                <p className="font-display text-[clamp(1.4rem,1.1rem+1vw,2rem)] font-semibold leading-none tracking-tight text-accent">
+                  <MetricValue
+                    value={metric.value}
+                    active={active}
+                    reduced={reduced}
+                  />
                 </p>
-                <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                <p className="mt-2 text-xs leading-5 text-muted-foreground">
                   {metric.label}
                 </p>
               </div>
             ))}
           </m.div>
 
-          <m.div variants={panelItem} className="mt-8 flex flex-wrap gap-2">
+          <m.div variants={panelItem} className="mt-5 flex flex-wrap gap-2">
             {item.tags.map((tag) => (
               <span
                 key={tag}
@@ -295,272 +292,421 @@ function Panel({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Vertical fallback (mobile + reduced motion)                         */
-/* ------------------------------------------------------------------ */
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: index * 0.06,
-    },
-  }),
-};
-
-function VerticalFallback({ items }: { items: ExperienceItem[] }) {
-  return (
-    <div className="shell section-y">
-      <div className="flex items-center gap-4">
-        <span className="eyebrow">{HEADING.eyebrow}</span>
-        <span className="font-mono text-xs text-faint">/ {HEADING.index}</span>
-      </div>
-      <h2 className="t-h2 mt-6 max-w-2xl">
-        <HeadingTitle />
-      </h2>
-
-      <ol className="mt-14 flex flex-col gap-5">
-        {items.map((item, index) => {
-          const isCurrent = /present|now/i.test(item.period + item.year);
-          return (
-            <m.li
-              key={`${item.company}-${item.role}`}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="group relative overflow-hidden rounded-lg border border-border bg-background p-7 transition-colors duration-500 hover:border-border-strong"
-            >
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-                  {item.year}
-                </span>
-                {isCurrent ? (
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">
-                    <span className="size-1.5 rounded-full bg-accent" />
-                    Current
-                  </span>
-                ) : null}
-              </div>
-              <h3 className="mt-5 font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.1rem)] font-semibold leading-tight tracking-tight">
-                {item.role}
-              </h3>
-              <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                {item.company}
-                <span className="mx-2 text-faint">/</span>
-                {item.period}
-              </p>
-              <p className="mt-5 text-sm leading-7 text-muted-foreground">
-                {item.summary}
-              </p>
-              <div
-                className="mt-6 grid gap-px overflow-hidden rounded-md border border-border bg-border"
-                style={{
-                  gridTemplateColumns: `repeat(${Math.min(item.metrics.length, 3)}, minmax(0, 1fr))`,
-                }}
-              >
-                {item.metrics.map((metric) => (
-                  <div key={metric.label} className="bg-background p-4">
-                    <p className="font-display text-xl font-semibold leading-none tracking-tight text-accent">
-                      {metric.value}
-                    </p>
-                    <p className="mt-2 text-[0.7rem] leading-4 text-muted-foreground">
-                      {metric.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-sm border border-border px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-faint"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </m.li>
-          );
-        })}
-      </ol>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Pinned immersive horizontal scroll (desktop)                        */
-/* ------------------------------------------------------------------ */
-function HorizontalScroll({
+/**
+ * Compact career stage: snaps into viewport center on enter, traps page
+ * scroll through every role, then releases back to normal page scroll.
+ */
+function CompactStage({
   items,
   reduced,
 }: {
   items: ExperienceItem[];
   reduced: boolean;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const [holding, setHolding] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(0);
+  const lockedRef = useRef(false);
+  const wheelAccRef = useRef(0);
+  const touchStartX = useRef<number | null>(null);
+  /** Holding scroll while roles advance. */
+  const holdingRef = useRef(false);
+  /** Smooth-scroll snapping in progress. */
+  const snappingRef = useRef(false);
+  /**
+   * Gate prevents immediate re-trap after releasing at an edge:
+   * ready → can snap/hold; spent-down / spent-up → wait until section mostly leaves.
+   */
+  const gateRef = useRef<"ready" | "spent-down" | "spent-up">("ready");
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
-  const keyframes = trackKeyframes(items.length);
-  const xRaw = useTransform(scrollYProgress, keyframes.inputs, keyframes.outputs);
-  const x = useSpring(xRaw, { stiffness: 110, damping: 26, restDelta: 0.4 });
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  useEffect(() => {
+    holdingRef.current = holding;
+  }, [holding]);
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const next = Math.min(items.length - 1, Math.floor(v * items.length));
-    setActive((prev) => (prev === next ? prev : next));
-  });
-
-  const jumpTo = (index: number) => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const runway = el.offsetHeight - window.innerHeight;
-    const start = el.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({
-      top: start + ((index + 0.5) / items.length) * runway,
-      behavior: "smooth",
-    });
+  const goTo = (index: number) => {
+    const next = Math.max(0, Math.min(items.length - 1, index));
+    if (next === activeRef.current) return false;
+    lockedRef.current = true;
+    setActive(next);
+    window.setTimeout(
+      () => {
+        lockedRef.current = false;
+        wheelAccRef.current = 0;
+      },
+      reduced ? 80 : 520,
+    );
+    return true;
   };
 
-  return (
-    <section
-      ref={sectionRef}
-      className="relative"
-      style={{ height: `${items.length * 100}vh` }}
-    >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Track */}
-        <m.div style={{ x }} className="flex h-full will-change-transform">
-          {items.map((item, index) => (
-            <Panel
-              key={`${item.company}-${item.role}`}
-              item={item}
-              index={index}
-              total={items.length}
-              progress={scrollYProgress}
-              active={active === index}
-              reduced={reduced}
-            />
-          ))}
-        </m.div>
+  const goNext = () => goTo(activeRef.current + 1);
+  const goPrev = () => goTo(activeRef.current - 1);
 
-        {/* Fixed overlay — heading top-left */}
-        <div className="pointer-events-none absolute inset-x-0 top-0">
-          <div className="shell flex items-start justify-between pt-[clamp(2rem,1.5rem+2vw,3.5rem)]">
-            <div>
-              <div className="flex items-center gap-4">
-                <span className="eyebrow">{HEADING.eyebrow}</span>
-                <span className="font-mono text-xs text-faint">
-                  / {HEADING.index}
-                </span>
+  const snapStageCenter = () => {
+    const el = stageRef.current;
+    if (!el || snappingRef.current) return;
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const offset = rect.top - (vh - rect.height) / 2;
+    if (Math.abs(offset) < 18) {
+      holdingRef.current = true;
+      setHolding(true);
+      return;
+    }
+    snappingRef.current = true;
+    const top = window.scrollY + offset;
+    window.scrollTo({
+      top,
+      behavior: reduced ? "auto" : "smooth",
+    });
+    window.setTimeout(
+      () => {
+        snappingRef.current = false;
+        holdingRef.current = true;
+        setHolding(true);
+        wheelAccRef.current = 0;
+      },
+      reduced ? 40 : 580,
+    );
+  };
+
+  // Enter → snap to center; leave → reset gate so next pass can trap again.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        const ratio = entry.intersectionRatio;
+        const rect = entry.boundingClientRect;
+        const vh = window.innerHeight;
+        const centerDelta = Math.abs(rect.top + rect.height / 2 - vh / 2);
+        const approaching =
+          ratio >= 0.42 || (ratio >= 0.28 && centerDelta < vh * 0.28);
+
+        if (ratio < 0.12) {
+          holdingRef.current = false;
+          setHolding(false);
+          snappingRef.current = false;
+          gateRef.current = "ready";
+          return;
+        }
+
+        if (!approaching || holdingRef.current || snappingRef.current) return;
+        if (gateRef.current !== "ready") return;
+
+        snapStageCenter();
+      },
+      { threshold: [0, 0.12, 0.28, 0.42, 0.55, 0.7, 1] },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduced]);
+
+  // Document-level wheel trap while holding (works even if cursor is outside the stage).
+  useEffect(() => {
+    const stageVisibleEnough = () => {
+      const el = stageRef.current;
+      if (!el) return false;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      return rect.top < vh * 0.9 && rect.bottom > vh * 0.1;
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (snappingRef.current) {
+        event.preventDefault();
+        return;
+      }
+
+      const predominantlyVertical =
+        Math.abs(event.deltaY) >= Math.abs(event.deltaX);
+      if (!predominantlyVertical) return;
+
+      // Reverse back into the carousel after releasing at an edge.
+      if (!holdingRef.current) {
+        const reverseIn =
+          (gateRef.current === "spent-down" && event.deltaY < 0) ||
+          (gateRef.current === "spent-up" && event.deltaY > 0);
+        if (reverseIn && stageVisibleEnough()) {
+          event.preventDefault();
+          gateRef.current = "ready";
+          holdingRef.current = true;
+          setHolding(true);
+          wheelAccRef.current = 0;
+        } else {
+          return;
+        }
+      }
+
+      const scrollingDown = event.deltaY > 0;
+      const atStart = activeRef.current === 0 && !scrollingDown;
+      const atEnd =
+        activeRef.current === items.length - 1 && scrollingDown;
+
+      if (atStart || atEnd) {
+        holdingRef.current = false;
+        setHolding(false);
+        gateRef.current = scrollingDown ? "spent-down" : "spent-up";
+        wheelAccRef.current = 0;
+        return;
+      }
+
+      event.preventDefault();
+      if (lockedRef.current) return;
+
+      wheelAccRef.current += event.deltaY;
+      const THRESHOLD = 36;
+      if (wheelAccRef.current > THRESHOLD) {
+        wheelAccRef.current = 0;
+        goNext();
+      } else if (wheelAccRef.current < -THRESHOLD) {
+        wheelAccRef.current = 0;
+        goPrev();
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel, {
+        capture: true,
+      } as AddEventListenerOptions);
+    };
+  }, [items.length, reduced]);
+
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!el.contains(document.activeElement) && document.activeElement !== el)
+        return;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        if (!goNext() && activeRef.current === items.length - 1) {
+          holdingRef.current = false;
+          setHolding(false);
+          gateRef.current = "spent-down";
+        }
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!goPrev() && activeRef.current === 0) {
+          holdingRef.current = false;
+          setHolding(false);
+          gateRef.current = "spent-up";
+        }
+      }
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      touchStartX.current = event.touches[0]?.clientX ?? null;
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      if (touchStartX.current == null) return;
+      const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+      const dx = endX - touchStartX.current;
+      touchStartX.current = null;
+      if (Math.abs(dx) < 48) return;
+      if (dx < 0) goNext();
+      else goPrev();
+    };
+
+    el.addEventListener("keydown", onKeyDown);
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("keydown", onKeyDown);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [items.length, reduced]);
+
+  const canPrev = active > 0;
+  const canNext = active < items.length - 1;
+
+  return (
+    <div
+      ref={stageRef}
+      tabIndex={0}
+      aria-roledescription="carousel"
+      aria-label="Career experience"
+      data-holding={holding ? "true" : "false"}
+      className="relative outline-none"
+    >
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-4">
+            <span className="eyebrow">{HEADING.eyebrow}</span>
+            <span className="font-mono text-xs text-faint">
+              / {HEADING.index}
+            </span>
+          </div>
+          <h2 className="t-h2 mt-4 max-w-2xl">
+            <HeadingTitle />
+          </h2>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="hidden font-mono text-sm tabular-nums text-faint sm:inline">
+            <span className="text-accent">
+              {String(active + 1).padStart(2, "0")}
+            </span>{" "}
+            / {String(items.length).padStart(2, "0")}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={goPrev}
+              disabled={!canPrev}
+              aria-label="Previous role"
+              className="grid size-9 place-items-center border border-border font-mono text-sm text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!canNext}
+              aria-label="Next role"
+              className="grid size-9 place-items-center border border-border font-mono text-sm text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+            >
+              →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative mt-8 overflow-hidden border border-border bg-background/50">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-background/80 to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-background/80 to-transparent"
+        />
+
+        <m.div
+          className="flex"
+          animate={{ x: `${-active * 100}%` }}
+          transition={
+            reduced
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 160, damping: 26, mass: 0.85 }
+          }
+        >
+          {items.map((item, index) => {
+            const on = active === index;
+            return (
+              <div
+                key={`${item.company}-${item.role}`}
+                aria-hidden={!on}
+                className="w-full shrink-0 p-6 sm:p-8 lg:px-10 lg:py-9"
+              >
+                <m.div
+                  animate={{
+                    opacity: on ? 1 : 0.35,
+                    scale: on ? 1 : 0.985,
+                  }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="origin-center"
+                >
+                  <Panel item={item} active={on} reduced={reduced} />
+                </m.div>
               </div>
-              {/* Sized between t-h3 and t-h2 so it never collides with the
-                  centered panel content on short viewports. */}
-              <h2 className="mt-4 font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-semibold leading-tight tracking-tight">
-                <HeadingTitle />
-              </h2>
-            </div>
-            <span className="hidden items-center gap-2 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-faint lg:inline-flex">
-              <span className="size-1.5 rounded-full bg-accent" />
-              Keep scrolling
+            );
+          })}
+        </m.div>
+      </div>
+
+      <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint">
+        {holding
+          ? "Scroll advances roles — page scroll resumes at the edges"
+          : "Scroll into view to lock, then advance through each role"}
+      </p>
+
+      <div className="mt-5">
+        <div className="mb-4 flex items-end justify-between gap-4">
+          <div className="flex min-w-0 items-baseline gap-3 overflow-hidden">
+            <span className="truncate font-display text-base font-semibold tracking-tight text-foreground sm:text-lg">
+              {items[active]?.role}
+            </span>
+            <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted-foreground sm:inline">
+              {items[active]?.company}
             </span>
           </div>
         </div>
 
-        {/* Career spine — connects all roles into one journey */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0">
-          <div className="shell pb-[clamp(2rem,1.5rem+2vw,3.5rem)]">
-            <div className="mb-7 flex items-end justify-between gap-4">
-              <div className="flex items-baseline gap-3 overflow-hidden">
-                <span className="font-display text-lg font-semibold tracking-tight text-foreground">
-                  {items[active]?.role}
-                </span>
-                <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted-foreground sm:inline">
-                  {items[active]?.company}
-                </span>
-              </div>
-              <span className="shrink-0 font-mono text-sm tabular-nums text-faint">
-                <span className="text-accent">
-                  {String(active + 1).padStart(2, "0")}
-                </span>{" "}
-                / {String(items.length).padStart(2, "0")}
-              </span>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-x-1 top-[7px] h-px bg-border" />
-              <m.div
-                style={{ width: progressWidth }}
-                className="absolute left-1 top-[7px] h-px bg-accent"
-              />
-              <ol className="pointer-events-auto relative flex items-start justify-between">
-                {items.map((item, index) => {
-                  const on = active === index;
-                  const passed = active >= index;
-                  return (
-                    <li
-                      key={`node-${item.year}-${item.company}`}
-                      className="relative"
+        <div className="relative">
+          <div className="absolute inset-x-1 top-[7px] h-px bg-border" />
+          <m.div
+            className="absolute left-1 top-[7px] h-px bg-accent"
+            animate={{
+              width: `${(active / Math.max(items.length - 1, 1)) * 100}%`,
+            }}
+            transition={{ type: "spring", stiffness: 160, damping: 26 }}
+          />
+          <ol className="relative flex items-start justify-between">
+            {items.map((item, index) => {
+              const on = active === index;
+              const passed = active >= index;
+              return (
+                <li
+                  key={`node-${item.year}-${item.company}`}
+                  className="relative"
+                >
+                  <button
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-label={`Go to ${item.role} at ${item.company}`}
+                    aria-current={on}
+                    className="flex cursor-pointer flex-col items-center"
+                  >
+                    <span className="grid h-[15px] place-items-center">
+                      {on ? (
+                        <span className="absolute inline-flex size-[15px] animate-ping rounded-full bg-accent/40" />
+                      ) : null}
+                      <span
+                        className={cn(
+                          "relative rounded-full transition-all duration-500",
+                          on
+                            ? "size-[11px] bg-accent shadow-[0_0_14px_3px_rgb(var(--accent-rgb)/0.5)]"
+                            : passed
+                              ? "size-[7px] bg-accent"
+                              : "size-[7px] bg-border-strong",
+                        )}
+                      />
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-colors duration-500",
+                        on
+                          ? "text-accent"
+                          : passed
+                            ? "text-muted-foreground hover:text-foreground"
+                            : "text-faint hover:text-muted-foreground",
+                      )}
                     >
-                      <button
-                        type="button"
-                        onClick={() => jumpTo(index)}
-                        aria-label={`Go to ${item.role} at ${item.company}`}
-                        aria-current={on}
-                        className="flex cursor-pointer flex-col items-center"
-                      >
-                        <span className="grid h-[15px] place-items-center">
-                          {on ? (
-                            <span className="absolute inline-flex size-[15px] animate-ping rounded-full bg-accent/40" />
-                          ) : null}
-                          <span
-                            className={cn(
-                              "relative rounded-full transition-all duration-500",
-                              on
-                                ? "size-[11px] bg-accent shadow-[0_0_14px_3px_rgb(var(--accent-rgb)/0.5)]"
-                                : passed
-                                  ? "size-[7px] bg-accent"
-                                  : "size-[7px] bg-border-strong",
-                            )}
-                          />
-                        </span>
-                        <span
-                          className={cn(
-                            "mt-3 font-mono text-[0.62rem] uppercase tracking-[0.14em] transition-colors duration-500",
-                            on
-                              ? "text-accent"
-                              : passed
-                                ? "text-muted-foreground hover:text-foreground"
-                                : "text-faint hover:text-muted-foreground",
-                          )}
-                        >
-                          {item.year}
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </div>
+                      {item.year}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Entry                                                               */
-/* ------------------------------------------------------------------ */
 export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
   const reducedMotion = useReducedMotion();
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
@@ -574,12 +720,12 @@ export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
   }, []);
 
   if (isDesktop === null) {
-    return <div className="min-h-[60vh]" aria-hidden />;
+    return <div className="min-h-[22rem]" aria-hidden />;
   }
 
-  if (!isDesktop || reducedMotion) {
+  if (!isDesktop) {
     return <VerticalFallback items={items} />;
   }
 
-  return <HorizontalScroll items={items} reduced={!!reducedMotion} />;
+  return <CompactStage items={items} reduced={!!reducedMotion} />;
 }

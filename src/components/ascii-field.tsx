@@ -45,7 +45,7 @@ export function AsciiField({
     const readColors = () => {
       const styles = getComputedStyle(document.documentElement);
       const accent =
-        styles.getPropertyValue("--accent-rgb").trim() || "74 222 128";
+        styles.getPropertyValue("--accent-rgb").trim() || "214 168 70";
       const stroke =
         styles.getPropertyValue("--stroke-rgb").trim() || "235 238 240";
       return { accent, stroke };

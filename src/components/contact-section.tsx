@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { Magnetic } from "@/components/magnetic";
+import { BoxedSection } from "@/components/boxed-section";
 import { LinkButton } from "@/components/ui/button";
 import { profile } from "@/data/site";
 
@@ -33,7 +33,7 @@ const channels = [
 
 export function ContactSection() {
   return (
-    <section id="contact" className="shell pb-[clamp(3.5rem,2.5rem+4vw,5.5rem)] pt-[clamp(1.5rem,1rem+2vw,2.75rem)]">
+    <BoxedSection id="contact" closed>
       <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-12">
         <div className="flex flex-col lg:justify-between">
           <div>
@@ -51,12 +51,10 @@ export function ContactSection() {
             </p>
 
             <div className="mt-8">
-              <Magnetic>
-                <LinkButton href={`mailto:${profile.email}`} size="lg">
-                  Start a conversation
-                  <ArrowUpRight aria-hidden="true" size={18} />
-                </LinkButton>
-              </Magnetic>
+              <LinkButton href={`mailto:${profile.email}`} size="lg">
+                Start a conversation
+                <ArrowUpRight aria-hidden="true" size={18} />
+              </LinkButton>
             </div>
           </div>
 
@@ -71,7 +69,7 @@ export function ContactSection() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between border-t border-border">
+        <div className="flex flex-col justify-between border-t border-border lg:border-t-0 lg:border-l lg:pl-12">
           {channels.map((ch, i) => (
             <Link
               key={ch.label}
@@ -106,6 +104,6 @@ export function ContactSection() {
           ))}
         </div>
       </div>
-    </section>
+    </BoxedSection>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CaseStudyCard } from "@/components/portfolio/case-study-card";
+import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
-import { Magnetic } from "@/components/magnetic";
 import { Marquee } from "@/components/marquee";
 import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
@@ -33,11 +33,17 @@ export default function ProjectsPage() {
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
-      <main>
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+4vw,4rem)]">
+      <BoxedPage>
+        <main>
+          <BoxedSection
+            dividerTop
+            pad="compact"
+            className="overflow-hidden"
+            innerClassName="pb-0 pt-[clamp(2rem,1.25rem+4vw,4rem)]"
+            overlay={
+              <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
+            }
+          >
             <Reveal>
               <span className="eyebrow">Selected work</span>
             </Reveal>
@@ -55,60 +61,57 @@ export default function ProjectsPage() {
                 tooling, AI workflows, and delivery foundations.
               </p>
             </Reveal>
-          </div>
+          </BoxedSection>
 
-          <div className="border-y border-border py-6">
-            <Marquee
-              items={[
-                "SaaS",
-                "Security",
-                "Multi-tenant",
-                "AI",
-                "Mobile",
-                "DevEx",
-                "Infrastructure",
-              ]}
-            />
-          </div>
-        </section>
+          <BoxedStrip dividerTop={false}>
+            <div className="py-6">
+              <Marquee
+                items={[
+                  "SaaS",
+                  "Security",
+                  "Multi-tenant",
+                  "AI",
+                  "Mobile",
+                  "DevEx",
+                  "Infrastructure",
+                ]}
+              />
+            </div>
+          </BoxedStrip>
 
-        {/* Pillars */}
-        <section className="shell pt-[clamp(2rem,1.25rem+3vw,3.5rem)]">
-          <div className="grid border-y border-border md:grid-cols-3">
-            {pillars.map((item, index) => (
-              <Reveal
-                key={item.title}
-                delay={index * 0.05}
-                className="border-border px-1 py-6 md:px-8 md:[&:not(:last-child)]:border-r"
-              >
-                <span className="font-mono text-xs text-faint">0{index + 1}</span>
-                <p className="mt-4 font-display text-xl font-semibold tracking-tight">
-                  {item.title}
-                </p>
-                <p className="mt-2.5 text-sm leading-7 text-muted-foreground">
-                  {item.body}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+          <BoxedSection pad="compact">
+            <div className="grid border-y border-border md:grid-cols-3">
+              {pillars.map((item, index) => (
+                <Reveal
+                  key={item.title}
+                  delay={index * 0.05}
+                  className="border-border px-1 py-6 md:px-8 md:[&:not(:last-child)]:border-r"
+                >
+                  <span className="font-mono text-xs text-faint">0{index + 1}</span>
+                  <p className="mt-4 font-display text-xl font-semibold tracking-tight">
+                    {item.title}
+                  </p>
+                  <p className="mt-2.5 text-sm leading-7 text-muted-foreground">
+                    {item.body}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+          </BoxedSection>
 
-        {/* Case studies */}
-        <section className="shell section-y">
-          <h2 className="sr-only">Case studies</h2>
-          <div className="flex flex-col gap-6 lg:gap-8">
-            {projects.map((project, index) => (
-              <Reveal key={project.slug} delay={index * 0.04}>
-                <CaseStudyCard project={project} index={index + 1} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
+          <BoxedSection>
+            <h2 className="sr-only">Case studies</h2>
+            <div className="flex flex-col gap-6 lg:gap-8">
+              {projects.map((project, index) => (
+                <Reveal key={project.slug} delay={index * 0.04}>
+                  <CaseStudyCard project={project} index={index + 1} />
+                </Reveal>
+              ))}
+            </div>
+          </BoxedSection>
 
-        {/* CTA */}
-        <section className="shell pb-[clamp(2.5rem,2rem+3vw,4.5rem)]">
-          <Reveal>
-            <Magnetic>
+          <BoxedSection pad="compact" closed>
+            <Reveal>
               <PageCta
                 label="Let's talk"
                 title={
@@ -121,10 +124,10 @@ export default function ProjectsPage() {
                 button="Discuss the build"
                 variant="primary"
               />
-            </Magnetic>
-          </Reveal>
-        </section>
-      </main>
+            </Reveal>
+          </BoxedSection>
+        </main>
+      </BoxedPage>
       <SiteFooter />
     </div>
   );

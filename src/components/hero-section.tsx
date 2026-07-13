@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { FrameNodes } from "@/components/boxed-section";
 import { Corners } from "@/components/corners";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { HeroLocalTime } from "@/components/hero-local-time";
+import { HeroTypewriter } from "@/components/hero-typewriter";
+import { PronounceNameButton } from "@/components/pronounce-name-button";
 import { LinkButton } from "@/components/ui/button";
 import { profile } from "@/data/site";
 
@@ -11,158 +14,123 @@ type ProofItem = { value: string; label: string };
 type HeroSectionProps = {
   name: string;
   title: string;
-  lead: React.ReactNode;
   location: string;
   proof: ProofItem[];
 };
 
 /**
- * Server-rendered hero. The headline is in the initial HTML and animates with
- * pure CSS (no hydration dependency), so the LCP element paints immediately.
- * Only the local-time chip and the deferred canvas are client islands.
+ * Hero: name + pronounce, typewriter craft line, short description, one CTA.
  */
 export function HeroSection({
   name,
   title,
-  lead,
   location,
   proof,
 }: HeroSectionProps) {
   return (
-    <section className="relative isolate flex min-h-[min(100svh,52rem)] flex-col overflow-hidden">
+    <section className="relative isolate overflow-hidden border-b border-border">
       <DeferredHeroCanvas className="absolute inset-0 -z-10 h-full w-full" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_45%,transparent,var(--background)_85%)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-background" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-28 bg-gradient-to-b from-transparent to-background" />
 
-      {/* Top meta */}
-      <div className="shell flex items-center justify-between pt-[clamp(1.5rem,1rem+2.5vw,2.75rem)]">
-        <div className="flex items-center gap-3">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
-            <span className="relative inline-flex size-2 rounded-full bg-accent" />
-          </span>
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-            Available for work — {location}
-          </span>
-        </div>
-        <HeroLocalTime />
-      </div>
+      <div className="shell">
+        <div className="boxed-frame relative flex min-h-[min(100svh,46rem)] flex-col border-x border-border">
+          <FrameNodes top bottom />
 
-      {/* Identity + headline + CTAs */}
-      <div className="shell relative flex flex-1 flex-col justify-center py-10 sm:py-12">
-        <p className="hero-fade font-mono text-[0.72rem] uppercase tracking-[0.2em] text-muted-foreground">
-          <span className="text-foreground">{name}</span>
-          <span aria-hidden="true" className="mx-3 text-faint">
-            //
-          </span>
-          <span className="text-accent">{title}</span>
-        </p>
+          <div className="frame-content flex items-center justify-between pt-[clamp(1.5rem,1rem+2.5vw,2.75rem)]">
+            <div className="flex items-center gap-3">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
+                <span className="relative inline-flex size-2 rounded-full bg-accent" />
+              </span>
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                Open to work — {location}
+              </span>
+            </div>
+            <HeroLocalTime />
+          </div>
 
-        {/* Headline animates with a transform-only line rise: opacity stays
-            at 1 so the LCP element still paints on the first frame. */}
-        <h1 className="t-display mt-5 max-w-[16ch]">
-          <span className="hero-line">I engineer</span>
-          <span className="hero-line">products that feel</span>
-          <span className="hero-line">
-            <span className="relative inline-block text-accent">
-              inevitable.
-              <span aria-hidden="true" className="cursor-blink" />
-              <span
-                aria-hidden="true"
-                className="hero-underline absolute -bottom-1 left-0 h-px w-full bg-accent"
-              />
-            </span>
-          </span>
-        </h1>
+          <div className="frame-content relative flex flex-1 flex-col justify-center py-8 sm:py-10">
+            <div className="hero-fade flex flex-wrap items-center gap-3">
+              <h2 className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] font-semibold tracking-tight text-foreground">
+                {name}
+              </h2>
+              <PronounceNameButton name={name} pronounceAs="Shabir Khan" />
+            </div>
 
-        <p
-          className="t-lead hero-fade mt-6 max-w-lg"
-          style={{ animationDelay: "0.5s" }}
-        >
-          {lead}
-        </p>
+            <p className="hero-fade mt-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">
+              {title}
+            </p>
 
-        <div
-          className="hero-fade mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
-          style={{ animationDelay: "0.62s" }}
-        >
-          <LinkButton href="#work" size="lg">
-            View selected work
-            <ArrowDownRight
-              aria-hidden="true"
-              size={18}
-              className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:translate-y-0.5"
-            />
-          </LinkButton>
-          <LinkButton href="/resume" variant="secondary" size="lg">
-            View résumé
-            <ArrowUpRight
-              aria-hidden="true"
-              size={17}
-              className="transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"
-            />
-          </LinkButton>
-          <span className="ml-1 flex items-center gap-5">
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer"
-              className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            <div className="mt-6">
+              <HeroTypewriter />
+            </div>
+
+            <p
+              className="hero-fade mt-5 max-w-md text-[0.95rem] leading-7 text-muted-foreground"
+              style={{ animationDelay: "0.2s" }}
             >
-              GitHub
-            </a>
-            <Link
-              href="/blog"
-              className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
-            >
-              Writing
-            </Link>
-          </span>
-        </div>
-      </div>
+              Creating with code. The quiet details are what make software hold.
+            </p>
 
-      {/* Proof — technical stat grid */}
-      <div className="shell relative pb-8 sm:pb-10">
-        <div className="hero-fade relative" style={{ animationDelay: "0.8s" }}>
-          <Corners />
-          <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
-            {proof.map((item, index) => (
-              <div
-                key={item.label}
-                className={`group relative px-4 py-4 transition-colors duration-300 hover:bg-accent/[0.04] sm:px-5 sm:py-5 ${
-                  index % 2 === 1 ? "border-l border-border" : ""
-                } ${index >= 2 ? "border-t border-border lg:border-t-0 lg:border-l" : ""}`}
+            <div
+              className="hero-fade mt-7 flex flex-wrap items-center gap-x-6 gap-y-3"
+              style={{ animationDelay: "0.35s" }}
+            >
+              <LinkButton href="#work" size="lg">
+                Selected work
+                <ArrowDownRight aria-hidden="true" size={18} />
+              </LinkButton>
+              <Link
+                href="/resume"
+                className="link-line inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
               >
-                <dt className="flex items-baseline justify-between gap-2 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <span
-                    aria-hidden="true"
-                    className="size-1 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  />
-                </dt>
-                <dd className="mt-2.5">
-                  <span className="font-display text-[clamp(1.6rem,1.3rem+1.2vw,2.4rem)] font-medium leading-none tracking-tight text-foreground">
-                    {item.value}
-                  </span>
-                  <span className="mt-1.5 block text-xs leading-5 text-muted-foreground">
-                    {item.label}
-                  </span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </div>
+                Résumé
+                <ArrowUpRight aria-hidden="true" size={13} />
+              </Link>
+              <a
+                href={profile.github}
+                target="_blank"
+                rel="noreferrer"
+                className="link-line font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
 
-      {/* Scroll cue */}
-      <div
-        className="hero-fade pointer-events-none absolute inset-x-0 bottom-4 flex justify-center"
-        style={{ animationDelay: "1.1s" }}
-      >
-        <span
-          aria-hidden="true"
-          className="scroll-cue block h-8 w-px bg-accent/50"
-        />
+          <div className="frame-content relative pb-8 sm:pb-9">
+            <div className="hero-fade relative" style={{ animationDelay: "0.55s" }}>
+              <Corners />
+              <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
+                {proof.map((item, index) => (
+                  <div
+                    key={item.label}
+                    className={`group relative px-4 py-4 transition-colors duration-300 hover:bg-accent/[0.04] sm:px-5 sm:py-5 ${
+                      index % 2 === 1 ? "border-l border-border" : ""
+                    } ${index >= 2 ? "border-t border-border lg:border-t-0 lg:border-l" : ""}`}
+                  >
+                    <dt className="flex items-baseline justify-between gap-2 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <span
+                        aria-hidden="true"
+                        className="size-1 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      />
+                    </dt>
+                    <dd className="mt-2.5">
+                      <span className="font-display text-[clamp(1.6rem,1.3rem+1.2vw,2.4rem)] font-medium leading-none tracking-tight text-foreground">
+                        {item.value}
+                      </span>
+                      <span className="mt-1.5 block text-xs leading-5 text-muted-foreground">
+                        {item.label}
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

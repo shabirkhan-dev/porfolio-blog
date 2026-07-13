@@ -17,7 +17,7 @@ const DeferredExperienceTimeline = dynamic(
     import("@/components/experience-timeline").then((m) => ({
       default: m.ExperienceTimeline,
     })),
-  { ssr: false, loading: () => <div className="min-h-[24rem]" aria-hidden /> },
+  { ssr: false, loading: () => <div className="min-h-[22rem]" aria-hidden /> },
 );
 
 const DeferredTestimonials = dynamic(

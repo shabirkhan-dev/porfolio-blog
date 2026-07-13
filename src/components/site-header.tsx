@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { MobileMenu } from "@/components/mobile-menu";
 import { DesktopNav } from "@/components/site-nav";
-import { Magnetic } from "@/components/magnetic";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LinkButton } from "@/components/ui/button";
 import { navItems, profile } from "@/data/site";
@@ -81,17 +80,16 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle className="hidden sm:grid" />
-            <Magnetic className="hidden sm:block">
-              <LinkButton
-                href={`mailto:${profile.email}`}
-                aria-label={`Email ${profile.name}`}
-                variant="primary"
-                size="sm"
-              >
-                Let&apos;s talk
-                <ArrowUpRight aria-hidden="true" size={14} />
-              </LinkButton>
-            </Magnetic>
+            <LinkButton
+              href={`mailto:${profile.email}`}
+              aria-label={`Email ${profile.name}`}
+              variant="primary"
+              size="sm"
+              className="hidden sm:inline-flex"
+            >
+              Let&apos;s talk
+              <ArrowUpRight aria-hidden="true" size={14} />
+            </LinkButton>
             <MobileMenu />
           </div>
         </div>

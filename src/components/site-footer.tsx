@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { FooterLogoDots } from "@/components/footer-logo-dots";
 import { navItems, profile, socials } from "@/data/site";
 
@@ -7,8 +8,8 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t border-border bg-background-2">
-      <div className="shell pb-10 pt-[clamp(2.5rem,2rem+3vw,4rem)]">
+    <footer className="relative overflow-hidden bg-background-2">
+      <BoxedSection dividerTop tone="muted">
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <span className="eyebrow">Open for work · {profile.location}</span>
@@ -65,56 +66,61 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
-      </div>
+      </BoxedSection>
 
-      <div
-        className="select-none overflow-hidden px-[var(--gutter)] [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
-        aria-hidden="true"
-      >
-        <FooterLogoDots
-          text="shabir"
-          className="h-[clamp(5rem,16vw,12rem)] w-full"
-        />
-      </div>
-
-      {/* Colophon — the site itself is a shipped project; document it like one */}
-      <div className="shell border-t border-border py-7">
-        <dl className="grid gap-x-8 gap-y-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <dt className="text-faint">Stack</dt>
-            <dd className="mt-1.5 text-muted-foreground">
-              Next.js · React 19 · Tailwind v4 · Bun
-            </dd>
-          </div>
-          <div>
-            <dt className="text-faint">Type</dt>
-            <dd className="mt-1.5 text-muted-foreground">
-              Space Grotesk · Inter · JetBrains Mono
-            </dd>
-          </div>
-          <div>
-            <dt className="text-faint">Performance</dt>
-            <dd className="mt-1.5 text-muted-foreground">
-              Static-first · CSS-only LCP · 98 Lighthouse
-            </dd>
-          </div>
-          <div>
-            <dt className="text-faint">Built by</dt>
-            <dd className="mt-1.5 text-muted-foreground">
-              Designed and engineered by me
-            </dd>
-          </div>
-        </dl>
-      </div>
-
-      <div className="shell flex flex-col gap-4 border-t border-border py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">
-        <p>© {year} Shabir Khan</p>
-        <span
+      <BoxedStrip dividerTop={false}>
+        <div
+          className="select-none overflow-hidden py-2 [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
           aria-hidden="true"
-          className="barcode hidden h-5 w-44 text-foreground/25 sm:block"
-        />
-        <p>{profile.location} · Remote worldwide</p>
-      </div>
+        >
+          <FooterLogoDots
+            text="shabir"
+            className="h-[clamp(5rem,16vw,12rem)] w-full"
+          />
+        </div>
+      </BoxedStrip>
+
+      <BoxedStrip dividerTop>
+        <div className="py-7">
+          <dl className="grid gap-x-8 gap-y-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <dt className="text-faint">Stack</dt>
+              <dd className="mt-1.5 text-muted-foreground">
+                Next.js · React 19 · Tailwind v4 · Bun
+              </dd>
+            </div>
+            <div>
+              <dt className="text-faint">Type</dt>
+              <dd className="mt-1.5 text-muted-foreground">
+                Space Grotesk · Inter · JetBrains Mono
+              </dd>
+            </div>
+            <div>
+              <dt className="text-faint">Performance</dt>
+              <dd className="mt-1.5 text-muted-foreground">
+                Static-first · CSS-only LCP · 98 Lighthouse
+              </dd>
+            </div>
+            <div>
+              <dt className="text-faint">Built by</dt>
+              <dd className="mt-1.5 text-muted-foreground">
+                Designed and engineered by me
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </BoxedStrip>
+
+      <BoxedStrip dividerTop closed>
+        <div className="flex flex-col gap-4 py-6 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} Shabir Khan</p>
+          <span
+            aria-hidden="true"
+            className="barcode hidden h-5 w-44 text-foreground/25 sm:block"
+          />
+          <p>{profile.location} · Remote worldwide</p>
+        </div>
+      </BoxedStrip>
     </footer>
   );
 }

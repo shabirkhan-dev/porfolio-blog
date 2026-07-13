@@ -31,7 +31,7 @@ export const profile = {
   github: "https://github.com/shabirkhan-dev",
   linkedin: "https://linkedin.com/in/shabirkhan23",
   hero:
-    "TypeScript-first engineer with 6+ years shipping production systems — React frontends serving 100k+ users, Node.js APIs, React Native apps, and delivery pipelines with security built in.",
+    "Six years shipping SaaS, mobile, and APIs — React frontends at 100k+ users, Node.js services, React Native apps, and release paths with security built in.",
   intro:
     "Six years shipping SaaS, admin systems, mobile apps, and AI workflows. I care about the boring parts that make software survive: state, latency, permissions, release flow, and the details users never see.",
 };

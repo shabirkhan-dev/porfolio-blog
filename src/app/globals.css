@@ -2,66 +2,65 @@
 @import "tw-animate-css";
 
 /* ================================================================== */
-/* Design system — "X-Ray"                                            */
-/* Near-black monochrome canvas · single sharp phosphor accent ·      */
-/* monospace-forward technical minimalism · light + dark              */
+/* Design system — "Drafting board"                                     */
+/* Warm ink field · brass signal accent · ruler-framed editorial grid · */
+/* light + dark                                                         */
 /* ================================================================== */
 
 /* ---- DARK (default) ---------------------------------------------- */
 :root {
   color-scheme: dark;
 
-  --background: oklch(0.147 0.003 250);
-  --background-2: oklch(0.176 0.004 250);
-  --foreground: oklch(0.94 0.004 250);
+  /* Warm soot — not cold blue-black */
+  --background: oklch(0.145 0.012 55);
+  --background-2: oklch(0.178 0.014 55);
+  --foreground: oklch(0.935 0.012 85);
 
-  --card: oklch(0.186 0.004 250);
-  --card-foreground: oklch(0.94 0.004 250);
-  --popover: oklch(0.186 0.004 250);
-  --popover-foreground: oklch(0.94 0.004 250);
+  --card: oklch(0.19 0.014 55);
+  --card-foreground: oklch(0.935 0.012 85);
+  --popover: oklch(0.19 0.014 55);
+  --popover-foreground: oklch(0.935 0.012 85);
 
-  --muted: oklch(0.23 0.004 250);
-  --muted-foreground: oklch(0.7 0.006 250);
-  --faint: oklch(0.58 0.006 250);
+  --muted: oklch(0.235 0.014 55);
+  --muted-foreground: oklch(0.7 0.02 75);
+  --faint: oklch(0.56 0.02 70);
 
-  --secondary: oklch(0.23 0.004 250);
-  --secondary-foreground: oklch(0.94 0.004 250);
+  --secondary: oklch(0.235 0.014 55);
+  --secondary-foreground: oklch(0.935 0.012 85);
 
-  /* Single accent — sharp phosphor green */
-  --accent: oklch(0.8 0.182 152);
-  --accent-foreground: oklch(0.17 0.04 152);
-  --accent-rgb: 74 222 128;
+  /* Brass / ochre signal — not phosphor green */
+  --accent: oklch(0.78 0.115 78);
+  --accent-foreground: oklch(0.18 0.03 55);
+  --accent-rgb: 214 168 70;
 
-  --primary: oklch(0.8 0.182 152);
-  --primary-foreground: oklch(0.17 0.04 152);
+  --primary: oklch(0.78 0.115 78);
+  --primary-foreground: oklch(0.18 0.03 55);
 
-  --destructive: oklch(0.62 0.2 25);
+  --destructive: oklch(0.62 0.18 28);
 
-  --border: oklch(1 0 0 / 0.08);
-  --border-strong: oklch(1 0 0 / 0.16);
-  --input: oklch(1 0 0 / 0.12);
-  --ring: oklch(0.8 0.182 152 / 0.5);
+  --border: oklch(0.92 0.02 80 / 0.1);
+  --border-strong: oklch(0.92 0.02 80 / 0.18);
+  --input: oklch(0.92 0.02 80 / 0.14);
+  --ring: oklch(0.78 0.115 78 / 0.45);
 
-  /* Themeable surface bits */
-  --grid-line: oklch(1 0 0 / 0.03);
-  --glass-bg: oklch(0.147 0.003 250 / 0.7);
-  --glass-strong-bg: oklch(0.176 0.004 250 / 0.85);
-  --header-shadow: 0 18px 50px -18px oklch(0 0 0 / 0.7);
-  --stroke-faint: oklch(1 0 0 / 0.16);
-  --scrollbar: oklch(1 0 0 / 0.12);
-  --scrollbar-hover: oklch(1 0 0 / 0.22);
-  --stroke-rgb: 235 238 240;
+  --grid-line: oklch(0.92 0.02 80 / 0.035);
+  --glass-bg: oklch(0.145 0.012 55 / 0.72);
+  --glass-strong-bg: oklch(0.178 0.014 55 / 0.88);
+  --header-shadow: 0 18px 50px -18px oklch(0 0 0 / 0.65);
+  --stroke-faint: oklch(0.92 0.02 80 / 0.18);
+  --scrollbar: oklch(0.92 0.02 80 / 0.14);
+  --scrollbar-hover: oklch(0.92 0.02 80 / 0.24);
+  --stroke-rgb: 236 228 210;
   --grain-blend: overlay;
-  --grain-opacity: 0.03;
+  --grain-opacity: 0.035;
 
-  --radius: 0.5rem;
+  --radius: 0.375rem;
 
   /* Type families */
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
   --font-display: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
-  /* Serif slot retired — resolves to display so nothing breaks */
   --font-serif: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
@@ -73,55 +72,60 @@
   --step-h3: clamp(1.25rem, 1rem + 1.1vw, 1.6rem);
   --step-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
 
-  /* Rhythm */
-  --section-y: clamp(4rem, 2.5rem + 6vw, 7.5rem);
-  --gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
-  --maxw: 80rem;
+  /* Rhythm + framing */
+  --section-y: clamp(3.75rem, 2.5rem + 4vw, 6rem);
+  /* Outer page margin — space outside the rails */
+  --gutter: clamp(0.85rem, 0.4rem + 2vw, 1.75rem);
+  /* Breathing room between rails and content — centered inside the rulers */
+  --frame-inset: clamp(1.35rem, 0.85rem + 2.8vw, 3rem);
+  --frame-node-size: 7px;
+  --maxw: 78rem;
 }
 
 /* ---- LIGHT -------------------------------------------------------- */
 .light {
   color-scheme: light;
 
-  --background: oklch(0.982 0.001 250);
-  --background-2: oklch(0.955 0.002 250);
-  --foreground: oklch(0.18 0.005 250);
+  /* Cool paper — not warm cream */
+  --background: oklch(0.975 0.004 250);
+  --background-2: oklch(0.95 0.006 250);
+  --foreground: oklch(0.2 0.02 55);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.005 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.005 250);
+  --card: oklch(1 0.002 250);
+  --card-foreground: oklch(0.2 0.02 55);
+  --popover: oklch(1 0.002 250);
+  --popover-foreground: oklch(0.2 0.02 55);
 
-  --muted: oklch(0.93 0.002 250);
-  --muted-foreground: oklch(0.45 0.006 250);
-  --faint: oklch(0.5 0.006 250);
+  --muted: oklch(0.935 0.006 250);
+  --muted-foreground: oklch(0.44 0.02 55);
+  --faint: oklch(0.52 0.02 55);
 
-  --secondary: oklch(0.93 0.002 250);
-  --secondary-foreground: oklch(0.18 0.005 250);
+  --secondary: oklch(0.935 0.006 250);
+  --secondary-foreground: oklch(0.2 0.02 55);
 
-  /* Deeper green so the accent holds contrast on a light field */
-  --accent: oklch(0.55 0.15 150);
-  --accent-foreground: oklch(0.99 0.005 150);
-  --accent-rgb: 21 128 61;
+  /* Deeper bronze so brass holds on light paper */
+  --accent: oklch(0.5 0.12 65);
+  --accent-foreground: oklch(0.99 0.01 85);
+  --accent-rgb: 166 110 28;
 
-  --primary: oklch(0.55 0.15 150);
-  --primary-foreground: oklch(0.99 0.005 150);
+  --primary: oklch(0.5 0.12 65);
+  --primary-foreground: oklch(0.99 0.01 85);
 
-  --border: oklch(0.2 0.01 250 / 0.12);
-  --border-strong: oklch(0.2 0.01 250 / 0.22);
-  --input: oklch(0.2 0.01 250 / 0.16);
-  --ring: oklch(0.55 0.15 150 / 0.4);
+  --border: oklch(0.25 0.02 55 / 0.12);
+  --border-strong: oklch(0.25 0.02 55 / 0.2);
+  --input: oklch(0.25 0.02 55 / 0.16);
+  --ring: oklch(0.5 0.12 65 / 0.4);
 
-  --grid-line: oklch(0.2 0.01 250 / 0.055);
-  --glass-bg: oklch(0.982 0.001 250 / 0.72);
-  --glass-strong-bg: oklch(1 0 0 / 0.85);
-  --header-shadow: 0 18px 50px -20px oklch(0.2 0.01 250 / 0.25);
-  --stroke-faint: oklch(0.2 0.01 250 / 0.14);
-  --scrollbar: oklch(0.2 0.01 250 / 0.2);
-  --scrollbar-hover: oklch(0.2 0.01 250 / 0.32);
-  --stroke-rgb: 32 34 38;
+  --grid-line: oklch(0.25 0.02 55 / 0.05);
+  --glass-bg: oklch(0.975 0.004 250 / 0.75);
+  --glass-strong-bg: oklch(1 0.002 250 / 0.88);
+  --header-shadow: 0 18px 50px -20px oklch(0.2 0.02 55 / 0.22);
+  --stroke-faint: oklch(0.25 0.02 55 / 0.16);
+  --scrollbar: oklch(0.25 0.02 55 / 0.18);
+  --scrollbar-hover: oklch(0.25 0.02 55 / 0.3);
+  --stroke-rgb: 45 38 28;
   --grain-blend: multiply;
-  --grain-opacity: 0.02;
+  --grain-opacity: 0.025;
 }
 
 @theme inline {
@@ -319,6 +323,37 @@
   padding-block: var(--section-y);
 }
 
+/* Boxed editorial frame — side rails, dividers, corner nodes */
+.boxed-page {
+  /* inherits --frame-node-size / --frame-inset from :root */
+}
+
+.boxed-frame {
+  position: relative;
+}
+
+/* Dead-centered content column inside the rails */
+.frame-content {
+  width: 100%;
+  max-width: var(--content-max, none);
+  padding-inline: var(--frame-inset);
+}
+
+.frame-node {
+  width: var(--frame-node-size);
+  height: var(--frame-node-size);
+  border: 1px solid var(--border-strong);
+  background: var(--background);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--background) 88%, transparent);
+}
+
+.boxed-frame[data-tone="muted"] .frame-node,
+.bg-background-2 .boxed-frame .frame-node {
+  background: var(--background-2);
+  box-shadow: 0 0 0 1px
+    color-mix(in oklab, var(--background-2) 88%, transparent);
+}
+
 /* ------------------------------------------------------------------ */
 /* Surfaces & texture                                                 */
 /* ------------------------------------------------------------------ */
@@ -326,9 +361,9 @@
   position: relative;
   background:
     radial-gradient(
-      130% 90% at 8% -10%,
-      rgb(var(--accent-rgb) / 0.07),
-      transparent 40%
+      120% 80% at 6% -8%,
+      rgb(var(--accent-rgb) / 0.06),
+      transparent 42%
     ),
     var(--background);
 }
@@ -471,19 +506,6 @@
   animation: hero-fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes hero-underline-in {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-.hero-underline {
-  transform-origin: left;
-  animation: hero-underline-in 0.85s 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 @keyframes scroll-cue-pulse {
   0%,
   100% {
@@ -501,37 +523,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-line,
   .hero-fade,
-  .hero-underline,
   .scroll-cue {
-    animation: none;
-  }
-}
-
-/* Blinking terminal cursor — a slim bar, soft-blinked. A wide block at
-   display size reads as a rendering artifact, not a cursor. */
-.cursor-blink {
-  display: inline-block;
-  width: clamp(3px, 0.06em, 6px);
-  height: 0.72em;
-  margin-left: 0.12em;
-  background: var(--accent);
-  animation: cursor-blink 1.2s ease-in-out infinite;
-}
-@keyframes cursor-blink {
-  0%,
-  45% {
-    opacity: 1;
-  }
-  55%,
-  95% {
-    opacity: 0.15;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cursor-blink {
     animation: none;
   }
 }

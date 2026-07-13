@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
 import { Marquee } from "@/components/marquee";
@@ -19,10 +20,17 @@ export default function LabPage() {
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-          <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+4vw,4rem)]">
+      <BoxedPage>
+        <main>
+          <BoxedSection
+            dividerTop
+            pad="compact"
+            className="overflow-hidden"
+            innerClassName="pb-0 pt-[clamp(2rem,1.25rem+4vw,4rem)]"
+            overlay={
+              <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
+            }
+          >
             <Reveal>
               <span className="eyebrow">Lab</span>
             </Reveal>
@@ -41,80 +49,82 @@ export default function LabPage() {
                 where I push further.
               </p>
             </Reveal>
-          </div>
+          </BoxedSection>
 
-          <div className="border-y border-border py-6">
-            <Marquee
-              items={[
-                "Motion",
-                "3D UI",
-                "AI Prototypes",
-                "Visual Engineering",
-                "Interaction Design",
-                "Creative Code",
-              ]}
-            />
-          </div>
-        </section>
+          <BoxedStrip dividerTop={false}>
+            <div className="py-6">
+              <Marquee
+                items={[
+                  "Motion",
+                  "3D UI",
+                  "AI Prototypes",
+                  "Visual Engineering",
+                  "Interaction Design",
+                  "Creative Code",
+                ]}
+              />
+            </div>
+          </BoxedStrip>
 
-        <section className="shell section-y">
-          <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
-            {labExperiments.map((item, index) => (
-              <Reveal key={item.title} delay={index * 0.05} className="relative">
-                <Corners />
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background-2 p-8 transition-colors duration-500 hover:border-border-strong">
-                  <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
-                  <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
-                    {item.category}
-                  </span>
-                  <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent">
-                    {item.title}
-                  </h2>
-                  <p className="mt-4 flex-1 text-sm leading-7 text-muted-foreground">
-                    {item.description}
-                  </p>
-                  <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-                    <div className="flex flex-wrap gap-2">
-                      {item.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-sm border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
+          <BoxedSection>
+            <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
+              {labExperiments.map((item, index) => (
+                <Reveal key={item.title} delay={index * 0.05} className="relative">
+                  <Corners />
+                  <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background-2 p-8 transition-colors duration-500 hover:border-border-strong">
+                    <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+                    <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
+                      {item.category}
+                    </span>
+                    <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent">
+                      {item.title}
+                    </h2>
+                    <p className="mt-4 flex-1 text-sm leading-7 text-muted-foreground">
+                      {item.description}
+                    </p>
+                    <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+                      <div className="flex flex-wrap gap-2">
+                        {item.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-sm border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
                         >
-                          {tag}
+                          Explore
+                          <ArrowUpRight aria-hidden="true" size={14} className="text-accent" />
+                        </Link>
+                      ) : (
+                        <span className="font-mono text-xs uppercase tracking-[0.14em] text-faint">
+                          In progress
                         </span>
-                      ))}
+                      )}
                     </div>
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
-                      >
-                        Explore
-                        <ArrowUpRight aria-hidden="true" size={14} className="text-accent" />
-                      </Link>
-                    ) : (
-                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-faint">
-                        In progress
-                      </span>
-                    )}
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          </BoxedSection>
 
-        <section className="shell pb-[clamp(2.5rem,2rem+3vw,4.5rem)]">
-          <Reveal>
-            <PageCta
-              label="Main portfolio"
-              title="Looking for hireable, production-focused work?"
-              href="/#work"
-              button="View selected work"
-            />
-          </Reveal>
-        </section>
-      </main>
+          <BoxedSection pad="compact" closed>
+            <Reveal>
+              <PageCta
+                label="Main portfolio"
+                title="Looking for hireable, production-focused work?"
+                href="/#work"
+                button="View selected work"
+              />
+            </Reveal>
+          </BoxedSection>
+        </main>
+      </BoxedPage>
       <SiteFooter />
     </div>
   );

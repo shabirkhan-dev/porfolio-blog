@@ -6,10 +6,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OpengraphImage() {
-  const bg = "#111214";
-  const fg = "#ebeef0";
-  const muted = "#8b9096";
-  const accent = "#4ade80";
+  const bg = "#211c16";
+  const fg = "#f0ebe0";
+  const muted = "#9a9080";
+  const accent = "#d6a846";
 
   return new ImageResponse(
     (
@@ -33,7 +33,7 @@ export default function OpengraphImage() {
             left: 40,
             right: 40,
             bottom: 40,
-            border: "1px solid rgba(235,238,240,0.08)",
+            border: "1px solid rgba(236,228,210,0.1)",
             borderRadius: 12,
           }}
         />
@@ -85,10 +85,7 @@ export default function OpengraphImage() {
               maxWidth: 880,
             }}
           >
-            <span>Senior Full-Stack Engineer building products that feel&nbsp;</span>
-            <span style={{ color: accent, fontFamily: "monospace" }}>
-              inevitable.
-            </span>
+            <span>Senior Full-Stack Engineer — calm UI, hard systems.</span>
           </div>
         </div>
 
