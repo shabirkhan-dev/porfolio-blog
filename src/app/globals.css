@@ -633,20 +633,6 @@
   to { transform: translateX(-50%); }
 }
 
-/* ------------------------------------------------------------------ */
-/* Scroll progress                                                     */
-/* ------------------------------------------------------------------ */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  transform-origin: 0 50%;
-  background: var(--accent);
-  z-index: 110;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
   html { scroll-behavior: auto; }

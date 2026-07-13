@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { DeferredChrome } from "@/components/deferred-chrome";
 import { MotionProvider } from "@/components/motion-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeScript } from "@/components/theme-toggle";
@@ -134,7 +133,6 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <MotionProvider>
-          <DeferredChrome />
           <SmoothScroll />
           {children}
         </MotionProvider>
