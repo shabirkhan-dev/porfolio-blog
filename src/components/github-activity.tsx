@@ -72,36 +72,45 @@ export function GithubActivitySection({ data }: GithubActivitySectionProps) {
 
 function ContributionGraph({ data }: { data: GithubContributionData }) {
   const totalLabel = data.total.toLocaleString("en-US");
+  const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""] as const;
 
   return (
     <div className="min-w-[40rem]">
-      <div
-        className="mb-1.5 grid gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${data.weeks.length}, minmax(0, 1fr))`,
-        }}
-      >
-        {data.weeks.map((_, weekIndex) => {
-          const month = data.months.find((m) => m.weekIndex === weekIndex);
-          return (
-            <span
-              key={`m-${weekIndex}`}
-              className="h-4 overflow-visible font-mono text-[0.58rem] uppercase tracking-[0.08em] text-faint"
-            >
-              {month?.label ?? ""}
-            </span>
-          );
-        })}
+      <div className="flex gap-1">
+        <div aria-hidden="true" className="hidden w-7 shrink-0 sm:block" />
+        <div
+          className="mb-1.5 grid flex-1 gap-1"
+          style={{
+            gridTemplateColumns: `repeat(${data.weeks.length}, minmax(0, 1fr))`,
+          }}
+        >
+          {data.weeks.map((_, weekIndex) => {
+            const month = data.months.find((m) => m.weekIndex === weekIndex);
+            return (
+              <span
+                key={`m-${weekIndex}`}
+                className="h-4 overflow-visible font-mono text-[0.58rem] uppercase tracking-[0.08em] text-faint"
+              >
+                {month?.label ?? ""}
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       <div className="flex gap-1">
         <div
           aria-hidden="true"
-          className="mr-1 hidden w-6 flex-col justify-between py-0.5 font-mono text-[0.55rem] uppercase leading-none text-faint sm:flex"
+          className="mr-0 hidden w-7 shrink-0 grid-rows-7 gap-1 font-mono text-[0.55rem] uppercase leading-none text-faint sm:grid"
         >
-          <span>Mon</span>
-          <span>Wed</span>
-          <span>Fri</span>
+          {dayLabels.map((label, index) => (
+            <span
+              key={`d-${index}`}
+              className="flex items-center justify-end pr-1"
+            >
+              {label}
+            </span>
+          ))}
         </div>
 
         <div
@@ -111,7 +120,10 @@ function ContributionGraph({ data }: { data: GithubContributionData }) {
           }}
         >
           {data.weeks.map((week, weekIndex) => (
-            <div key={week.days[0]?.date ?? weekIndex} className="grid gap-1">
+            <div
+              key={week.days[0]?.date ?? weekIndex}
+              className="grid grid-rows-7 gap-1"
+            >
               {week.days.map((day) => (
                 <span
                   key={day.date}

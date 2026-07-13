@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
+import { BoxedPage, BoxedSection } from "@/components/boxed-section";
 import { Corners } from "@/components/corners";
 import { Reveal } from "@/components/motion";
-import { Marquee } from "@/components/marquee";
 import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -22,72 +21,47 @@ export default function LabPage() {
       <SiteHeader />
       <BoxedPage>
         <main>
-          <BoxedSection
-            dividerTop
-            pad="compact"
-            className="overflow-hidden"
-            innerClassName="pb-0 pt-[clamp(2rem,1.25rem+4vw,4rem)]"
-            overlay={
-              <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-            }
-          >
-            <Reveal>
-              <span className="eyebrow">Lab</span>
-            </Reveal>
-
-            <h1 className="t-display mt-5">
-              <span className="block">Where experiments</span>
-              <span className="block">
-                get <span className="text-accent">room to breathe.</span>
-              </span>
-            </h1>
-
-            <Reveal delay={0.12} className="mt-6 max-w-xl border-t border-border pt-5">
-              <p className="t-lead">
-                Interactive systems, motion studies, 3D interface concepts, and
-                AI UI prototypes. The main portfolio stays hireable — this is
-                where I push further.
+          <BoxedSection dividerTop pad={false} className="overflow-hidden">
+            <div className="flex flex-col gap-5 py-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10 sm:py-8">
+              <div className="max-w-2xl">
+                <span className="eyebrow">Lab</span>
+                <h1 className="t-h2 mt-3 text-balance">
+                  Experiments with{" "}
+                  <span className="text-accent">room to breathe.</span>
+                </h1>
+                <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+                  Motion, 3D UI, and AI prototypes — pushed further than the
+                  hireable portfolio.
+                </p>
+              </div>
+              <p className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint sm:pb-1">
+                {labExperiments.length} experiments
               </p>
-            </Reveal>
+            </div>
           </BoxedSection>
 
-          <BoxedStrip dividerTop={false}>
-            <div className="py-6">
-              <Marquee
-                items={[
-                  "Motion",
-                  "3D UI",
-                  "AI Prototypes",
-                  "Visual Engineering",
-                  "Interaction Design",
-                  "Creative Code",
-                ]}
-              />
-            </div>
-          </BoxedStrip>
-
-          <BoxedSection>
-            <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
+          <BoxedSection pad="compact">
+            <div className="grid gap-4 md:grid-cols-2 lg:gap-5">
               {labExperiments.map((item, index) => (
                 <Reveal key={item.title} delay={index * 0.05} className="relative">
                   <Corners />
-                  <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background-2 p-8 transition-colors duration-500 hover:border-border-strong">
+                  <article className="group relative flex h-full flex-col overflow-hidden border border-border bg-background-2 p-6 transition-colors duration-500 hover:border-border-strong sm:p-7">
                     <div className="pointer-events-none absolute inset-0 dot-grid opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
                     <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-accent">
                       {item.category}
                     </span>
-                    <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-accent">
+                    <h2 className="mt-4 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-accent sm:text-2xl">
                       {item.title}
                     </h2>
-                    <p className="mt-4 flex-1 text-sm leading-7 text-muted-foreground">
+                    <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">
                       {item.description}
                     </p>
-                    <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+                    <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                       <div className="flex flex-wrap gap-2">
                         {item.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-sm border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
+                            className="border border-border px-2.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-faint"
                           >
                             {tag}
                           </span>
@@ -99,7 +73,11 @@ export default function LabPage() {
                           className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
                         >
                           Explore
-                          <ArrowUpRight aria-hidden="true" size={14} className="text-accent" />
+                          <ArrowUpRight
+                            aria-hidden="true"
+                            size={14}
+                            className="text-accent"
+                          />
                         </Link>
                       ) : (
                         <span className="font-mono text-xs uppercase tracking-[0.14em] text-faint">

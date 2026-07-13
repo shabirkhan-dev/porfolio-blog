@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
+import { NewsletterBlock } from "@/components/blog/newsletter-block";
 import { AsciiField } from "@/components/ascii-field";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
@@ -260,6 +261,10 @@ export default async function Home() {
                 </Reveal>
               ))}
             </div>
+
+            <Reveal className="mt-10">
+              <NewsletterBlock />
+            </Reveal>
           </BoxedSection>
 
           <BoxedSection tone="muted">

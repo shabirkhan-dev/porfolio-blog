@@ -161,11 +161,15 @@ export function HeroTypewriter({
 
   return (
     <h1
-      className={cn("t-display", className)}
+      className={cn(
+        "font-display font-medium tracking-[-0.03em] text-[clamp(1.7rem,0.95rem+4.8vw,5.25rem)] leading-[0.98]",
+        className,
+      )}
       aria-live="polite"
       aria-label={lines.join(" ")}
       style={{
-        width: `min(100%, ${maxChars}ch)`,
+        width: "100%",
+        maxWidth: `${maxChars}ch`,
         height: `calc(${slotCount} * 1.05em)`,
       }}
     >

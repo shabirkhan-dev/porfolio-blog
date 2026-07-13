@@ -3,20 +3,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { MobileMenu } from "@/components/mobile-menu";
-import { DesktopNav } from "@/components/site-nav";
+import { FrameNodes } from "@/components/boxed-section";
+import { DesktopNav, MobileBottomNav } from "@/components/site-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LinkButton } from "@/components/ui/button";
 import { navItems, profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
+/**
+ * Frame Index header — thin rail aligned to the page frame.
+ * Mobile uses a fixed bottom bar instead of a hamburger sheet.
+ */
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     let ticking = false;
     const update = () => {
-      setScrolled(window.scrollY > 16);
+      setScrolled(window.scrollY > 12);
       ticking = false;
     };
     const onScroll = () => {
@@ -31,69 +35,59 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-colors duration-500",
-        scrolled ? "border-b border-transparent" : "glass border-b border-border/60",
-      )}
-    >
-      <div
-        className="mx-auto w-full transition-[max-width] duration-500 ease-out"
-        style={{
-          maxWidth: scrolled ? "58rem" : "var(--maxw)",
-          paddingInline: "var(--gutter)",
-        }}
+    <>
+      <header
+        className={cn(
+          "sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-400",
+          scrolled
+            ? "glass border-b border-border"
+            : "border-b border-transparent bg-transparent",
+        )}
       >
-        <div
-          className={cn(
-            "flex items-center justify-between gap-4 transition-all duration-500 ease-out",
-            scrolled
-              ? "mt-2 min-h-[3.25rem] rounded-lg border border-border-strong glass-strong pl-3 pr-2 sm:mt-3 [box-shadow:var(--header-shadow)]"
-              : "min-h-16",
-          )}
-        >
-          <Link
-            href="/"
-            className="group inline-flex min-h-11 items-center gap-3 py-1"
-          >
-            <span
-              className={cn(
-                "grid place-items-center rounded-sm bg-accent font-mono font-bold text-accent-foreground transition-all duration-500 group-hover:rotate-90",
-                scrolled ? "size-7 text-[0.7rem]" : "size-8 text-xs",
-              )}
-            >
-              {profile.initials}
-            </span>
-            <span
-              className={cn(
-                "font-mono uppercase tracking-[0.1em] transition-all duration-500",
-                scrolled
-                  ? "hidden text-[0.72rem] md:block"
-                  : "hidden text-[0.78rem] sm:block",
-              )}
-            >
-              {profile.name}
-            </span>
-          </Link>
+        <div className="shell relative">
+          <div className="relative border-x border-border">
+            <FrameNodes top className="hidden sm:block" />
 
-          <DesktopNav items={navItems} />
+            <div className="relative flex min-h-14 items-center justify-between gap-3 px-[clamp(0.85rem,0.5rem+1.5vw,1.25rem)] sm:min-h-16">
+              <Link
+                href="/"
+                className="group inline-flex min-h-11 shrink-0 items-center gap-2.5"
+              >
+                <span className="grid size-7 place-items-center bg-accent font-mono text-[0.66rem] font-bold text-accent-foreground transition-transform duration-500 group-hover:rotate-90 sm:size-8 sm:text-xs">
+                  {profile.initials}
+                </span>
+                <span className="hidden font-mono text-[0.7rem] uppercase tracking-[0.12em] text-foreground xl:inline">
+                  {profile.name}
+                </span>
+              </Link>
 
-          <div className="flex items-center gap-2">
-            <ThemeToggle className="hidden sm:grid" />
-            <LinkButton
-              href={`mailto:${profile.email}`}
-              aria-label={`Email ${profile.name}`}
-              variant="primary"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
-              Let&apos;s talk
-              <ArrowUpRight aria-hidden="true" size={14} />
-            </LinkButton>
-            <MobileMenu />
+              <DesktopNav items={navItems} />
+
+              <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+                <Link
+                  href="/resume"
+                  className="px-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+                >
+                  Résumé
+                </Link>
+                <ThemeToggle className="size-9 rounded-sm" />
+                <LinkButton
+                  href={`mailto:${profile.email}`}
+                  aria-label={`Email ${profile.name}`}
+                  variant="primary"
+                  size="sm"
+                  className="hidden rounded-sm lg:inline-flex"
+                >
+                  Let&apos;s talk
+                  <ArrowUpRight aria-hidden="true" size={14} />
+                </LinkButton>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <MobileBottomNav />
+    </>
   );
 }

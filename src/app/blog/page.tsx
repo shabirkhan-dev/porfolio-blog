@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleCard } from "@/components/blog/article-card";
+import { NewsletterBlock } from "@/components/blog/newsletter-block";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
-import { Marquee } from "@/components/marquee";
 import { PageCta } from "@/components/page-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -38,53 +38,30 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <SiteHeader />
       <BoxedPage>
         <main>
-          <BoxedSection
-            dividerTop
-            pad="compact"
-            className="overflow-hidden"
-            innerClassName="pb-0 pt-[clamp(2rem,1.25rem+4vw,4rem)]"
-            overlay={
-              <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
-            }
-          >
-            <Reveal>
-              <span className="eyebrow">Writing</span>
-            </Reveal>
-
-            <h1 className="t-display mt-5">
-              <span className="block">Notes on</span>
-              <span className="block">
-                building <span className="text-accent">with taste.</span>
-              </span>
-            </h1>
-
-            <Reveal delay={0.12} className="mt-6 max-w-lg border-t border-border pt-5">
-              <p className="t-lead">
-                Notes on engineering judgment, system design, and the quieter
-                parts of shipping real software.
+          <BoxedSection dividerTop pad={false} className="overflow-hidden">
+            <div className="flex flex-col gap-5 py-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10 sm:py-8">
+              <div className="max-w-2xl">
+                <span className="eyebrow">Writing</span>
+                <h1 className="t-h2 mt-3 text-balance">
+                  Notes on building{" "}
+                  <span className="text-accent">with taste.</span>
+                </h1>
+                <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
+                  Engineering judgment, system design, and the quieter parts of
+                  shipping real software.
+                </p>
+              </div>
+              <p className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint sm:pb-1">
+                {allInCategory.length}{" "}
+                {allInCategory.length === 1 ? "essay" : "essays"}
+                {activeCategory !== "All" ? ` · ${activeCategory}` : ""}
               </p>
-            </Reveal>
+            </div>
           </BoxedSection>
 
-          <BoxedStrip dividerTop={false}>
-            <div className="py-6">
-              <Marquee
-                items={[
-                  "Engineering",
-                  "Frontend",
-                  "Backend",
-                  "AI",
-                  "Product",
-                  "Design",
-                  "Personal",
-                ]}
-              />
-            </div>
-          </BoxedStrip>
-
           <BoxedStrip>
-            <div className="py-4">
-              <div className="flex gap-2 overflow-x-auto">
+            <div className="py-3.5">
+              <div className="flex gap-1.5 overflow-x-auto">
                 {["All", ...categories].map((item) => {
                   const href =
                     item === "All"
@@ -97,7 +74,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       key={item}
                       href={href}
                       className={cn(
-                        "shrink-0 rounded-md px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] transition-colors duration-300",
+                        "shrink-0 px-3.5 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors duration-300",
                         active
                           ? "bg-accent text-accent-foreground"
                           : "text-muted-foreground hover:text-foreground",
@@ -120,8 +97,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           ) : null}
 
           <BoxedSection pad="compact">
-            <div className="mb-6 flex items-baseline justify-between gap-4 border-b border-border pb-4">
-              <h2 className="font-display text-lg font-semibold tracking-tight">
+            <div className="mb-5 flex items-baseline justify-between gap-4 border-b border-border pb-3">
+              <h2 className="font-display text-base font-semibold tracking-tight sm:text-lg">
                 {activeCategory === "All" ? "All essays" : activeCategory}
               </h2>
               <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
@@ -139,7 +116,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border py-14 text-center">
+              <div className="flex flex-col items-center gap-3 border border-dashed border-border py-12 text-center">
                 <p className="font-display text-xl font-semibold tracking-tight">
                   Nothing here yet
                 </p>
@@ -154,6 +131,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </Link>
               </div>
             )}
+          </BoxedSection>
+
+          <BoxedSection pad="compact">
+            <Reveal>
+              <NewsletterBlock />
+            </Reveal>
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>

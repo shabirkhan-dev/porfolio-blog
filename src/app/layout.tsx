@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, Instrument_Serif, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { DeferredChrome } from "@/components/deferred-chrome";
 import { MotionProvider } from "@/components/motion-provider";
@@ -20,6 +20,13 @@ const inter = Inter({
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-grotesk",
+  display: "optional",
+});
+
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-instrument",
   display: "optional",
 });
 
@@ -115,7 +122,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${inter.variable} ${grotesk.variable} ${jetbrains.variable} scroll-smooth`}
+      className={`${inter.variable} ${grotesk.variable} ${instrument.variable} ${jetbrains.variable} scroll-smooth`}
     >
       <head>
         <ThemeScript />
