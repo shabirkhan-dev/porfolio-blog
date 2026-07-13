@@ -29,8 +29,28 @@ export const profile = {
   hero:
     "Six years shipping SaaS, mobile, and APIs — React frontends at 100k+ users, Node.js services, React Native apps, and release paths with security built in.",
   intro:
-    "Six years shipping SaaS, admin systems, mobile apps, and AI workflows. I care about the boring parts that make software survive: state, latency, permissions, release flow, and the details users never see.",
+    "I'm a senior full-stack engineer and founder. I own product surfaces end-to-end — React and Next.js interfaces, Node APIs, React Native apps, and the release path that keeps them honest. Right now I'm building Rabtx while staying open to remote senior roles.",
 };
+
+/** Concrete outcomes for the About block — not slogans. */
+export const aboutImpact = [
+  {
+    outcome: "100k+ users on production frontend platforms",
+    proof: "Excelorithm EMS",
+  },
+  {
+    outcome: "~50% lighter API payloads and ~35% faster page loads",
+    proof: "Autobay",
+  },
+  {
+    outcome: "Multi-tenant school ops with role dashboards and AI insights",
+    proof: "School OS",
+  },
+  {
+    outcome: "Founder building security-minded product systems",
+    proof: "Rabtx",
+  },
+];
 
 export const education = {
   degree: "ICS — Intermediate in Computer Science",

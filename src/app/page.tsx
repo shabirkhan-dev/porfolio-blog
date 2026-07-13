@@ -20,6 +20,7 @@ import { SectionHeading } from "@/components/section";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  aboutImpact,
   coreStack,
   coreStackMobile,
   experience,
@@ -75,26 +76,35 @@ export default async function Home() {
                   <span className="eyebrow">About</span>
                   <span className="font-mono text-xs text-faint">/ 01</span>
                 </div>
-                <h2 className="t-h2 mt-4 max-w-lg text-balance">
-                  Calm on the surface.{" "}
-                  <span className="text-accent">Disciplined</span> underneath.
-                </h2>
-                <p className="mt-4 max-w-lg text-[0.95rem] leading-7 text-muted-foreground">
+
+                <p className="mt-5 max-w-xl text-[1.05rem] leading-8 text-foreground">
                   {profile.intro}
                 </p>
 
-                <dl className="mt-6 grid max-w-lg gap-y-2 border-t border-border pt-5 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-2 sm:gap-x-8">
-                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
-                    <dt className="text-faint">Currently</dt>
-                    <dd className="text-foreground">Founder @ Rabtx</dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
-                    <dt className="text-faint">Experience</dt>
-                    <dd className="text-foreground">6+ years, full-stack</dd>
-                  </div>
+                <ul className="mt-7 max-w-xl space-y-3 border-t border-border pt-5">
+                  {aboutImpact.map((item) => (
+                    <li
+                      key={item.proof}
+                      className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-4"
+                    >
+                      <span className="text-sm leading-6 text-muted-foreground">
+                        {item.outcome}
+                      </span>
+                      <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-accent">
+                        {item.proof}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <dl className="mt-6 grid max-w-xl gap-y-2 border-t border-border pt-5 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-3 sm:gap-x-6">
                   <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
                     <dt className="text-faint">Based in</dt>
                     <dd className="text-foreground">Islamabad · GMT+5</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                    <dt className="text-faint">Experience</dt>
+                    <dd className="text-foreground">6+ years</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
                     <dt className="text-faint">Open to</dt>
