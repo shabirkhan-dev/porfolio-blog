@@ -44,10 +44,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
   const listRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  const current = groups[active];
-  const ActiveIcon = iconRegistry[current.iconName];
   const totalTools = groups.reduce((sum, g) => sum + g.items.length, 0);
-  const progress = groups.length > 1 ? active / (groups.length - 1) : 0;
 
   const select = useCallback((index: number) => {
     setActive(index);
@@ -96,144 +93,135 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
           ref={listRef}
           className="grid overflow-hidden rounded-lg border border-border-strong bg-background lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
         >
-        {/* Left index — stretch rows to match detail panel height */}
-        <div className="relative flex h-full min-h-[28rem] flex-col border-r border-border">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute bottom-6 left-[1.65rem] top-6 w-px bg-border"
-          />
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute left-[1.65rem] top-6 w-px origin-top bg-accent"
-            animate={{ scaleY: progress }}
-            transition={{ duration: reduceMotion ? 0 : 0.45, ease }}
-            style={{ height: "calc(100% - 3rem)" }}
-          />
-
-          {groups.map((group, index) => {
-            const isActive = index === active;
-            return (
-              <button
-                key={group.title}
-                type="button"
-                onMouseEnter={() => select(index)}
-                onFocus={() => select(index)}
-                onClick={() => select(index)}
-                aria-pressed={isActive}
-                className={cn(
-                  "group/row relative flex w-full min-h-0 flex-1 items-center gap-5 px-7 py-4 text-left transition-colors duration-300",
-                  index !== 0 && "border-t border-border",
-                  isActive ? "bg-background-2" : "hover:bg-background-2/50",
-                )}
-              >
-                <span
+          {/* Left index — stretch rows to match detail panel height */}
+          <div className="relative flex h-full min-h-0 flex-col border-r border-border">
+            {groups.map((group, index) => {
+              const isActive = index === active;
+              return (
+                <button
+                  key={group.title}
+                  type="button"
+                  onMouseEnter={() => select(index)}
+                  onFocus={() => select(index)}
+                  onClick={() => select(index)}
+                  aria-pressed={isActive}
                   className={cn(
-                    "relative z-10 grid size-7 place-items-center rounded-sm border font-mono text-[0.62rem] tabular-nums transition-all duration-300",
-                    isActive
-                      ? "border-accent bg-accent text-accent-foreground"
-                      : "border-border bg-background text-faint group-hover/row:border-border-strong",
+                    "group/row relative flex w-full min-h-0 flex-1 items-center gap-5 px-7 py-4 text-left transition-colors duration-300",
+                    index !== 0 && "border-t border-border",
+                    isActive ? "bg-background-2" : "hover:bg-background-2/50",
                   )}
                 >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span
-                  className={cn(
-                    "font-display text-2xl font-semibold tracking-tight transition-all duration-300",
-                    isActive
-                      ? "translate-x-0.5 text-foreground"
-                      : "text-muted-foreground group-hover/row:text-foreground",
-                  )}
-                >
-                  {group.title}
-                </span>
-                <ArrowUpRight
-                  aria-hidden
-                  size={17}
-                  className={cn(
-                    "ml-auto transition-all duration-300",
-                    isActive
-                      ? "translate-x-0 text-accent opacity-100"
-                      : "-translate-x-1 text-faint opacity-0 group-hover/row:translate-x-0 group-hover/row:opacity-60",
-                  )}
-                />
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Detail panel */}
-        <div className="relative flex h-full min-h-[28rem] flex-col overflow-hidden bg-background-2/50">
-          <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(120%_100%_at_100%_0%,black,transparent_80%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_100%_0%,rgb(var(--accent-rgb)/0.12),transparent_65%)]" />
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.title}
-              initial={reduceMotion ? false : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={reduceMotion ? undefined : { opacity: 0, x: -16 }}
-              transition={{ duration: 0.38, ease }}
-              className="relative flex h-full flex-col p-8 sm:p-9"
-            >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -left-2 bottom-4 select-none font-display text-[9rem] font-semibold leading-none text-foreground/[0.03]"
-              >
-                {String(active + 1).padStart(2, "0")}
-              </span>
-
-              <div className="relative w-fit">
-                <span className="absolute -inset-2 animate-[spin_14s_linear_infinite] rounded-lg border border-dashed border-accent/30" />
-                <span className="relative grid size-14 place-items-center rounded-md border border-accent/30 bg-accent/[0.08] text-accent">
-                  <ActiveIcon aria-hidden size={24} />
-                </span>
-              </div>
-
-              <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-accent">
-                Capability focus
-              </p>
-              <h3 className="mt-3 font-display text-[clamp(2rem,1.4rem+1.8vw,2.85rem)] font-semibold leading-[1.02] tracking-tight">
-                {current.title}
-              </h3>
-              <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
-                {current.focus}
-              </p>
-              <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
-                {current.description}
-              </p>
-
-              <div className="mt-auto pt-10">
-                <div className="mb-4 flex items-center justify-between gap-4">
-                  <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
-                    Tools in rotation
-                  </p>
-                  <span className="font-mono text-[0.62rem] text-muted-foreground">
-                    {current.items.length} selected
+                  <span
+                    className={cn(
+                      "relative z-10 grid size-7 place-items-center rounded-sm border font-mono text-[0.62rem] tabular-nums transition-all duration-300",
+                      isActive
+                        ? "border-accent bg-accent text-accent-foreground"
+                        : "border-border bg-background text-faint group-hover/row:border-border-strong",
+                    )}
+                  >
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {current.items.map((item, i) => (
-                    <motion.div
-                      key={item}
-                      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.32,
-                        delay: 0.08 + i * 0.05,
-                        ease,
-                      }}
-                      className="group/pill flex items-center justify-between rounded-md border border-border bg-background/60 px-4 py-3 transition-colors duration-300 hover:border-accent/35 hover:bg-card"
+                  <span
+                    className={cn(
+                      "font-display text-2xl font-semibold tracking-tight transition-all duration-300",
+                      isActive
+                        ? "translate-x-0.5 text-foreground"
+                        : "text-muted-foreground group-hover/row:text-foreground",
+                    )}
+                  >
+                    {group.title}
+                  </span>
+                  <ArrowUpRight
+                    aria-hidden
+                    size={17}
+                    className={cn(
+                      "ml-auto transition-all duration-300",
+                      isActive
+                        ? "translate-x-0 text-accent opacity-100"
+                        : "-translate-x-1 text-faint opacity-0 group-hover/row:translate-x-0 group-hover/row:opacity-60",
+                    )}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Detail panel — all panes stacked so height stays locked to the tallest */}
+          <div className="relative overflow-hidden bg-background-2/50">
+            <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(120%_100%_at_100%_0%,black,transparent_80%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_100%_0%,rgb(var(--accent-rgb)/0.12),transparent_65%)]" />
+
+            <div className="relative grid">
+              {groups.map((group, index) => {
+                const Icon = iconRegistry[group.iconName];
+                const isActive = index === active;
+                return (
+                  <div
+                    key={group.title}
+                    aria-hidden={!isActive}
+                    className={cn(
+                      "relative col-start-1 row-start-1 flex flex-col p-8 sm:p-9 transition-opacity duration-300",
+                      isActive
+                        ? "z-10 opacity-100"
+                        : "pointer-events-none z-0 opacity-0",
+                    )}
+                  >
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -left-2 bottom-4 select-none font-display text-[9rem] font-semibold leading-none text-foreground/[0.03]"
                     >
-                      <span className="font-mono text-[0.72rem] text-foreground">
-                        {item}
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <div className="relative w-fit">
+                      {isActive && !reduceMotion ? (
+                        <span className="absolute -inset-2 animate-[spin_14s_linear_infinite] rounded-lg border border-dashed border-accent/30" />
+                      ) : null}
+                      <span className="relative grid size-14 place-items-center rounded-md border border-accent/30 bg-accent/[0.08] text-accent">
+                        <Icon aria-hidden size={24} />
                       </span>
-                      <span className="size-1.5 rounded-full bg-accent opacity-40 transition-opacity group-hover/pill:opacity-100" />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                    </div>
+
+                    <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-accent">
+                      Capability focus
+                    </p>
+                    <h3 className="mt-3 font-display text-[clamp(2rem,1.4rem+1.8vw,2.85rem)] font-semibold leading-[1.02] tracking-tight">
+                      {group.title}
+                    </h3>
+                    <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
+                      {group.focus}
+                    </p>
+                    <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
+                      {group.description}
+                    </p>
+
+                    <div className="mt-auto pt-10">
+                      <div className="mb-4 flex items-center justify-between gap-4">
+                        <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
+                          Tools in rotation
+                        </p>
+                        <span className="font-mono text-[0.62rem] text-muted-foreground">
+                          {group.items.length} selected
+                        </span>
+                      </div>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {group.items.map((item) => (
+                          <div
+                            key={item}
+                            className="group/pill flex items-center justify-between rounded-md border border-border bg-background/60 px-4 py-3 transition-colors duration-300 hover:border-accent/35 hover:bg-card"
+                          >
+                            <span className="font-mono text-[0.72rem] text-foreground">
+                              {item}
+                            </span>
+                            <span className="size-1.5 rounded-full bg-accent opacity-40 transition-opacity group-hover/pill:opacity-100" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
