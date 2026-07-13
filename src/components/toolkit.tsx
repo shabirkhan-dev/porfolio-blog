@@ -96,8 +96,8 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
           ref={listRef}
           className="grid overflow-hidden rounded-lg border border-border-strong bg-background lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
         >
-        {/* Left index */}
-        <div className="relative border-r border-border">
+        {/* Left index — stretch rows to match detail panel height */}
+        <div className="relative flex h-full min-h-[28rem] flex-col border-r border-border">
           <div
             aria-hidden
             className="pointer-events-none absolute bottom-6 left-[1.65rem] top-6 w-px bg-border"
@@ -121,7 +121,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
                 onClick={() => select(index)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group/row relative flex w-full items-center gap-5 px-7 py-5 text-left transition-colors duration-300",
+                  "group/row relative flex w-full min-h-0 flex-1 items-center gap-5 px-7 py-4 text-left transition-colors duration-300",
                   index !== 0 && "border-t border-border",
                   isActive ? "bg-background-2" : "hover:bg-background-2/50",
                 )}
@@ -162,7 +162,7 @@ export function Toolkit({ groups }: { groups: StackGroup[] }) {
         </div>
 
         {/* Detail panel */}
-        <div className="relative min-h-[28rem] overflow-hidden bg-background-2/50">
+        <div className="relative flex h-full min-h-[28rem] flex-col overflow-hidden bg-background-2/50">
           <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(120%_100%_at_100%_0%,black,transparent_80%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_100%_0%,rgb(var(--accent-rgb)/0.12),transparent_65%)]" />
 
