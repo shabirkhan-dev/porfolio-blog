@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { BoxedPage, BoxedSection } from "@/components/boxed-section";
-import { LabDemoFrame } from "@/components/lab/lab-demo-frame";
-import { labDemoMap } from "@/components/lab/lab-demos";
+import { LabExperimentStage } from "@/components/lab/lab-experiment-stage";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getLabExperiment, getLabSlugs, labExperiments } from "@/data/lab";
@@ -34,9 +33,9 @@ export default async function LabExperimentPage({
 }: LabExperimentPageProps) {
   const { slug } = await params;
   const experiment = getLabExperiment(slug);
-  const Demo = labDemoMap[slug as keyof typeof labDemoMap];
 
-  if (!experiment || !Demo) {
+  // Only validate data on the server — demo components are client-only.
+  if (!experiment) {
     notFound();
   }
 
@@ -46,7 +45,6 @@ export default async function LabExperimentPage({
     index >= 0 && index < labExperiments.length - 1
       ? labExperiments[index + 1]
       : null;
-  const flush = slug === "iron-field";
 
   return (
     <div className="page-shell min-h-screen">
@@ -86,11 +84,7 @@ export default async function LabExperimentPage({
           </BoxedSection>
 
           <BoxedSection pad="compact">
-            <LabDemoFrame
-              flush={flush}
-              preview={<Demo />}
-              code={experiment.code}
-            />
+            <LabExperimentStage experiment={experiment} />
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>
