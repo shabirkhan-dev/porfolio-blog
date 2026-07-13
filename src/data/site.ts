@@ -63,7 +63,7 @@ export const socials = [
   { href: "tel:+923166651488", label: "Phone", icon: Phone },
 ];
 
-/** Compact "core stack" shown as a quiet static strip under the hero. */
+/** Compact "core stack" strip under the hero — expanded from résumé stack groups. */
 export const coreStack = [
   "TypeScript",
   "React",
@@ -74,7 +74,29 @@ export const coreStack = [
   "Redis",
   "Docker",
   "AWS",
-  "AI Workflows",
+  "Tailwind CSS",
+  "Express",
+  "NestJS",
+  "Expo",
+  "MongoDB",
+  "GitHub Actions",
+  "Bun",
+  "Hono",
+  "Kafka",
+  "RAG",
+  "Design systems",
+];
+
+/** Tighter subset so the mobile marquee stays a single dense row. */
+export const coreStackMobile = [
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+  "React Native",
+  "PostgreSQL",
+  "Docker",
+  "AWS",
 ];
 
 export const proof = [

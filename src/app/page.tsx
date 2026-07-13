@@ -6,6 +6,7 @@ import { AsciiField } from "@/components/ascii-field";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
 import { HeroSection } from "@/components/hero-section";
+import { CoreStackMarquee } from "@/components/core-stack-marquee";
 import { ScalesFrame } from "@/components/scales";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
@@ -20,6 +21,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
   coreStack,
+  coreStackMobile,
   experience,
   philosophy,
   profile,
@@ -50,20 +52,8 @@ export default async function Home() {
           />
 
           <BoxedStrip dividerTop>
-            <div className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:gap-8">
-              <span className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
-                Core stack
-              </span>
-              <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                {coreStack.map((item) => (
-                  <li
-                    key={item}
-                    className="font-mono text-[0.72rem] uppercase tracking-[0.1em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            <div className="py-5 sm:py-6">
+              <CoreStackMarquee items={coreStack} mobileItems={coreStackMobile} />
             </div>
           </BoxedStrip>
 

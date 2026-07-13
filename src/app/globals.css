@@ -633,6 +633,22 @@
   to { transform: translateX(-50%); }
 }
 
+.core-stack-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: marquee 42s linear infinite;
+}
+.core-stack-marquee:hover .core-stack-track {
+  animation-play-state: paused;
+}
+
+@media (max-width: 639px) {
+  .core-stack-track {
+    animation-duration: 28s;
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Scroll progress                                                     */
 /* ------------------------------------------------------------------ */
@@ -648,7 +664,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
+  .marquee-track,
+  .core-stack-track { animation: none; }
   html { scroll-behavior: auto; }
 }
 
