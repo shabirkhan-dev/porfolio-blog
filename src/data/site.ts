@@ -87,7 +87,7 @@ export const coreStack = [
   "Design systems",
 ];
 
-/** Tighter subset so the mobile marquee stays a single dense row. */
+/** Tighter subset so mobile stays a single readable row. */
 export const coreStackMobile = [
   "TypeScript",
   "React",
@@ -95,8 +95,6 @@ export const coreStackMobile = [
   "Node.js",
   "React Native",
   "PostgreSQL",
-  "Docker",
-  "AWS",
 ];
 
 export const proof = [

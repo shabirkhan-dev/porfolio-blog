@@ -1,12 +1,15 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, LayoutGroup, m, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type CoreStackMarqueeProps = {
+type CoreStackShuffleProps = {
   items: string[];
   mobileItems: string[];
   className?: string;
+  /** How often to reshuffle, in ms. */
+  intervalMs?: number;
 };
 
 function shuffle<T>(list: T[]) {
@@ -19,16 +22,19 @@ function shuffle<T>(list: T[]) {
 }
 
 /**
- * Centered single-row skill shuffle under the hero.
- * Mobile uses a shorter list so the track never wraps to two rows.
+ * Centered single-row skills strip. Reshuffles every few seconds
+ * with a short layout/fade animation — no continuous marquee.
  */
-export function CoreStackMarquee({
+export function CoreStackShuffle({
   items,
   mobileItems,
   className,
-}: CoreStackMarqueeProps) {
+  intervalMs = 3800,
+}: CoreStackShuffleProps) {
+  const reduced = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
   const [order, setOrder] = useState(items);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -39,66 +45,80 @@ export function CoreStackMarquee({
   }, []);
 
   useEffect(() => {
-    const source = isMobile ? mobileItems : items;
-    setOrder(shuffle(source));
+    const pick = () => {
+      if (isMobile) return shuffle(mobileItems);
+      // Keep one centered row on desktop — rotate through the full pool.
+      return shuffle(items).slice(0, 10);
+    };
+
+    setOrder(pick());
+    setTick((t) => t + 1);
   }, [isMobile, items, mobileItems]);
 
-  const sequence = useMemo(
-    () => (
-      <span className="inline-flex shrink-0 items-center whitespace-nowrap">
-        {order.map((item) => (
-          <Fragment key={item}>
-            <span className="px-4 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors sm:px-5 sm:text-[0.72rem]">
-              {item}
-            </span>
-            <span
-              aria-hidden="true"
-              className="size-1 shrink-0 rounded-full bg-accent/70"
-            />
-          </Fragment>
-        ))}
-      </span>
-    ),
-    [order],
-  );
+  useEffect(() => {
+    if (reduced) return;
 
-  // Two identical halves → animate -50% for a seamless loop.
-  const half = (
-    <span className="inline-flex shrink-0 items-center" aria-hidden="true">
-      {Array.from({ length: isMobile ? 3 : 2 }, (_, i) => (
-        <Fragment key={i}>{sequence}</Fragment>
-      ))}
-    </span>
-  );
+    const pick = () => {
+      if (isMobile) return shuffle(mobileItems);
+      return shuffle(items).slice(0, 10);
+    };
+
+    const id = window.setInterval(() => {
+      setOrder(pick());
+      setTick((t) => t + 1);
+    }, intervalMs);
+    return () => window.clearInterval(id);
+  }, [intervalMs, isMobile, items, mobileItems, reduced]);
 
   return (
     <div className={cn("w-full", className)}>
       <p className="text-center font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
         Core stack
       </p>
-      <div className="core-stack-marquee relative mt-4 overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-background to-transparent sm:w-16"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-background to-transparent sm:w-16"
-        />
-        <div className="core-stack-track flex w-max items-center">
-          {half}
-          <span className="inline-flex shrink-0 items-center" aria-hidden="true">
-            {Array.from({ length: isMobile ? 3 : 2 }, (_, i) => (
-              <Fragment key={`b-${i}`}>{sequence}</Fragment>
+
+      <LayoutGroup id="core-stack">
+        <ul
+          className="mt-4 flex flex-nowrap items-center justify-center gap-x-4 overflow-hidden sm:gap-x-5"
+          aria-live="polite"
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            {order.map((item, index) => (
+              <m.li
+                key={`${item}-${tick}-${index}`}
+                layout={!reduced}
+                initial={
+                  reduced ? false : { opacity: 0, y: 8, filter: "blur(4px)" }
+                }
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={
+                  reduced
+                    ? undefined
+                    : { opacity: 0, y: -8, filter: "blur(4px)" }
+                }
+                transition={{
+                  duration: reduced ? 0 : 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: reduced ? 0 : index * 0.03,
+                }}
+                className="shrink-0 whitespace-nowrap font-mono text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground sm:text-[0.72rem]"
+              >
+                <span className="inline-flex items-center gap-4 sm:gap-5">
+                  {item}
+                  {index < order.length - 1 ? (
+                    <span
+                      aria-hidden="true"
+                      className="inline-block size-1 rounded-full bg-accent/70"
+                    />
+                  ) : null}
+                </span>
+              </m.li>
             ))}
-          </span>
-        </div>
-        <ul className="sr-only">
-          {order.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
+          </AnimatePresence>
         </ul>
-      </div>
+      </LayoutGroup>
     </div>
   );
 }
+
+/** @deprecated Use CoreStackShuffle — kept as alias during rename. */
+export const CoreStackMarquee = CoreStackShuffle;

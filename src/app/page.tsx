@@ -6,7 +6,7 @@ import { AsciiField } from "@/components/ascii-field";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { Reveal } from "@/components/motion";
 import { HeroSection } from "@/components/hero-section";
-import { CoreStackMarquee } from "@/components/core-stack-marquee";
+import { CoreStackShuffle } from "@/components/core-stack-marquee";
 import { ScalesFrame } from "@/components/scales";
 import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
@@ -53,7 +53,7 @@ export default async function Home() {
 
           <BoxedStrip dividerTop>
             <div className="py-5 sm:py-6">
-              <CoreStackMarquee items={coreStack} mobileItems={coreStackMobile} />
+              <CoreStackShuffle items={coreStack} mobileItems={coreStackMobile} />
             </div>
           </BoxedStrip>
 
