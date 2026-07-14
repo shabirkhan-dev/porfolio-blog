@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "audit": "bun run build && bun run lint",
+    "test": "bun test src/components/lab/experiments/request-flow/simulation-engine.test.ts",
     "lighthouse": "lighthouse http://localhost:3001 --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-report.json --chrome-flags=\"--headless --no-sandbox\""
   },
   "engines": {

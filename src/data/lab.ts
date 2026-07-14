@@ -10,6 +10,21 @@ export type LabExperiment = {
 
 export const labExperiments: LabExperiment[] = [
   {
+    slug: "request-flow",
+    title: "Request Flow",
+    category: "Systems simulation",
+    description:
+      "Send a request through gateway, auth, rate limiting, cache, and database — watch every stage, trace, retry, and failure in real time.",
+    instruction:
+      "Send a request, inject failures, and read the live trace beside the pipeline.",
+    tags: ["Pipeline", "Trace", "Retries"],
+    code: `// Coordinated scheduler — one timer chain per simulation run.
+class RequestFlowSimulation {
+  start(config) { /* schedule stages */ }
+  cancel() { /* mark active stage cancelled */ }
+}`,
+  },
+  {
     slug: "iron-field",
     title: "Iron Field",
     category: "Motion canvas",

@@ -10,7 +10,7 @@ import { labExperiments } from "@/data/lab";
 export const metadata: Metadata = {
   title: "Lab",
   description:
-    "Signature interactive studies — Iron Field, Cipher Deck, and Signal Radar. Live results on the page.",
+    "Signature interactive studies — Request Flow, Iron Field, Cipher Deck, and Signal Radar. Live results on the page.",
 };
 
 export default function LabPage() {
@@ -26,7 +26,7 @@ export default function LabPage() {
               <div className="max-w-2xl">
                 <span className="eyebrow">Lab</span>
                 <h1 className="t-h2 mt-3 text-balance">
-                  Three studies.{" "}
+                  Four studies.{" "}
                   <span className="text-accent">The result is the point.</span>
                 </h1>
                 <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">

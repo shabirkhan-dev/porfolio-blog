@@ -7,6 +7,7 @@ import { LabExperimentStage } from "@/components/lab/lab-experiment-stage";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getLabExperiment, getLabSlugs, labExperiments } from "@/data/lab";
+import { getRequestFlowSourceFiles } from "@/lib/request-flow-sources";
 
 type LabExperimentPageProps = {
   params: Promise<{ slug: string }>;
@@ -38,6 +39,9 @@ export default async function LabExperimentPage({
   if (!experiment) {
     notFound();
   }
+
+  const sourceFiles =
+    slug === "request-flow" ? await getRequestFlowSourceFiles() : [];
 
   const index = labExperiments.findIndex((item) => item.slug === slug);
   const prev = index > 0 ? labExperiments[index - 1] : null;
@@ -84,7 +88,10 @@ export default async function LabExperimentPage({
           </BoxedSection>
 
           <BoxedSection pad="compact">
-            <LabExperimentStage experiment={experiment} />
+            <LabExperimentStage
+              experiment={experiment}
+              sourceFiles={sourceFiles}
+            />
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>

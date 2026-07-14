@@ -2,12 +2,15 @@
 
 import { LabDemoFrame } from "@/components/lab/lab-demo-frame";
 import { labDemoMap } from "@/components/lab/lab-demos";
+import type { SourceFileEntry } from "@/components/lab/experiments/request-flow/request-flow.types";
 import type { LabExperiment } from "@/data/lab";
 
 export function LabExperimentStage({
   experiment,
+  sourceFiles = [],
 }: {
   experiment: LabExperiment;
+  sourceFiles?: SourceFileEntry[];
 }) {
   const Demo = labDemoMap[experiment.slug as keyof typeof labDemoMap];
   if (!Demo) {
@@ -16,6 +19,10 @@ export function LabExperimentStage({
         This instrument could not load.
       </p>
     );
+  }
+
+  if (experiment.slug === "request-flow") {
+    return <Demo sourceFiles={sourceFiles} />;
   }
 
   return (
