@@ -4,8 +4,8 @@ import { FrameNodes } from "@/components/boxed-section";
 import { Corners } from "@/components/corners";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { HeroLocalTime } from "@/components/hero-local-time";
-import { HeroTypewriter } from "@/components/hero-typewriter";
 import { PronounceNameButton } from "@/components/pronounce-name-button";
+import { HeroBuildTypewriter } from "@/components/hero-typewriter";
 import { LinkButton } from "@/components/ui/button";
 import { profile } from "@/data/site";
 
@@ -19,7 +19,7 @@ type HeroSectionProps = {
 };
 
 /**
- * Hero: name + pronounce, typewriter craft line, short description, one CTA.
+ * Compact hiring-focused hero: name, role, typewriter proposition, metrics.
  */
 export function HeroSection({
   name,
@@ -34,10 +34,10 @@ export function HeroSection({
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-28 bg-gradient-to-b from-transparent to-background" />
 
       <div className="shell">
-        <div className="boxed-frame relative flex min-h-[min(100svh,46rem)] flex-col border-x border-border">
+        <div className="boxed-frame relative flex flex-col border-x border-border">
           <FrameNodes top bottom />
 
-          <div className="frame-content flex items-center justify-between pt-[clamp(1.5rem,1rem+2.5vw,2.75rem)]">
+          <div className="frame-content flex items-center justify-between pt-[clamp(1.25rem,0.9rem+1.5vw,2rem)]">
             <div className="flex items-center gap-3">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
@@ -50,11 +50,11 @@ export function HeroSection({
             <HeroLocalTime />
           </div>
 
-          <div className="frame-content relative flex flex-1 flex-col justify-center py-8 sm:py-10">
+          <div className="frame-content relative py-6 sm:py-7">
             <div className="hero-fade flex flex-wrap items-center gap-3">
-              <h2 className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] font-semibold tracking-tight text-foreground">
+              <p className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] font-semibold tracking-tight text-foreground">
                 {name}
-              </h2>
+              </p>
               <PronounceNameButton name={name} pronounceAs="Shabir Khan" />
             </div>
 
@@ -62,23 +62,28 @@ export function HeroSection({
               {title}
             </p>
 
-            <div className="mt-6">
-              <HeroTypewriter />
-            </div>
+            <h1
+              className="hero-fade mt-5 font-display text-[clamp(3.1rem,2.1rem+4.5vw,5.25rem)] font-medium leading-[1.02] tracking-[-0.035em]"
+              style={{ animationDelay: "0.1s" }}
+            >
+              <span className="block text-foreground">I build</span>
+              <HeroBuildTypewriter className="text-foreground" />
+            </h1>
 
             <p
-              className="hero-fade mt-5 max-w-md text-[0.95rem] leading-7 text-muted-foreground"
-              style={{ animationDelay: "0.2s" }}
+              className="hero-fade mt-4 max-w-xl text-[0.95rem] leading-7 text-muted-foreground"
+              style={{ animationDelay: "0.16s" }}
             >
-              Creating with code. The quiet details are what make software hold.
+              Full-stack engineer building reliable products from interface to
+              infrastructure.
             </p>
 
             <div
-              className="hero-fade mt-6 flex flex-wrap items-center gap-x-5 gap-y-2.5 sm:mt-7 sm:gap-x-6"
-              style={{ animationDelay: "0.35s" }}
+              className="hero-fade mt-5 flex flex-wrap items-center gap-x-5 gap-y-2.5 sm:mt-6 sm:gap-x-6"
+              style={{ animationDelay: "0.24s" }}
             >
               <LinkButton href="#work" size="md" className="sm:h-11 md:h-12 md:px-7 md:text-[0.78rem]">
-                Selected work
+                View selected work
                 <ArrowDownRight aria-hidden="true" className="size-4 md:size-[18px]" />
               </LinkButton>
               <Link
@@ -96,11 +101,17 @@ export function HeroSection({
               >
                 GitHub
               </a>
+              <Link
+                href="#contact"
+                className="link-line font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs"
+              >
+                Contact
+              </Link>
             </div>
           </div>
 
-          <div className="frame-content relative pb-8 sm:pb-9">
-            <div className="hero-fade relative" style={{ animationDelay: "0.55s" }}>
+          <div className="frame-content relative pb-6 sm:pb-7">
+            <div className="hero-fade relative" style={{ animationDelay: "0.32s" }}>
               <Corners />
               <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
                 {proof.map((item, index) => (

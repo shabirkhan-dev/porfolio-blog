@@ -1,58 +1,44 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { NewsletterBlock } from "@/components/blog/newsletter-block";
-import { WritingPreview } from "@/components/blog/writing-preview";
 import { AsciiField } from "@/components/ascii-field";
+import { WritingPreview } from "@/components/blog/writing-preview";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
-import { Reveal } from "@/components/motion";
-import { HeroSection } from "@/components/hero-section";
-import { CoreStackShuffle } from "@/components/core-stack-marquee";
-import { ScalesFrame } from "@/components/scales";
-import { PrincipleCard } from "@/components/principle-card";
 import { ContactSection } from "@/components/contact-section";
-import { ProjectsBento } from "@/components/portfolio/projects-bento";
+import { HeroSection } from "@/components/hero-section";
 import {
   HomeExperienceTimeline,
   HomeTestimonials,
-  HomeToolkit,
 } from "@/components/home-deferred";
+import { LabLiveCard } from "@/components/lab/lab-live-card";
+import { Reveal } from "@/components/motion";
+import { ProjectsBento } from "@/components/portfolio/projects-bento";
+import { PrincipleCard } from "@/components/principle-card";
+import { ScalesFrame } from "@/components/scales";
 import { SectionHeading } from "@/components/section";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { getPublishedPosts } from "@/data/posts.server";
+import { labExperiments } from "@/data/lab";
 import {
   aboutImpact,
   coreStack,
-  coreStackMobile,
   experience,
   philosophy,
   profile,
   projects,
   proof,
-  stackGroups,
   testimonials,
 } from "@/data/site";
-import { getPublishedPosts } from "@/data/posts.server";
-import { getGithubContributions } from "@/lib/github-contributions";
-import { GithubActivitySection } from "@/components/github-activity";
 
 export default async function Home() {
   const posts = await getPublishedPosts();
-  const writingPreview = posts.slice(0, 5);
-  const workProjects = projects.slice(0, 4);
-  const githubActivity = await getGithubContributions("shabirkhan-dev");
-  const newsletterCover = posts[0]
-    ? {
-        title: posts[0].title,
-        href: `/blog/${posts[0].slug}`,
-        label: "Latest note",
-      }
-    : undefined;
-  const newsletterItems = posts.slice(1, 4).map((post) => ({
-    category: post.category,
-    title: post.title,
-    readingTime: post.readingTime.replace(/\s*read$/i, ""),
-    href: `/blog/${post.slug}`,
-  }));
+  const writingPreview = posts.slice(0, 3);
+  const workProjects = [
+    projects.find((project) => project.slug === "autobay"),
+    projects.find((project) => project.slug === "school-os"),
+    projects.find((project) => project.slug === "excelorithm-ems"),
+  ].filter((project): project is (typeof projects)[number] => Boolean(project));
+  const featuredLab = labExperiments[0];
 
   return (
     <div className="page-shell min-h-screen">
@@ -66,16 +52,34 @@ export default async function Home() {
             proof={proof}
           />
 
-          <BoxedStrip dividerTop>
-            <div className="py-5 sm:py-6">
-              <CoreStackShuffle items={coreStack} mobileItems={coreStackMobile} />
-            </div>
-          </BoxedStrip>
+          <BoxedSection id="work">
+            <SectionHeading
+              index="01"
+              eyebrow="Selected work"
+              title="Shipped systems under real constraints."
+              description={
+                <Link
+                  href="/projects"
+                  className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
+                >
+                  All projects
+                  <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+                </Link>
+              }
+            />
+            <p className="mt-3 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
+              Product constraints, architecture, and release path handled as one
+              job — with a clear decision and a measurable result in each case.
+            </p>
+            <Reveal className="mt-8 sm:mt-9">
+              <ProjectsBento projects={workProjects} />
+            </Reveal>
+          </BoxedSection>
 
-          <BoxedSection id="about">
-            <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-14">
-              <Reveal>
-                <ScalesFrame className="mx-auto w-full max-w-[17rem]">
+          <BoxedSection id="about" tone="muted">
+            <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-14">
+              <Reveal className="overflow-x-clip py-9">
+                <ScalesFrame className="mx-auto w-full max-w-[15rem]">
                   <div className="relative grid aspect-square place-items-center overflow-hidden">
                     <AsciiField className="absolute inset-0 h-full w-full" cell={13} />
                     <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-medium leading-none tracking-tight text-accent">
@@ -85,13 +89,15 @@ export default async function Home() {
                 </ScalesFrame>
               </Reveal>
 
-              <Reveal delay={0.1}>
+              <Reveal delay={0.08}>
                 <div className="flex items-center gap-4">
-                  <span className="eyebrow">About</span>
-                  <span className="font-mono text-xs text-faint">/ 01</span>
+                  <span className="eyebrow">Evidence</span>
+                  <span className="font-mono text-xs text-faint">/ 02</span>
                 </div>
-
-                <p className="mt-5 max-w-xl text-[1.05rem] leading-8 text-foreground">
+                <h2 className="t-h2 mt-4 max-w-[18ch] text-balance">
+                  Senior ownership, visible in the work.
+                </h2>
+                <p className="mt-4 max-w-xl text-[1.02rem] leading-8 text-foreground/85">
                   {profile.intro}
                 </p>
 
@@ -112,74 +118,39 @@ export default async function Home() {
                 </ul>
 
                 <dl className="mt-6 grid max-w-xl gap-y-2 border-t border-border pt-5 font-mono text-[0.7rem] uppercase tracking-[0.12em] sm:grid-cols-3 sm:gap-x-6">
-                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <div>
                     <dt className="text-faint">Based in</dt>
-                    <dd className="text-foreground">Islamabad · GMT+5</dd>
+                    <dd className="mt-1 text-foreground">Islamabad · GMT+5</dd>
                   </div>
-                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <div>
                     <dt className="text-faint">Experience</dt>
-                    <dd className="text-foreground">6+ years</dd>
+                    <dd className="mt-1 text-foreground">6+ years</dd>
                   </div>
-                  <div className="flex items-baseline justify-between gap-4 sm:flex-col sm:gap-1">
+                  <div>
                     <dt className="text-faint">Open to</dt>
-                    <dd className="text-accent">Remote senior roles</dd>
+                    <dd className="mt-1 text-accent">Remote senior roles</dd>
                   </div>
                 </dl>
-
-                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
-                  <a
-                    href={profile.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-line inline-flex items-center gap-1.5 text-foreground"
-                  >
-                    GitHub
-                    <ArrowUpRight aria-hidden="true" size={13} className="text-accent" />
-                  </a>
-                  <a
-                    href={profile.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-line inline-flex items-center gap-1.5 text-foreground"
-                  >
-                    LinkedIn
-                    <ArrowUpRight aria-hidden="true" size={13} className="text-accent" />
-                  </a>
-                  <a
-                    href={`mailto:${profile.email}`}
-                    className="link-line inline-flex items-center gap-1.5 text-foreground"
-                  >
-                    Email
-                    <ArrowUpRight aria-hidden="true" size={13} className="text-accent" />
-                  </a>
-                </div>
               </Reveal>
             </div>
           </BoxedSection>
 
-          <BoxedSection>
-            <GithubActivitySection data={githubActivity} />
-          </BoxedSection>
+          <BoxedStrip>
+            <div className="py-3.5 sm:py-4">
+              <div className="flex items-center gap-4 overflow-x-auto font-mono text-[0.64rem] uppercase tracking-[0.12em] text-muted-foreground sm:justify-center">
+                <span className="shrink-0 text-faint">Core stack</span>
+                {coreStack.slice(0, 8).map((item) => (
+                  <span key={item} className="inline-flex shrink-0 items-center gap-4">
+                    <span aria-hidden="true" className="size-1 rounded-full bg-accent/70" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </BoxedStrip>
 
-          <BoxedSection id="work">
-            <SectionHeading
-              index="02"
-              eyebrow="Selected work"
-              title="Selected work."
-              description={
-                <Link
-                  href="/projects"
-                  className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
-                >
-                  All projects
-                  <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
-                </Link>
-              }
-            />
-
-            <Reveal className="mt-10">
-              <ProjectsBento projects={workProjects} />
-            </Reveal>
+          <BoxedSection id="experience">
+            <HomeExperienceTimeline items={experience} />
           </BoxedSection>
 
           <BoxedSection
@@ -187,27 +158,24 @@ export default async function Home() {
             tone="muted"
             className="overflow-hidden"
             overlay={
-              <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
+              <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
             }
           >
             <Reveal>
               <div className="max-w-2xl">
                 <div className="flex items-center gap-4">
-                  <span className="eyebrow">Approach</span>
-                  <span className="font-mono text-xs text-faint">/ 03</span>
+                  <span className="eyebrow">Engineering principles</span>
+                  <span className="font-mono text-xs text-faint">/ 04</span>
                 </div>
                 <h2 className="t-h2 mt-4 text-balance">
-                  Rules I actually{" "}
-                  <span className="text-accent">ship by.</span>
+                  How I make decisions under constraint.
                 </h2>
                 <p className="mt-4 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
-                  Not slogans — decision filters. These are the checks that decide
-                  what gets built, what waits, and what gets cut before it becomes
-                  debt.
+                  Practical checks for scope, data boundaries, failure states,
+                  and release work. Each one is tied to shipped work.
                 </p>
               </div>
             </Reveal>
-
             <div className="mt-8 border-b border-border sm:mt-10">
               {philosophy.map((item, index) => (
                 <Reveal key={item.title} delay={index * 0.04}>
@@ -223,62 +191,64 @@ export default async function Home() {
             </div>
           </BoxedSection>
 
-          <BoxedSection
-            className="overflow-hidden"
-            overlay={
-              <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(90%_70%_at_50%_50%,black,transparent_85%)]" />
-            }
-          >
-            <SectionHeading
-              index="04"
-              eyebrow="Toolkit"
-              title="The stack I ship with."
-            />
-
-            <Reveal className="mt-10">
-              <HomeToolkit groups={stackGroups} />
-            </Reveal>
-          </BoxedSection>
-
-          <BoxedSection id="experience" tone="muted">
-            <HomeExperienceTimeline items={experience} />
-          </BoxedSection>
-
           <BoxedSection>
-            <SectionHeading
-              index="06"
-              eyebrow="Writing"
-              title="Judgment from shipping."
-              description={
-                <Link
-                  href="/blog"
-                  className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
-                >
-                  All writing
-                  <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
-                </Link>
-              }
-            />
+            <div className="grid gap-14 xl:grid-cols-[1.1fr_0.9fr] xl:gap-12">
+              <div>
+                <SectionHeading
+                  index="05"
+                  eyebrow="Writing"
+                  title="Notes on decisions and trade-offs."
+                  description={
+                    <Link
+                      href="/blog"
+                      className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
+                    >
+                      All writing
+                      <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+                    </Link>
+                  }
+                />
+                <Reveal className="mt-8">
+                  <WritingPreview posts={writingPreview} />
+                </Reveal>
+              </div>
 
-            <Reveal className="mt-10">
-              <WritingPreview posts={writingPreview} />
-            </Reveal>
-
-            <Reveal className="mt-10">
-              <NewsletterBlock
-                cover={newsletterCover}
-                items={newsletterItems}
-              />
-            </Reveal>
+              <div>
+                <SectionHeading
+                  index="06"
+                  eyebrow="Lab"
+                  title="Interaction studies, live."
+                  description={
+                    <Link
+                      href="/lab"
+                      className="link-line inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground"
+                    >
+                      Open the Lab
+                      <ArrowUpRight aria-hidden="true" size={15} className="text-accent" />
+                    </Link>
+                  }
+                />
+                {featuredLab ? (
+                  <Reveal className="mt-8">
+                    <LabLiveCard
+                      experiment={featuredLab}
+                      index={0}
+                      featured
+                      headingLevel="h3"
+                    />
+                  </Reveal>
+                ) : null}
+              </div>
+            </div>
           </BoxedSection>
 
           <BoxedSection tone="muted">
             <SectionHeading
               index="07"
               eyebrow="Endorsements"
-              title="Trusted by people I've shipped with."
+              title="What collaborators say about the work."
             />
-            <div className="mt-10">
+            <div className="mt-8">
               <HomeTestimonials items={testimonials} />
             </div>
           </BoxedSection>

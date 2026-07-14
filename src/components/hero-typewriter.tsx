@@ -3,29 +3,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
-export type HeroHeadline = {
-  lines: string[];
-  /** Optional substring in the last line rendered in accent color. */
-  accent?: string;
-};
+export const HERO_BUILD_PHRASES = [
+  "web applications.",
+  "mobile applications.",
+  "backend systems.",
+  "developer tools.",
+  "production platforms.",
+] as const;
 
-export const DEFAULT_HERO_HEADLINES: HeroHeadline[] = [
-  {
-    lines: ["Calm UI.", "Hard systems."],
-    accent: "systems.",
-  },
-  {
-    lines: ["Clear interfaces.", "Quiet power."],
-    accent: "power.",
-  },
-  {
-    lines: ["Software that", "holds under change."],
-    accent: "change.",
-  },
-];
+type Phase = "typing" | "holding" | "deleting";
 
-type HeroTypewriterProps = {
-  headlines?: HeroHeadline[];
+type HeroBuildTypewriterProps = {
+  phrases?: readonly string[];
   className?: string;
   holdMs?: number;
   gapMs?: number;
@@ -33,57 +22,33 @@ type HeroTypewriterProps = {
   deleteMs?: number;
 };
 
-type Phase = "typing" | "holding" | "deleting";
-
-function accentedSlice(headline: HeroHeadline, lineIndex: number, shown: string) {
-  const accent = headline.accent;
-  const last = (headline.lines?.length ?? 0) - 1;
-  if (!accent || lineIndex !== last || !shown.includes(accent)) return shown;
-  const at = shown.lastIndexOf(accent);
-  return (
-    <>
-      {shown.slice(0, at)}
-      <span className="text-accent">{shown.slice(at)}</span>
-    </>
-  );
-}
-
 /**
- * Cycles headlines with type/delete motion inside a reserved box so
- * surrounding layout never jumps — text expands and shrinks in place.
+ * Single-line phrase rotator with a reserved width so the hero never shifts.
  */
-export function HeroTypewriter({
-  headlines = DEFAULT_HERO_HEADLINES,
+export function HeroBuildTypewriter({
+  phrases = HERO_BUILD_PHRASES,
   className,
-  holdMs = 2200,
-  gapMs = 280,
-  typeMs = 36,
-  deleteMs = 22,
-}: HeroTypewriterProps) {
+  holdMs = 2400,
+  gapMs = 320,
+  typeMs = 42,
+  deleteMs = 28,
+}: HeroBuildTypewriterProps) {
   const list =
-    Array.isArray(headlines) && headlines.length > 0
-      ? headlines
-      : DEFAULT_HERO_HEADLINES;
+    Array.isArray(phrases) && phrases.length > 0
+      ? phrases
+      : HERO_BUILD_PHRASES;
 
-  const slotCount = useMemo(
-    () => Math.max(1, ...list.map((h) => h.lines.length)),
-    [list],
-  );
-  const maxChars = useMemo(
-    () => Math.max(1, ...list.flatMap((h) => h.lines.map((l) => l.length))),
+  const longest = useMemo(
+    () => Math.max(...list.map((p) => p.length)),
     [list],
   );
 
-  const [headlineIndex, setHeadlineIndex] = useState(0);
-  const [lineIndex, setLineIndex] = useState(0);
+  const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("typing");
   const [reduced, setReduced] = useState(false);
 
-  const safeIndex = headlineIndex % list.length;
-  const current = list[safeIndex] ?? list[0]!;
-  const display = reduced ? list[0]! : current;
-  const lines = display.lines ?? [];
+  const current = list[index % list.length] ?? list[0]!;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -94,20 +59,11 @@ export function HeroTypewriter({
   }, []);
 
   useEffect(() => {
-    if (reduced || list.length === 0) return;
-
-    const line = current.lines[lineIndex] ?? "";
+    if (reduced) return;
 
     if (phase === "typing") {
-      if (charIndex < line.length) {
+      if (charIndex < current.length) {
         const id = window.setTimeout(() => setCharIndex((c) => c + 1), typeMs);
-        return () => window.clearTimeout(id);
-      }
-      if (lineIndex < current.lines.length - 1) {
-        const id = window.setTimeout(() => {
-          setLineIndex((l) => l + 1);
-          setCharIndex(0);
-        }, 140);
         return () => window.clearTimeout(id);
       }
       const id = window.setTimeout(() => setPhase("holding"), 0);
@@ -123,67 +79,44 @@ export function HeroTypewriter({
       const id = window.setTimeout(() => setCharIndex((c) => c - 1), deleteMs);
       return () => window.clearTimeout(id);
     }
-    if (lineIndex > 0) {
-      const prev = current.lines[lineIndex - 1] ?? "";
-      const id = window.setTimeout(() => {
-        setLineIndex((l) => l - 1);
-        setCharIndex(prev.length);
-      }, deleteMs);
-      return () => window.clearTimeout(id);
-    }
 
     const id = window.setTimeout(() => {
-      setHeadlineIndex((i) => (i + 1) % list.length);
-      setLineIndex(0);
+      setIndex((i) => (i + 1) % list.length);
       setCharIndex(0);
       setPhase("typing");
     }, gapMs);
     return () => window.clearTimeout(id);
   }, [
     charIndex,
-    current.lines,
+    current.length,
     deleteMs,
     gapMs,
     holdMs,
-    lineIndex,
     list.length,
     phase,
     reduced,
     typeMs,
   ]);
 
-  const visibleFor = (index: number) => {
-    if (reduced) return lines[index] ?? "";
-    if (index > lineIndex) return "";
-    if (index < lineIndex) return current.lines[index] ?? "";
-    return (current.lines[index] ?? "").slice(0, charIndex);
-  };
+  const shown = reduced ? list[0]! : current.slice(0, charIndex);
 
   return (
-    <h1
+    <span
       className={cn(
-        "font-display font-medium tracking-[-0.03em] text-[clamp(1.7rem,0.95rem+4.8vw,5.25rem)] leading-[0.98]",
+        "relative mt-1 block whitespace-nowrap",
         className,
       )}
+      style={{ minWidth: `${longest}ch`, width: `${longest}ch` }}
       aria-live="polite"
-      aria-label={lines.join(" ")}
-      style={{
-        width: "100%",
-        maxWidth: `${maxChars}ch`,
-        height: `calc(${slotCount} * 1.05em)`,
-      }}
+      aria-label={reduced ? list[0] : current}
     >
-      {Array.from({ length: slotCount }, (_, index) => {
-        const shown = visibleFor(index);
-        return (
-          <span
-            key={index}
-            className="block h-[1.05em] overflow-hidden whitespace-nowrap"
-          >
-            {shown ? accentedSlice(display, index, shown) : "\u00A0"}
-          </span>
-        );
-      })}
-    </h1>
+      {shown}
+      {!reduced ? (
+        <span
+          aria-hidden
+          className="ml-0.5 inline-block h-[0.85em] w-[0.08em] translate-y-[0.08em] bg-accent align-baseline motion-safe:animate-pulse"
+        />
+      ) : null}
+    </span>
   );
 }
