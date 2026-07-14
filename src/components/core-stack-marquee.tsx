@@ -39,9 +39,12 @@ export function CoreStackShuffle({
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
     const update = () => setIsMobile(mq.matches);
-    update();
+    const frame = window.requestAnimationFrame(update);
     mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      mq.removeEventListener("change", update);
+    };
   }, []);
 
   useEffect(() => {
@@ -51,8 +54,11 @@ export function CoreStackShuffle({
       return shuffle(items).slice(0, 10);
     };
 
-    setOrder(pick());
-    setTick((t) => t + 1);
+    const frame = window.requestAnimationFrame(() => {
+      setOrder(pick());
+      setTick((t) => t + 1);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [isMobile, items, mobileItems]);
 
   useEffect(() => {

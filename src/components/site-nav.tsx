@@ -117,6 +117,19 @@ export const mobileBottomItems: NavItem[] = [
 export function MobileBottomNav() {
   const pathname = usePathname();
   const hash = useHash();
+  const [contactInView, setContactInView] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const contact = document.getElementById("contact");
+    if (!contact) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setContactInView(Boolean(entry?.isIntersecting)),
+      { rootMargin: "-35% 0px -35% 0px", threshold: 0 },
+    );
+    observer.observe(contact);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   return (
     <nav
@@ -126,7 +139,12 @@ export function MobileBottomNav() {
     >
       <div className="mx-auto flex max-w-lg items-stretch justify-between gap-0.5 px-2 pt-1.5">
         {mobileBottomItems.map((item) => {
-          const active = isActive(pathname, item.href, hash);
+          const active =
+            item.href === "/#contact"
+              ? pathname === "/" && contactInView
+              : item.href === "/"
+                ? pathname === "/" && !contactInView
+                : isActive(pathname, item.href, hash);
           const Icon = bottomIcons[item.href] ?? Home;
 
           return (

@@ -46,7 +46,7 @@ export function LabDemoFrame({
               aria-selected={tab === id}
               onClick={() => setTab(id)}
               className={cn(
-                "px-3 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] transition-colors",
+                "min-h-11 px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition-colors",
                 tab === id
                   ? "bg-accent text-accent-foreground"
                   : "text-faint hover:text-foreground",
@@ -61,7 +61,7 @@ export function LabDemoFrame({
           <button
             type="button"
             onClick={copy}
-            className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 px-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground"
           >
             {copied ? (
               <Check size={12} className="text-accent" />

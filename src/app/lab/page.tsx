@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Lab",
   description:
     "Signature interactive studies — Request Flow, Iron Field, Cipher Deck, and Signal Radar. Live results on the page.",
+  alternates: { canonical: "/lab" },
 };
 
 export default function LabPage() {

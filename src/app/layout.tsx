@@ -40,11 +40,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev",
   ),
   title: {
-    default: "Shabir Khan — Senior Full-Stack Engineer & Product Builder",
+    default: "Shabir Khan — Senior Full-Stack Product Engineer",
     template: "%s — Shabir Khan",
   },
   description:
-    "Senior full-stack engineer building TypeScript-first products, SaaS platforms, mobile apps, AI workflows, and polished interfaces with editorial taste.",
+    "Shabir Khan is a senior full-stack product engineer in Islamabad, Pakistan, owning frontend, backend, mobile, architecture, DevOps, and production delivery for remote teams.",
   authors: [{ name: "Shabir Khan" }],
   creator: "Shabir Khan",
   keywords: [
@@ -61,18 +61,18 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Shabir Khan — Senior Full-Stack Engineer & Product Builder",
+    title: "Shabir Khan — Senior Full-Stack Product Engineer",
     description:
-      "Production-grade TypeScript systems, premium interfaces, React frontends, Node.js APIs, mobile apps, AI workflows, and secure delivery pipelines.",
+      "Senior product engineering across frontend, backend, mobile, architecture, DevOps, and production delivery.",
     type: "website",
     url: "/",
     siteName: "Shabir Khan",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shabir Khan — Senior Full-Stack Engineer & Product Builder",
+    title: "Shabir Khan — Senior Full-Stack Product Engineer",
     description:
-      "TypeScript-first product engineering, premium interface craft, and editorial writing.",
+      "Senior product engineering across frontend, backend, mobile, architecture, and release work.",
   },
 };
 
@@ -88,7 +88,7 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Shabir Khan",
-  jobTitle: "Senior Full-Stack Engineer",
+  jobTitle: "Senior Full-Stack Product Engineer",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev",
   email: "mailto:shabirkhan.dev@gmail.com",
   address: {
@@ -127,7 +127,6 @@ export default function RootLayout({
         <ThemeScript />
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>

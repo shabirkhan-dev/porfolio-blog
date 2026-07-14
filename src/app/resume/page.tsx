@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Résumé — Shabir Khan",
   description:
     "Résumé of Shabir Khan, Senior Full-Stack Engineer — experience, skills, and selected work.",
+  alternates: { canonical: "/resume" },
 };
 
 const ACCENT = "#15803d";

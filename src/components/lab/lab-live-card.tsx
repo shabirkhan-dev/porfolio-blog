@@ -9,12 +9,15 @@ export function LabLiveCard({
   experiment,
   index,
   featured = false,
+  headingLevel = "h2",
 }: {
   experiment: LabExperiment;
   index: number;
   featured?: boolean;
+  headingLevel?: "h2" | "h3";
 }) {
   const Demo = labDemoMap[experiment.slug as keyof typeof labDemoMap];
+  const Heading = headingLevel;
 
   return (
     <article
@@ -52,7 +55,7 @@ export function LabLiveCard({
             />
           </span>
         </div>
-        <h2
+        <Heading
           className={
             featured
               ? "mt-3 font-display text-[clamp(1.5rem,1.2rem+1vw,2.1rem)] font-semibold tracking-tight transition-colors group-hover:text-accent"
@@ -60,9 +63,15 @@ export function LabLiveCard({
           }
         >
           {experiment.title}
-        </h2>
+        </Heading>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           {experiment.description}
+        </p>
+        <p className="mt-4 border-t border-border pt-3 font-mono text-[0.62rem] leading-5 text-muted-foreground">
+          <span className="mr-2 uppercase tracking-[0.12em] text-accent">
+            Interaction
+          </span>
+          {experiment.instruction}
         </p>
       </Link>
     </article>

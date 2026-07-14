@@ -175,7 +175,7 @@ export function ActionSwapText({
     const nextWidth = measureRef.current?.offsetWidth;
     if (!nextWidth) return;
     setWidth((currentWidth) => (currentWidth === nextWidth ? currentWidth : nextWidth));
-  });
+  }, [children, value]);
 
   // Cascade needs a plain string to split into letters; non-string content
   // and reduced motion fall back to the closest single-element animation.

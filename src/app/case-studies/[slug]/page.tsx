@@ -29,6 +29,7 @@ export async function generateMetadata({
   return {
     title: `${study.title} — Case Study`,
     description: study.tagline,
+    alternates: { canonical: `/case-studies/${study.slug}` },
   };
 }
 

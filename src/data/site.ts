@@ -17,7 +17,7 @@ export function slugifyHeading(value: string) {
 export const profile = {
   name: "Shabir Khan",
   initials: "SK",
-  title: "Senior Full-Stack Engineer",
+  title: "Senior Full-Stack Product Engineer",
   descriptor:
     "TypeScript-first product builder, frontend-focused systems engineer, startup founder, and creative UI engineer.",
   location: "Islamabad, Pakistan",
@@ -178,10 +178,13 @@ export type Project = {
   slug: string;
   role: string;
   category: string;
+  status: string;
   year: string;
   /** One sentence: what this product actually is. */
   tagline: string;
   built: string;
+  /** The decision that best demonstrates engineering judgment. */
+  decision: string;
   stack: string[];
   impact: string[];
   /** Single proof line under the summary. */
@@ -203,11 +206,14 @@ export const projects: Project[] = [
     slug: "autobay",
     role: "Lead frontend, backend, and DevOps",
     category: "Marketplace",
+    status: "Shipped production system",
     year: "2022 – 2023",
     tagline:
       "Vehicle marketplace and dealer ops — listings, live inventory sync, and a companion mobile app.",
     built:
       "Next.js admin, React Native app, CodeIgniter APIs, WebSockets, Redis, Docker, Nginx, MySQL",
+    decision:
+      "Split response contracts by surface and added a reconnect reconciliation path for live inventory.",
     stack: [
       "Next.js",
       "React Native",
@@ -232,11 +238,14 @@ export const projects: Project[] = [
     slug: "school-os",
     role: "Product architect and lead engineer",
     category: "Multi-tenant SaaS",
+    status: "Private product in active development",
     year: "2025 – Present",
     tagline:
       "School operations platform — attendance, role dashboards, and AI insights across many tenants.",
     built:
       "Multi-tenant Next.js admin, Node.js APIs, PostgreSQL, Redis, structured AI insight pipelines",
+    decision:
+      "Made tenant context mandatory in every data-access path and kept AI inputs structured and scoped.",
     stack: ["Next.js", "Node.js", "PostgreSQL", "Redis", "LLM APIs"],
     impact: [
       "Single codebase serving multiple school tenants",
@@ -255,11 +264,14 @@ export const projects: Project[] = [
     slug: "redcore",
     role: "Founder and systems architect",
     category: "Security tooling",
+    status: "Open-source work in development",
     year: "In development",
     tagline:
       "Security operations platform — scan, review, and enforce policy through automated workflows.",
     built:
       "TypeScript core, Rust performance modules, policy engine, workflow automation layer",
+    decision:
+      "Keep orchestration in TypeScript and reserve Rust for the policy-enforcement hot path.",
     stack: ["TypeScript", "Rust", "Policy engines", "Workflow automation"],
     impact: [
       "Operator-grade platform for repeatable security workflows",
@@ -276,11 +288,14 @@ export const projects: Project[] = [
     slug: "excelorithm-ems",
     role: "Lead frontend engineer",
     category: "Workforce SaaS",
+    status: "Shipped production platform",
     year: "2023 – 2025",
     tagline:
       "Employee management platform for attendance, approvals, and day-to-day workforce ops at scale.",
     built:
       "React frontend architecture, component standards, performance optimization, SSR/SSG strategy",
+    decision:
+      "Standardized rendering and component contracts before tuning the highest-cost routes.",
     stack: ["React", "TypeScript", "Node.js", "Redis"],
     impact: [
       "Served 100k+ users across production workflows",
@@ -297,11 +312,14 @@ export const projects: Project[] = [
     slug: "starter-kit",
     role: "Author and maintainer",
     category: "Open source",
+    status: "Public open-source project",
     year: "2024 – Present",
     tagline:
       "Production monorepo starter — polyglot services with CI, CodeQL, and secret scanning built in.",
     built:
       "TypeScript, Python, and Rust services, shared CI/CD pipelines, CodeQL, Dependabot, secret scanning",
+    decision:
+      "Put type checks, CodeQL, dependency review, and secret scanning on the merge path by default.",
     stack: ["TypeScript", "Python", "Rust", "GitHub Actions", "CodeQL"],
     impact: [
       "One repo pattern reused across client and product builds",

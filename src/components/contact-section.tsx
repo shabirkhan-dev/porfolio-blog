@@ -42,12 +42,13 @@ export function ContactSection() {
               <span className="font-mono text-xs text-faint">/ 08</span>
             </div>
             <h2 className="t-h1 mt-4 max-w-[20ch] text-balance">
-              Building a <span className="text-accent">serious</span> product?
+              Need senior ownership across the{" "}
+              <span className="text-accent">product and release path?</span>
             </h2>
             <p className="mt-4 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
-              Whether you&apos;re hiring a senior engineer or need a product
-              built end to end — I can design the system, ship the interface,
-              and make the architecture hold under real use.
+              I&apos;m open to senior full-stack, frontend lead, and product
+              engineering roles where I can own the interface, architecture,
+              mobile surface, and delivery path with a long-term team.
             </p>
 
             <div className="mt-8">
@@ -74,6 +75,8 @@ export function ContactSection() {
             <Link
               key={ch.label}
               href={ch.href}
+              target={ch.href.startsWith("http") ? "_blank" : undefined}
+              rel={ch.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className="group relative flex flex-1 items-center gap-5 overflow-hidden border-b border-border py-6 lg:py-7"
             >
               <span className="pointer-events-none absolute inset-0 -z-10 origin-left scale-x-0 bg-accent/[0.06] transition-transform duration-500 ease-out group-hover:scale-x-100" />

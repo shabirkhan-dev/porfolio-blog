@@ -98,7 +98,7 @@ export function SiteFooter() {
             <div>
               <dt className="text-faint">Performance</dt>
               <dd className="mt-1.5 text-muted-foreground">
-                Static-first · CSS-only LCP · 98 Lighthouse
+                Static-first · deferred canvas · reduced-motion aware
               </dd>
             </div>
             <div>

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Work",
   description:
     "Selected product, platform, SaaS, AI, mobile, infrastructure, and systems work by Shabir Khan.",
+  alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {

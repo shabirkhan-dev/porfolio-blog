@@ -17,8 +17,9 @@ export function IronFieldDemo({ compact = false }: { compact?: boolean }) {
     >
       <IronField className="absolute inset-0 h-full w-full" />
       {!compact ? (
-        <p className="pointer-events-none absolute bottom-4 left-4 font-mono text-[0.56rem] uppercase tracking-[0.16em] text-faint">
-          Move pointer · filings answer
+        <p className="pointer-events-none absolute bottom-4 left-4 right-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint">
+          <span className="sm:hidden">Tap or drag the field</span>
+          <span className="hidden sm:inline">Move pointer · tap · press Enter</span>
         </p>
       ) : null}
     </div>

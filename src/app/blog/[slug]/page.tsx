@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
 import { ArticleBody } from "@/components/blog/article-body";
+import { ArticleShare } from "@/components/blog/article-share";
 import { ListenButton } from "@/components/blog/listen-button";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { BoxedPage, BoxedSection } from "@/components/boxed-section";
@@ -45,9 +46,26 @@ export async function generateMetadata({
     return {};
   }
 
+  const canonical = `/blog/${post.slug}`;
+
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical },
+    authors: [{ name: profile.name, url: profile.linkedin }],
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      url: canonical,
+      publishedTime: post.publishedAt,
+      authors: [profile.name],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
   };
 }
 
@@ -63,6 +81,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const toc = getTableOfContents(post);
   const readingTime = getReadingTime(post);
   const { previous, next } = await getAdjacentPosts(post.slug);
+  const articleUrl = new URL(
+    `/blog/${post.slug}`,
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev",
+  ).toString();
 
   return (
     <div className="page-shell min-h-screen">
@@ -128,6 +150,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <BoxedSection pad={false}>
             <div className="grid gap-10 py-7 sm:py-8 lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-10">
               <article className="min-w-0 max-w-[44rem]">
+                {toc.length > 0 ? (
+                  <details className="mb-7 border border-border bg-background-2 px-4 py-3 lg:hidden">
+                    <summary className="min-h-11 cursor-pointer select-none py-3 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-foreground">
+                      Article contents
+                    </summary>
+                    <div className="border-t border-border pb-3 pt-4">
+                      <TableOfContents items={toc} />
+                      <div className="mt-5 border-t border-border pt-4">
+                        <ArticleShare title={post.title} url={articleUrl} />
+                      </div>
+                    </div>
+                  </details>
+                ) : null}
+
                 {post.takeaways && post.takeaways.length > 0 ? (
                   <div className="mb-7 border border-border bg-background-2 px-4 py-4 sm:px-5">
                     <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-accent">
@@ -213,29 +249,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <TableOfContents items={toc} />
 
                   <div className="border-t border-border pt-5">
-                    <p className="mb-3 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">
-                      Share
-                    </p>
-                    <div className="flex flex-col gap-2 text-sm">
-                      <a
-                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex w-fit items-center gap-1 text-muted-foreground transition-colors hover:text-accent"
-                      >
-                        Post on X
-                        <ArrowUpRight aria-hidden="true" size={13} />
-                      </a>
-                      <a
-                        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profile.linkedin)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex w-fit items-center gap-1 text-muted-foreground transition-colors hover:text-accent"
-                      >
-                        Share on LinkedIn
-                        <ArrowUpRight aria-hidden="true" size={13} />
-                      </a>
-                    </div>
+                    <ArticleShare title={post.title} url={articleUrl} />
                   </div>
 
                   <Link

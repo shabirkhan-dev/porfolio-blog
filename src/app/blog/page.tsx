@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "Writing",
   description:
     "Editorial notes on engineering, frontend systems, backend architecture, AI, product, design, and personal craft.",
+  alternates: { canonical: "/blog" },
 };
 
 type BlogPageProps = {
@@ -57,8 +58,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <div className="max-w-2xl">
                 <span className="eyebrow">Writing</span>
                 <h1 className="t-h2 mt-3 text-balance">
-                  Notes from shipping{" "}
-                  <span className="text-accent">real systems.</span>
+                  Notes from production{" "}
+                  <span className="text-accent">decisions.</span>
                 </h1>
                 <p className="mt-3 max-w-md text-[0.95rem] leading-7 text-muted-foreground">
                   Interfaces, architecture, AI, release craft — judgment from
@@ -88,7 +89,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       key={item}
                       href={href}
                       className={cn(
-                        "shrink-0 px-3.5 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors duration-300",
+                        "inline-flex min-h-11 shrink-0 items-center px-3.5 py-2 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors duration-300",
                         active
                           ? "bg-accent text-accent-foreground"
                           : "text-muted-foreground hover:text-foreground",

@@ -25,8 +25,8 @@ function Scramble({ text }: { text: string }) {
 
   useEffect(() => {
     if (reduce) {
-      setDisplay(text);
-      return;
+      const staticFrame = window.requestAnimationFrame(() => setDisplay(text));
+      return () => window.cancelAnimationFrame(staticFrame);
     }
     const chars = text.split("");
     const start = performance.now();

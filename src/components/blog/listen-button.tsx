@@ -37,7 +37,7 @@ export function ListenButton({ text }: { text: string }) {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
       return;
     }
-    setSupported(true);
+    const frame = window.requestAnimationFrame(() => setSupported(true));
 
     const pickVoice = () => {
       const voices = window.speechSynthesis.getVoices();
@@ -53,12 +53,13 @@ export function ListenButton({ text }: { text: string }) {
 
     return () => {
       window.speechSynthesis.removeEventListener("voiceschanged", pickVoice);
+      window.cancelAnimationFrame(frame);
       cancelledRef.current = true;
       window.speechSynthesis.cancel();
     };
   }, []);
 
-  const speakFrom = useCallback((from: number) => {
+  const speakFrom = useCallback(function speakChunk(from: number) {
     const synth = window.speechSynthesis;
     const chunks = chunksRef.current;
 
@@ -80,7 +81,7 @@ export function ListenButton({ text }: { text: string }) {
       const nextIndex = from + 1;
       indexRef.current = nextIndex;
       setProgress(nextIndex / chunks.length);
-      speakFrom(nextIndex);
+      speakChunk(nextIndex);
     };
 
     utterance.onerror = () => {
@@ -144,7 +145,7 @@ export function ListenButton({ text }: { text: string }) {
         onClick={toggle}
         aria-pressed={status === "playing"}
         aria-label={`${label} article audio`}
-        className="grid size-8 shrink-0 place-items-center bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
+        className="grid size-11 shrink-0 place-items-center bg-accent text-accent-foreground transition-transform duration-200 hover:scale-105 active:scale-95"
       >
         {status === "playing" ? (
           <Pause aria-hidden="true" size={14} />
@@ -174,7 +175,7 @@ export function ListenButton({ text }: { text: string }) {
           type="button"
           onClick={stop}
           aria-label="Stop article audio"
-          className="grid size-7 shrink-0 place-items-center rounded-sm text-faint transition-colors hover:text-accent"
+          className="grid size-11 shrink-0 place-items-center rounded-sm text-faint transition-colors hover:text-accent"
         >
           <Square aria-hidden="true" size={13} />
         </button>

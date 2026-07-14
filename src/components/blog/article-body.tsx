@@ -187,6 +187,36 @@ function createMarkdownComponents(): Components {
         />
       );
     },
+    table: ({ children }) => (
+      <div
+        className="my-10 max-w-full overflow-x-auto border border-border"
+        role="region"
+        aria-label="Scrollable data table"
+        tabIndex={0}
+      >
+        <table className="w-full min-w-[36rem] border-collapse text-left text-sm">
+          {children}
+        </table>
+      </div>
+    ),
+    th: ({ children }) => (
+      <th className="border-b border-r border-border bg-background-2 px-4 py-3 font-mono text-[0.66rem] uppercase tracking-[0.12em] text-foreground last:border-r-0">
+        {children}
+      </th>
+    ),
+    td: ({ children }) => (
+      <td className="border-b border-r border-border px-4 py-3 align-top text-muted-foreground last:border-r-0">
+        {children}
+      </td>
+    ),
+    a: ({ href, children }) => (
+      <a
+        href={href}
+        className="font-medium text-foreground underline decoration-accent/50 underline-offset-4 transition-colors hover:text-accent"
+      >
+        {children}
+      </a>
+    ),
   };
 }
 

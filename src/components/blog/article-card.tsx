@@ -57,7 +57,7 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
             <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
 
             <p className="relative font-mono text-[0.62rem] uppercase tracking-[0.18em] text-faint">
-              Latest essay
+              Featured essay
             </p>
 
             <dl className="relative mt-8 space-y-5 font-mono text-[0.7rem] uppercase tracking-[0.12em]">

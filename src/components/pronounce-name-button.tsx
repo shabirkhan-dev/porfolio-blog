@@ -23,8 +23,11 @@ export function PronounceNameButton({
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    setSupported(true);
-    return () => window.speechSynthesis.cancel();
+    const frame = window.requestAnimationFrame(() => setSupported(true));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.speechSynthesis.cancel();
+    };
   }, []);
 
   if (!supported) return null;

@@ -30,7 +30,7 @@ class RequestFlowSimulation {
     category: "Motion canvas",
     description:
       "A magnetic filing field that leans toward your pointer — quiet until you move, then the whole surface answers.",
-    instruction: "Move across the field. Filings stretch and pick up brass near the cursor.",
+    instruction: "Move a pointer, or tap and drag on touch. Press Enter for a centered pulse.",
     tags: ["Canvas", "Pointer", "Brand"],
     code: `// Interactive vector field — filings orient to the pointer.
 // Near strokes lengthen and take the accent color; far strokes idle-drift.
@@ -58,7 +58,7 @@ class RequestFlowSimulation {
     category: "Ops UI",
     description:
       "A brass scope that sweeps shipping signals — deploy, review, latency, sync. Click a blip to read the contact.",
-    instruction: "Watch the sweep. Click illuminated blips for the ops readout.",
+    instruction: "Select any labelled signal below the scope to inspect its ops readout.",
     tags: ["Canvas", "Radar", "Systems"],
     code: `// Sweep beam + polar blips for deploy / review / sync contacts.
 // Click hit-testing maps pointer → nearest signal.`,

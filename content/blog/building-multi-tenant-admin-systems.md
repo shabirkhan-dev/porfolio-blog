@@ -14,7 +14,7 @@ takeaways:
   - "Shared code is fine; shared assumptions about ‘the customer’ are not."
 ---
 
-::lead I have shipped multi-tenant admin systems where one wrong join quietly leaked another school’s data into a report. That kind of bug does not look dramatic in staging. It looks catastrophic in production. This essay is the checklist I wish I had printed on the wall before those projects started.
+::lead During testing, I caught a tenant-scoping mistake that allowed one school’s records to appear in another tenant’s report preview. It was fixed before release and became the reason I now make tenant context explicit and testable at every data boundary. This essay is the checklist that came out of that work.
 
 ## What “multi-tenant” actually means
 

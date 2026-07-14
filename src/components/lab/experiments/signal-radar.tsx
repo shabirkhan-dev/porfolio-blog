@@ -86,10 +86,8 @@ export function SignalRadar({
     };
 
     const draw = () => {
-      if (!visible && !reduceMotion) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
+      raf = 0;
+      if (!visible && !reduceMotion) return;
 
       if (!reduceMotion) sweepRef.current += 0.018;
       const sweep = sweepRef.current;
@@ -159,24 +157,6 @@ export function SignalRadar({
     build();
     draw();
 
-    const onClick = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const mx = event.clientX - rect.left;
-      const my = event.clientY - rect.top;
-      const cx = width / 2;
-      const cy = height / 2;
-      const maxR = Math.min(width, height) * 0.42;
-
-      let hit: Blip | null = null;
-      for (const blip of BLIPS) {
-        const x = cx + Math.cos(blip.angle) * maxR * blip.radius;
-        const y = cy + Math.sin(blip.angle) * maxR * blip.radius;
-        if (Math.hypot(mx - x, my - y) < 16) hit = blip;
-      }
-      if (hit) setActive(hit);
-    };
-
-    canvas.addEventListener("click", onClick);
     const ro = new ResizeObserver(() => {
       build();
       if (reduceMotion) draw();
@@ -185,32 +165,73 @@ export function SignalRadar({
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry?.isIntersecting ?? true;
+        if (!visible) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        } else if (!reduceMotion && raf === 0) {
+          raf = requestAnimationFrame(draw);
+        }
       },
       { threshold: 0.05 },
     );
     io.observe(canvas);
+    const themeObserver = new MutationObserver(() => {
+      accent = readAccent();
+      if (reduceMotion) draw();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme", "style"],
+    });
 
     return () => {
       cancelAnimationFrame(raf);
-      canvas.removeEventListener("click", onClick);
       ro.disconnect();
       io.disconnect();
+      themeObserver.disconnect();
     };
   }, [active?.id]);
 
   return (
-    <div className={compact ? "w-full" : "grid w-full gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"}>
-      <canvas
-        ref={canvasRef}
-        className={
-          compact
-            ? "aspect-square w-full max-w-[16rem] mx-auto touch-none"
-            : "aspect-square w-full max-w-md mx-auto touch-none cursor-crosshair"
-        }
-        aria-label="Operations signal radar"
-      />
+    <div className={compact ? "w-full" : "grid w-full gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"}>
+      <div>
+        <canvas
+          ref={canvasRef}
+          className={
+            compact
+              ? "pointer-events-none mx-auto aspect-square w-full max-w-[10.5rem]"
+              : "pointer-events-none mx-auto aspect-square w-full max-w-md"
+          }
+          aria-hidden="true"
+        />
+        <div
+          className={compact ? "mt-1 grid grid-cols-4 gap-1" : "mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4"}
+          aria-label="Radar signals"
+        >
+          {BLIPS.map((blip) => {
+            const selected = active?.id === blip.id;
+            return (
+              <button
+                key={blip.id}
+                type="button"
+                aria-pressed={selected}
+                aria-label={`Show ${blip.label} signal: ${blip.detail}`}
+                onClick={() => setActive(blip)}
+                className={`min-h-11 border px-2 font-mono text-[0.58rem] uppercase tracking-[0.1em] transition-colors ${
+                  selected
+                    ? "border-accent bg-accent/[0.08] text-accent"
+                    : "border-border text-muted-foreground hover:border-border-strong hover:text-foreground"
+                }`}
+              >
+                {blip.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {!compact && active ? (
-        <div className="border border-border bg-background-2 px-5 py-5">
+        <div className="border border-border bg-background-2 px-5 py-5" aria-live="polite">
           <p className="font-mono text-[0.56rem] uppercase tracking-[0.16em] text-accent">
             Contact · {active.id}
           </p>
@@ -220,15 +241,10 @@ export function SignalRadar({
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {active.detail}
           </p>
-          <p className="mt-5 font-mono text-[0.54rem] uppercase tracking-[0.14em] text-faint">
-            Click a blip on the scope
+          <p className="mt-5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
+            Select a signal to inspect its readout
           </p>
         </div>
-      ) : null}
-      {compact ? (
-        <p className="mt-2 text-center font-mono text-[0.54rem] uppercase tracking-[0.14em] text-faint">
-          Sweep live · click blips in full view
-        </p>
       ) : null}
     </div>
   );

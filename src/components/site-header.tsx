@@ -66,7 +66,7 @@ export function SiteHeader() {
               <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                 <Link
                   href="/resume"
-                  className="px-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+                  className="hidden px-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground sm:block lg:hidden"
                 >
                   Résumé
                 </Link>

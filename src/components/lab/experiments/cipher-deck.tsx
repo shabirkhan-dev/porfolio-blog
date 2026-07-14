@@ -41,8 +41,14 @@ export function CipherDeck({
 
   useEffect(() => {
     if (!running) return;
-    setProgress(0);
-    setSalt((s) => s + 1);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const staticFrame = window.requestAnimationFrame(() => setProgress(1));
+      return () => window.cancelAnimationFrame(staticFrame);
+    }
+    const resetFrame = window.requestAnimationFrame(() => {
+      setProgress(0);
+      setSalt((s) => s + 1);
+    });
     let frame = 0;
     let raf = 0;
     const start = performance.now();
@@ -58,7 +64,10 @@ export function CipherDeck({
     };
 
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(resetFrame);
+      cancelAnimationFrame(raf);
+    };
   }, [phrase, running]);
 
   const display = scrambleToward(phrase.toUpperCase(), progress, salt);
@@ -108,7 +117,7 @@ export function CipherDeck({
                   setRunning(true);
                   setPhrase(item);
                 }}
-                className="border border-border px-2.5 py-1 font-mono text-[0.54rem] uppercase tracking-[0.12em] text-faint transition-colors hover:border-accent/40 hover:text-accent"
+                className="min-h-11 border border-border px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
                 {item.slice(0, 18)}
                 {item.length > 18 ? "…" : ""}
@@ -120,7 +129,7 @@ export function CipherDeck({
                 setRunning(false);
                 window.requestAnimationFrame(() => setRunning(true));
               }}
-              className="border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-mono text-[0.54rem] uppercase tracking-[0.12em] text-accent"
+              className="min-h-11 border border-accent/40 bg-accent/[0.08] px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-accent"
             >
               Replay
             </button>
@@ -136,7 +145,7 @@ export function CipherDeck({
             setRunning(true);
             setPhrase(next);
           }}
-          className="mt-3 font-mono text-[0.56rem] uppercase tracking-[0.14em] text-accent"
+          className="mt-3 min-h-11 border border-border px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-accent"
         >
           Next signal
         </button>

@@ -40,6 +40,7 @@ export function IronField({ className }: { className?: string }) {
     let visible = true;
     let raf = 0;
     let t = 0;
+    let pulseTimer = 0;
 
     const build = () => {
       const rect = canvas.getBoundingClientRect();
@@ -64,9 +65,31 @@ export function IronField({ className }: { className?: string }) {
     };
 
     const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" && event.buttons === 0) return;
       const rect = canvas.getBoundingClientRect();
       pointer.tx = event.clientX - rect.left;
       pointer.ty = event.clientY - rect.top;
+    };
+
+    const pulseAt = (x: number, y: number) => {
+      pointer.tx = x;
+      pointer.ty = y;
+      window.clearTimeout(pulseTimer);
+      pulseTimer = window.setTimeout(() => {
+        pointer.tx = -9999;
+        pointer.ty = -9999;
+      }, 720);
+    };
+
+    const onDown = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      pulseAt(event.clientX - rect.left, event.clientY - rect.top);
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      pulseAt(width / 2, height / 2);
     };
 
     const onLeave = () => {
@@ -75,10 +98,8 @@ export function IronField({ className }: { className?: string }) {
     };
 
     const frame = () => {
-      if (!visible) {
-        raf = requestAnimationFrame(frame);
-        return;
-      }
+      raf = 0;
+      if (!visible) return;
 
       t += 0.016;
       pointer.x += (pointer.tx - pointer.x) * 0.12;
@@ -160,6 +181,12 @@ export function IronField({ className }: { className?: string }) {
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry?.isIntersecting ?? true;
+        if (!visible) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        } else if (!reduceMotion && raf === 0) {
+          raf = requestAnimationFrame(frame);
+        }
       },
       { threshold: 0.05 },
     );
@@ -167,7 +194,8 @@ export function IronField({ className }: { className?: string }) {
 
     canvas.addEventListener("pointermove", onMove);
     canvas.addEventListener("pointerleave", onLeave);
-    canvas.addEventListener("pointerdown", onMove);
+    canvas.addEventListener("pointerdown", onDown);
+    canvas.addEventListener("keydown", onKeyDown);
 
     const onTheme = () => {
       colors = readColors();
@@ -181,12 +209,14 @@ export function IronField({ className }: { className?: string }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      window.clearTimeout(pulseTimer);
       ro.disconnect();
       io.disconnect();
       mo.disconnect();
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerleave", onLeave);
-      canvas.removeEventListener("pointerdown", onMove);
+      canvas.removeEventListener("pointerdown", onDown);
+      canvas.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("themechange", onTheme);
     };
   }, []);
@@ -194,8 +224,10 @@ export function IronField({ className }: { className?: string }) {
   return (
     <canvas
       ref={canvasRef}
-      className={className}
-      aria-label="Interactive magnetic iron-filing field"
+      className={`${className ?? ""} touch-pan-y outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent`}
+      role="button"
+      tabIndex={0}
+      aria-label="Interactive magnetic iron-filing field. Tap, drag, or press Enter to create a magnetic pulse."
     />
   );
 }
