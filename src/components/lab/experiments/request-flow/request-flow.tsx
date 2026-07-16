@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { RequestFlowControls } from "./request-flow-controls";
 import type { EdgeCase } from "./request-flow-edge-cases";
@@ -18,6 +17,33 @@ import type {
   SimulationSnapshot,
   SourceFileEntry,
 } from "./request-flow.types";
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
+
+function useElementInView(ref: React.RefObject<Element | null>) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      { rootMargin: "-10% 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref]);
+  return inView;
+}
 
 export function RequestFlow({
   compact = false,
@@ -157,8 +183,8 @@ function RequestFlowCompactPreview() {
   const simRef = useRef<RequestFlowSimulation | null>(null);
   const loopRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const visibleRef = useRef(false);
-  const inView = useInView(rootRef, { margin: "-10% 0px" });
-  const reducedMotion = useReducedMotion();
+  const inView = useElementInView(rootRef);
+  const reducedMotion = usePrefersReducedMotion();
   const [nodes, setNodes] = useState(idleNodes());
 
   const startRun = useCallback(() => {

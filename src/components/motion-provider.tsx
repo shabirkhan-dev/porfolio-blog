@@ -1,7 +1,9 @@
 "use client";
 
-import { LazyMotion, domAnimation } from "framer-motion";
-
+/**
+ * Passthrough provider — framer-motion stays off the initial route bundle.
+ * Components that still need motion import it locally and lazily.
+ */
 export function MotionProvider({ children }: { children: React.ReactNode }) {
-  return <LazyMotion features={domAnimation}>{children}</LazyMotion>;
+  return <>{children}</>;
 }

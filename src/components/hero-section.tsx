@@ -5,6 +5,10 @@ import { Corners } from "@/components/corners";
 import { DeferredHeroCanvas } from "@/components/deferred-hero-canvas";
 import { HeroLocalTime } from "@/components/hero-local-time";
 import { PronounceNameButton } from "@/components/pronounce-name-button";
+import {
+  HERO_FIRST_PHRASE,
+  HERO_PHRASE_SLOT_CH,
+} from "@/components/hero-phrases";
 import { HeroBuildTypewriter } from "@/components/hero-typewriter";
 import { LinkButton } from "@/components/ui/button";
 import { profile } from "@/data/site";
@@ -19,7 +23,8 @@ type HeroSectionProps = {
 };
 
 /**
- * Compact hiring-focused hero: name, role, typewriter proposition, metrics.
+ * Compact hiring-focused hero. The LCP phrase is server HTML — the typewriter
+ * only takes over after the LCP window.
  */
 export function HeroSection({
   name,
@@ -51,47 +56,59 @@ export function HeroSection({
           </div>
 
           <div className="frame-content relative py-6 sm:py-7">
-            <div className="hero-fade flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <p className="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] font-semibold tracking-tight text-foreground">
                 {name}
               </p>
               <PronounceNameButton name={name} pronounceAs="Shabir Khan" />
             </div>
 
-            <p className="hero-fade mt-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">
+            <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">
               {title}
             </p>
 
-            <h1
-              className="hero-fade mt-5 font-display text-[clamp(3.1rem,2.1rem+4.5vw,5.25rem)] font-medium leading-[1.02] tracking-[-0.035em]"
-              style={{ animationDelay: "0.1s" }}
-            >
+            <h1 className="mt-5 font-display text-[clamp(3.1rem,2.1rem+4.5vw,5.25rem)] font-medium leading-[1.02] tracking-[-0.035em]">
               <span className="block text-foreground">I build</span>
-              <HeroBuildTypewriter className="text-foreground" />
+              <span
+                className="relative mt-1 block whitespace-nowrap text-foreground"
+                style={{
+                  minWidth: `${HERO_PHRASE_SLOT_CH}ch`,
+                  width: `${HERO_PHRASE_SLOT_CH}ch`,
+                  minHeight: "1.05em",
+                }}
+              >
+                <span data-hero-static-phrase>{HERO_FIRST_PHRASE}</span>
+                <HeroBuildTypewriter />
+              </span>
             </h1>
 
-            <p
-              className="hero-fade mt-4 max-w-xl text-[0.95rem] leading-7 text-muted-foreground"
-              style={{ animationDelay: "0.16s" }}
-            >
+            <p className="mt-4 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
               Full-stack engineer building reliable products from interface to
               infrastructure.
             </p>
 
-            <div
-              className="hero-fade mt-5 flex flex-wrap items-center gap-x-5 gap-y-2.5 sm:mt-6 sm:gap-x-6"
-              style={{ animationDelay: "0.24s" }}
-            >
-              <LinkButton href="#work" size="md" className="sm:h-11 md:h-12 md:px-7 md:text-[0.78rem]">
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2.5 sm:mt-6 sm:gap-x-6">
+              <LinkButton
+                href="#work"
+                size="md"
+                className="sm:h-11 md:h-12 md:px-7 md:text-[0.78rem]"
+              >
                 View selected work
-                <ArrowDownRight aria-hidden="true" className="size-4 md:size-[18px]" />
+                <ArrowDownRight
+                  aria-hidden="true"
+                  className="size-4 md:size-[18px]"
+                />
               </LinkButton>
               <Link
                 href="/resume"
                 className="link-line inline-flex items-center gap-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs"
               >
                 Résumé
-                <ArrowUpRight aria-hidden="true" size={12} className="sm:size-[13px]" />
+                <ArrowUpRight
+                  aria-hidden="true"
+                  size={12}
+                  className="sm:size-[13px]"
+                />
               </Link>
               <a
                 href={profile.github}
@@ -111,7 +128,7 @@ export function HeroSection({
           </div>
 
           <div className="frame-content relative pb-6 sm:pb-7">
-            <div className="hero-fade relative" style={{ animationDelay: "0.32s" }}>
+            <div className="relative">
               <Corners />
               <dl className="grid grid-cols-2 border border-border bg-background/40 backdrop-blur-[2px] lg:grid-cols-4">
                 {proof.map((item, index) => (

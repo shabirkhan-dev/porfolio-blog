@@ -58,11 +58,10 @@
 
   /* Type families */
   --font-sans:
-    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    var(--font-grotesk), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
   --font-display: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), "Iowan Old Style", "Palatino Linotype",
-    Palatino, Georgia, serif;
+  --font-serif: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
 
@@ -539,6 +538,36 @@
   .hero-fade,
   .scroll-cue {
     animation: none;
+  }
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@supports (animation-timeline: view()) {
+  .reveal-in {
+    animation: reveal-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-in {
+      animation: none;
+    }
+  }
+}
+
+@keyframes reveal-in-up {
+  from {
+    opacity: 0.01;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

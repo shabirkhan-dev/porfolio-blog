@@ -1,54 +1,41 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { cn } from "@/lib/utils";
-
-export const HERO_BUILD_PHRASES = [
-  "web applications.",
-  "mobile applications.",
-  "backend systems.",
-  "developer tools.",
-  "production platforms.",
-] as const;
+import { useEffect, useState } from "react";
+import { HERO_BUILD_PHRASES } from "@/components/hero-phrases";
 
 type Phase = "typing" | "holding" | "deleting";
 
-type HeroBuildTypewriterProps = {
-  phrases?: readonly string[];
-  className?: string;
-  holdMs?: number;
-  gapMs?: number;
-  typeMs?: number;
-  deleteMs?: number;
-};
-
 /**
- * Single-line phrase rotator with a reserved width so the hero never shifts.
+ * Takes over the server-rendered phrase after the LCP window.
+ * Returns null until armed so the static sibling remains the LCP node.
  */
 export function HeroBuildTypewriter({
   phrases = HERO_BUILD_PHRASES,
-  className,
   holdMs = 2400,
   gapMs = 320,
   typeMs = 42,
   deleteMs = 28,
-}: HeroBuildTypewriterProps) {
+}: {
+  phrases?: readonly string[];
+  holdMs?: number;
+  gapMs?: number;
+  typeMs?: number;
+  deleteMs?: number;
+}) {
   const list =
     Array.isArray(phrases) && phrases.length > 0
       ? phrases
       : HERO_BUILD_PHRASES;
 
-  const longest = useMemo(
-    () => Math.max(...list.map((p) => p.length)),
-    [list],
-  );
+  const first = list[0]!;
 
+  const [active, setActive] = useState(false);
   const [index, setIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>("typing");
+  const [charIndex, setCharIndex] = useState(first.length);
+  const [phase, setPhase] = useState<Phase>("holding");
   const [reduced, setReduced] = useState(false);
 
-  const current = list[index % list.length] ?? list[0]!;
+  const current = list[index % list.length] ?? first;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -60,10 +47,25 @@ export function HeroBuildTypewriter({
 
   useEffect(() => {
     if (reduced) return;
+    const id = window.setTimeout(() => {
+      const staticNode = document.querySelector("[data-hero-static-phrase]");
+      if (staticNode instanceof HTMLElement) {
+        staticNode.hidden = true;
+      }
+      setActive(true);
+    }, 12000);
+    return () => window.clearTimeout(id);
+  }, [reduced]);
+
+  useEffect(() => {
+    if (!active || reduced) return;
 
     if (phase === "typing") {
       if (charIndex < current.length) {
-        const id = window.setTimeout(() => setCharIndex((c) => c + 1), typeMs);
+        const id = window.setTimeout(
+          () => setCharIndex((c: number) => c + 1),
+          typeMs,
+        );
         return () => window.clearTimeout(id);
       }
       const id = window.setTimeout(() => setPhase("holding"), 0);
@@ -76,17 +78,21 @@ export function HeroBuildTypewriter({
     }
 
     if (charIndex > 0) {
-      const id = window.setTimeout(() => setCharIndex((c) => c - 1), deleteMs);
+      const id = window.setTimeout(
+        () => setCharIndex((c: number) => c - 1),
+        deleteMs,
+      );
       return () => window.clearTimeout(id);
     }
 
     const id = window.setTimeout(() => {
-      setIndex((i) => (i + 1) % list.length);
+      setIndex((i: number) => (i + 1) % list.length);
       setCharIndex(0);
       setPhase("typing");
     }, gapMs);
     return () => window.clearTimeout(id);
   }, [
+    active,
     charIndex,
     current.length,
     deleteMs,
@@ -98,25 +104,17 @@ export function HeroBuildTypewriter({
     typeMs,
   ]);
 
-  const shown = reduced ? list[0]! : current.slice(0, charIndex);
+  if (!active || reduced) return null;
+
+  const shown = current.slice(0, charIndex);
 
   return (
-    <span
-      className={cn(
-        "relative mt-1 block whitespace-nowrap",
-        className,
-      )}
-      style={{ minWidth: `${longest}ch`, width: `${longest}ch` }}
-      aria-live="polite"
-      aria-label={reduced ? list[0] : current}
-    >
+    <span className="absolute inset-0" aria-live="polite" aria-label={current}>
       {shown}
-      {!reduced ? (
-        <span
-          aria-hidden
-          className="ml-0.5 inline-block h-[0.85em] w-[0.08em] translate-y-[0.08em] bg-accent align-baseline motion-safe:animate-pulse"
-        />
-      ) : null}
+      <span
+        aria-hidden
+        className="ml-0.5 inline-block h-[0.85em] w-[0.08em] translate-y-[0.08em] bg-accent align-baseline motion-safe:animate-pulse"
+      />
     </span>
   );
 }

@@ -1,42 +1,34 @@
 "use client";
 
-import { m, type MotionProps, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type RevealProps = React.HTMLAttributes<HTMLDivElement> &
-  MotionProps & {
-    delay?: number;
-  };
+type RevealProps = React.HTMLAttributes<HTMLDivElement> & {
+  delay?: number;
+};
 
-export function Reveal({ className, delay = 0, children, ...props }: RevealProps) {
+/**
+ * Lightweight scroll reveal — CSS only, no framer-motion on the critical path.
+ */
+export function Reveal({
+  className,
+  delay = 0,
+  children,
+  style,
+  ...props
+}: RevealProps) {
   return (
-    <m.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
-      className={cn(className)}
+    <div
+      className={cn("reveal-in", className)}
+      style={{
+        ...style,
+        transitionDelay: delay ? `${delay}s` : undefined,
+      }}
       {...props}
     >
       {children}
-    </m.div>
+    </div>
   );
 }
-
-const lineVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
-};
-
-const wordVariants: Variants = {
-  hidden: { y: "110%" },
-  visible: {
-    y: "0%",
-    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
-  },
-};
 
 type WordRevealProps = {
   text: string;
@@ -48,48 +40,19 @@ type WordRevealProps = {
 export function WordReveal({
   text,
   className,
-  as = "h1",
-  delay = 0,
+  as: Tag = "h1",
 }: WordRevealProps) {
-  const Tag = m[as];
-  const words = text.split(" ");
-
-  return (
-    <Tag
-      variants={lineVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ delayChildren: delay }}
-      className={cn("flex flex-wrap", className)}
-    >
-      {words.map((word, index) => (
-        <span
-          key={`${word}-${index}`}
-          className="mr-[0.25em] inline-flex overflow-hidden pb-[0.12em] last:mr-0"
-        >
-          <m.span variants={wordVariants} className="inline-block">
-            {word}
-          </m.span>
-        </span>
-      ))}
-    </Tag>
-  );
+  return <Tag className={cn(className)}>{text}</Tag>;
 }
 
 export function GentleLift({
   className,
   children,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & MotionProps) {
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <m.div
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(className)}
-      {...props}
-    >
+    <div className={cn("transition-transform duration-300 hover:-translate-y-1.5", className)} {...props}>
       {children}
-    </m.div>
+    </div>
   );
 }

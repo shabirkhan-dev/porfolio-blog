@@ -12,7 +12,7 @@ import {
   SkipForward,
   X,
 } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   STAGE_LABELS,
@@ -20,6 +20,18 @@ import {
   type NodeVisualState,
   type PipelineStage,
 } from "./request-flow.types";
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
 
 const STATE_META: Record<
   NodeVisualState,
@@ -75,7 +87,7 @@ export function RequestNode({
 }) {
   const meta = STATE_META[snapshot.state];
   const Icon = meta.icon;
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = usePrefersReducedMotion();
   const spinning =
     !reducedMotion &&
     (snapshot.state === "active" || snapshot.state === "retrying");

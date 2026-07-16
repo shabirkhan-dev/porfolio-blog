@@ -27,12 +27,12 @@ export function DeferredHeroCanvas({ className }: DeferredHeroCanvasProps) {
 
     if (win.requestIdleCallback) {
       const id = win.requestIdleCallback(() => setReady(true), {
-        timeout: 1500,
+        timeout: 3500,
       });
       return () => win.cancelIdleCallback?.(id);
     }
 
-    const id = window.setTimeout(() => setReady(true), 300);
+    const id = window.setTimeout(() => setReady(true), 1200);
     return () => window.clearTimeout(id);
   }, []);
 

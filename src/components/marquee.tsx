@@ -24,7 +24,7 @@ export function Marquee({ items, className }: MarqueeProps) {
   // which keeps the loop seamless (no gap) on wide screens.
   const half = (
     <span className="inline-flex items-center" aria-hidden={undefined}>
-      {Array.from({ length: 4 }, (_, i) => (
+      {Array.from({ length: 2 }, (_, i) => (
         <Fragment key={i}>{sequence}</Fragment>
       ))}
     </span>

@@ -1,9 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
 import { useEffect, useSyncExternalStore, type MouseEvent } from "react";
-import { ActionSwapIcon } from "@/components/motion/action-swap";
 import { cn } from "@/lib/utils";
 
 export type ThemeVariant = "rectangle" | "circle" | "circle-blur";
@@ -20,8 +18,6 @@ type Theme = "light" | "dark";
 
 const VT_STYLE_ID = "beui-theme-toggle-vt";
 
-// Duration/easing is component-specific: the View Transition API uses CSS, not
-// motion springs. Timings mirror native OS mode-switch feel.
 const VT_CSS = `
 html[data-beui-vt="rect"]::view-transition-old(root) {
   animation: none;
@@ -90,11 +86,14 @@ function getIsDark() {
   return !document.documentElement.classList.contains("light");
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function useThemeToggle({
   variant = "circle-blur",
   start = "bottom-up",
 }: ToggleOptions = {}) {
-  const reduce = useReducedMotion() ?? false;
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -116,6 +115,7 @@ export function useThemeToggle({
 
   const toggle = (event?: MouseEvent) => {
     const next: Theme = isDark ? "light" : "dark";
+    const reduce = prefersReducedMotion();
 
     const supportsVT =
       typeof document !== "undefined" && "startViewTransition" in document;
@@ -134,7 +134,6 @@ export function useThemeToggle({
       root.style.setProperty("--beui-vt-from", RECT_FROM[start]);
       root.dataset.beuiVt = "rect";
     } else {
-      // Emanate from the pointer when available, otherwise the default origin.
       if (event) {
         const x = (event.clientX / window.innerWidth) * 100;
         const y = (event.clientY / window.innerHeight) * 100;
@@ -186,16 +185,10 @@ export function ThemeToggle({
         className,
       )}
     >
-      {mounted ? (
-        <ActionSwapIcon value={isDark ? "dark" : "light"} animation="blur">
-          {isDark ? (
-            <Sun aria-hidden="true" className={iconClassName} />
-          ) : (
-            <Moon aria-hidden="true" className={iconClassName} />
-          )}
-        </ActionSwapIcon>
-      ) : (
+      {mounted && isDark ? (
         <Sun aria-hidden="true" className={iconClassName} />
+      ) : (
+        <Moon aria-hidden="true" className={iconClassName} />
       )}
     </button>
   );

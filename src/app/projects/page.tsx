@@ -63,9 +63,7 @@ export default function ProjectsPage() {
 
           <BoxedSection>
             <h2 className="sr-only">Projects</h2>
-            <Reveal>
-              <ProjectsBento projects={projects} variant="page" />
-            </Reveal>
+            <ProjectsBento projects={projects} variant="page" />
           </BoxedSection>
 
           <BoxedSection pad="compact" closed>

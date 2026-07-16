@@ -40,10 +40,10 @@ export function ArticleCard({ post, featured = false }: ArticleCardProps) {
             <span className="rounded-sm border border-accent/25 bg-accent/[0.08] px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-accent">
               {post.category}
             </span>
-            <h2 className="mt-8 max-w-2xl font-display text-[clamp(1.75rem,1.3rem+1.8vw,2.8rem)] font-semibold leading-[1.04] tracking-tight transition-colors group-hover:text-accent group-data-[active=true]:text-accent">
+            <h2 className="mt-8 max-w-2xl font-display text-[clamp(1.45rem,1.15rem+1.1vw,2.1rem)] font-semibold leading-[1.08] tracking-tight transition-colors group-hover:text-accent group-data-[active=true]:text-accent">
               {post.title}
             </h2>
-            <p className="mt-5 max-w-xl text-[0.95rem] leading-7 text-muted-foreground">
+            <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground line-clamp-3">
               {post.excerpt}
             </p>
             <p className="mt-8 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint lg:hidden">

@@ -57,7 +57,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <div className="flex flex-col gap-5 py-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10 sm:py-8">
               <div className="max-w-2xl">
                 <span className="eyebrow">Writing</span>
-                <h1 className="t-h2 mt-3 text-balance">
+                <h1 className="mt-3 max-w-[16ch] font-display text-[clamp(2.4rem,1.6rem+3.2vw,4.2rem)] font-semibold leading-[1.02] tracking-tight text-balance">
                   Notes from production{" "}
                   <span className="text-accent">decisions.</span>
                 </h1>
@@ -105,9 +105,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
           {showFeatured && featuredPost ? (
             <BoxedSection pad="compact">
-              <Reveal>
-                <ArticleCard post={featuredPost} featured />
-              </Reveal>
+              <ArticleCard post={featuredPost} featured />
             </BoxedSection>
           ) : null}
 
@@ -124,10 +122,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {filteredPosts.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {filteredPosts.map((post, index) => (
-                  <Reveal key={post.slug} delay={index * 0.04}>
-                    <ArticleCard post={post} />
-                  </Reveal>
+                {filteredPosts.map((post) => (
+                  <ArticleCard key={post.slug} post={post} />
                 ))}
               </div>
             ) : (

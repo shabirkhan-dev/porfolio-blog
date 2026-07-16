@@ -1,9 +1,59 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { labDemoMap } from "@/components/lab/lab-demos";
 import type { LabExperiment } from "@/data/lab";
+import type { SourceFileEntry } from "@/components/lab/experiments/request-flow/request-flow.types";
+
+type DemoProps = {
+  compact?: boolean;
+  sourceFiles?: SourceFileEntry[];
+};
+
+const demoLoaders: Record<
+  string,
+  () => Promise<{ default: ComponentType<DemoProps> }>
+> = {
+  "request-flow": () =>
+    import("@/components/lab/experiments/request-flow/request-flow").then(
+      (m) => ({
+        default: ({ compact }: DemoProps) => (
+          <div
+            className={
+              compact
+                ? "relative h-full min-h-[14rem] w-full overflow-hidden bg-background"
+                : "relative w-full overflow-hidden border border-border bg-background"
+            }
+          >
+            <m.RequestFlow compact={compact} />
+          </div>
+        ),
+      }),
+    ),
+  "iron-field": () =>
+    import("@/components/lab/experiments/iron-field").then((m) => ({
+      default: ({ compact }: DemoProps) => (
+        <div
+          className={
+            compact
+              ? "relative h-full min-h-[14rem] w-full overflow-hidden bg-background"
+              : "relative h-[min(28rem,70vh)] w-full overflow-hidden border border-border bg-background"
+          }
+        >
+          <m.IronField className="absolute inset-0 h-full w-full" />
+        </div>
+      ),
+    })),
+  "cipher-deck": () =>
+    import("@/components/lab/experiments/cipher-deck").then((m) => ({
+      default: ({ compact }: DemoProps) => <m.CipherDeck compact={compact} />,
+    })),
+  "signal-radar": () =>
+    import("@/components/lab/experiments/signal-radar").then((m) => ({
+      default: ({ compact }: DemoProps) => <m.SignalRadar compact={compact} />,
+    })),
+};
 
 export function LabLiveCard({
   experiment,
@@ -16,8 +66,33 @@ export function LabLiveCard({
   featured?: boolean;
   headingLevel?: "h2" | "h3";
 }) {
-  const Demo = labDemoMap[experiment.slug as keyof typeof labDemoMap];
   const Heading = headingLevel;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [Demo, setDemo] = useState<ComponentType<DemoProps> | null>(null);
+
+  useEffect(() => {
+    const node = stageRef.current;
+    const loader = demoLoaders[experiment.slug];
+    if (!node || !loader) return;
+
+    let cancelled = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        void loader().then((mod) => {
+          if (!cancelled) setDemo(() => mod.default);
+        });
+      },
+      { rootMargin: "160px 0px", threshold: 0.05 },
+    );
+
+    observer.observe(node);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [experiment.slug]);
 
   return (
     <article
@@ -27,8 +102,8 @@ export function LabLiveCard({
           : "flex h-full flex-col overflow-hidden border border-border bg-background-2"
       }
     >
-      {/* Live end-result — interactive, not buried behind navigation */}
       <div
+        ref={stageRef}
         className={
           featured
             ? "relative h-[min(22rem,52vw)] w-full overflow-hidden border-b border-border bg-background sm:h-[26rem]"

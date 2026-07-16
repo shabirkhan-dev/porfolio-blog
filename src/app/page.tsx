@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { AsciiField } from "@/components/ascii-field";
 import { WritingPreview } from "@/components/blog/writing-preview";
 import { BoxedPage, BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { ContactSection } from "@/components/contact-section";
 import { HeroSection } from "@/components/hero-section";
 import {
+  HomeAsciiField,
   HomeExperienceTimeline,
   HomeTestimonials,
 } from "@/components/home-deferred";
@@ -71,9 +71,9 @@ export default async function Home() {
               Product constraints, architecture, and release path handled as one
               job — with a clear decision and a measurable result in each case.
             </p>
-            <Reveal className="mt-8 sm:mt-9">
+            <div className="mt-8 sm:mt-9">
               <ProjectsBento projects={workProjects} />
-            </Reveal>
+            </div>
           </BoxedSection>
 
           <BoxedSection id="about" tone="muted">
@@ -81,7 +81,7 @@ export default async function Home() {
               <Reveal className="overflow-x-clip py-9">
                 <ScalesFrame className="mx-auto w-full max-w-[15rem]">
                   <div className="relative grid aspect-square place-items-center overflow-hidden">
-                    <AsciiField className="absolute inset-0 h-full w-full" cell={13} />
+                    <HomeAsciiField className="absolute inset-0 h-full w-full" cell={13} />
                     <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-medium leading-none tracking-tight text-accent">
                       {profile.initials}
                     </span>

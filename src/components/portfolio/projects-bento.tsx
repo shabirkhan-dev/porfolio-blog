@@ -145,7 +145,10 @@ function ProjectTile({
               : "(max-width: 768px) 100vw, 50vw"
           }
           className="object-cover object-top transition duration-500 ease-out group-hover:scale-[1.015]"
-          priority={index < 2}
+          priority={featured || index === 0}
+          loading={featured || index === 0 ? "eager" : "lazy"}
+          fetchPriority={featured || index === 0 ? "high" : "auto"}
+          decoding={featured || index === 0 ? "sync" : "async"}
         />
         <div
           aria-hidden

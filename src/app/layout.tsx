@@ -1,38 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeScript } from "@/components/theme-toggle";
 
-// `display: "optional"` keeps LCP honest: text paints once with the
-// size-adjusted fallback and never re-paints late when the webfont lands.
-// Body font is not preloaded — its metrics-adjusted fallback is near
-// identical, and skipping the preload keeps it off the critical path.
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "optional",
-  preload: false,
-});
-
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-grotesk",
-  display: "optional",
-});
-
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-instrument",
-  display: "optional",
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
   display: "optional",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -121,7 +106,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${inter.variable} ${grotesk.variable} ${instrument.variable} ${jetbrains.variable} scroll-smooth`}
+      className={`${grotesk.variable} ${jetbrains.variable} scroll-smooth`}
     >
       <head>
         <ThemeScript />
