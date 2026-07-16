@@ -44,9 +44,14 @@ next-env.d.ts
 # local working files
 /work/
 lighthouse-*.json
+lighthouse-report.json
 audit-*.png
 *-after.png
+*-before.png
+*-final.png
 flow-work.png
 hero-*.png
+engine-room-*.png
+experience-*.png
 /shots/
 public/redesign.html
