@@ -24,7 +24,9 @@ function ProjectMeta({
     <div
       className={cn(
         "flex flex-1 flex-col",
-        featured ? "px-5 py-5 sm:px-6 sm:py-6 lg:justify-center lg:px-8 lg:py-8" : "px-4 py-4 sm:px-5 sm:py-5",
+        featured
+          ? "px-5 py-5 sm:px-6 sm:py-6 lg:justify-center lg:px-8 lg:py-8"
+          : "px-4 py-4 sm:px-5 sm:py-5",
       )}
     >
       <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[0.58rem] uppercase tracking-[0.14em]">
@@ -70,7 +72,9 @@ function ProjectMeta({
       <div
         className={cn(
           "mt-auto flex flex-wrap items-end justify-between gap-3",
-          featured ? "mt-6 pt-5 border-t border-border" : "mt-4 pt-4 border-t border-border",
+          featured
+            ? "mt-6 border-t border-border pt-5"
+            : "mt-4 border-t border-border pt-4",
         )}
       >
         <p className="font-mono text-[0.66rem] uppercase tracking-[0.1em] text-accent">
@@ -108,10 +112,13 @@ function ProjectTile({
   project,
   index,
   featured = false,
+  eager = false,
 }: {
   project: Project;
   index: number;
   featured?: boolean;
+  /** True only for the above-the-fold LCP image on this route. */
+  eager?: boolean;
 }) {
   const href = detailHref(project);
 
@@ -145,10 +152,11 @@ function ProjectTile({
               : "(max-width: 768px) 100vw, 50vw"
           }
           className="object-cover object-top transition duration-500 ease-out group-hover:scale-[1.015]"
-          priority={featured || index === 0}
-          loading={featured || index === 0 ? "eager" : "lazy"}
-          fetchPriority={featured || index === 0 ? "high" : "auto"}
-          decoding={featured || index === 0 ? "sync" : "async"}
+          quality={60}
+          priority={eager}
+          loading={eager ? "eager" : "lazy"}
+          fetchPriority={eager ? "high" : "auto"}
+          decoding={eager ? "sync" : "async"}
         />
         <div
           aria-hidden
@@ -161,7 +169,10 @@ function ProjectTile({
   );
 }
 
-/** Home + projects grid — featured lead on home, equal tiles elsewhere. */
+/**
+ * Home: all images lazy (below hero).
+ * Projects page: only the first tile is eager for LCP.
+ */
 export function ProjectsBento({
   projects,
   variant = "home",
@@ -175,7 +186,7 @@ export function ProjectsBento({
     return (
       <div className="space-y-4 sm:space-y-5">
         {featured ? (
-          <ProjectTile project={featured} index={0} featured />
+          <ProjectTile project={featured} index={0} featured eager={false} />
         ) : null}
         {rest.length > 0 ? (
           <div
@@ -189,6 +200,7 @@ export function ProjectsBento({
                 key={project.slug}
                 project={project}
                 index={index + 1}
+                eager={false}
               />
             ))}
           </div>
@@ -206,7 +218,12 @@ export function ProjectsBento({
       )}
     >
       {projects.map((project, index) => (
-        <ProjectTile key={project.slug} project={project} index={index} />
+        <ProjectTile
+          key={project.slug}
+          project={project}
+          index={index}
+          eager={variant === "page" && index === 0}
+        />
       ))}
     </div>
   );

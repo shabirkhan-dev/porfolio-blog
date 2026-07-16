@@ -47,14 +47,28 @@ export function HeroBuildTypewriter({
 
   useEffect(() => {
     if (reduced) return;
-    const id = window.setTimeout(() => {
+
+    const arm = () => {
       const staticNode = document.querySelector("[data-hero-static-phrase]");
       if (staticNode instanceof HTMLElement) {
         staticNode.hidden = true;
       }
       setActive(true);
-    }, 12000);
-    return () => window.clearTimeout(id);
+      window.removeEventListener("pointerdown", arm);
+      window.removeEventListener("keydown", arm);
+      window.removeEventListener("scroll", arm);
+    };
+
+    // Only after interaction — a timed swap becomes a late LCP candidate.
+    window.addEventListener("pointerdown", arm, { once: true, passive: true });
+    window.addEventListener("keydown", arm, { once: true });
+    window.addEventListener("scroll", arm, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", arm);
+      window.removeEventListener("keydown", arm);
+      window.removeEventListener("scroll", arm);
+    };
   }, [reduced]);
 
   useEffect(() => {

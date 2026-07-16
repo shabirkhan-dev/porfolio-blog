@@ -145,7 +145,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     fill
                     sizes="(max-width: 1024px) 100vw, 480px"
                     className="object-cover object-top"
+                    quality={60}
                     priority
+                    fetchPriority="high"
+                    decoding="sync"
                   />
                 ) : null}
               </div>

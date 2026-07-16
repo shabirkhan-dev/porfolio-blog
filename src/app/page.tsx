@@ -17,6 +17,7 @@ import { ScalesFrame } from "@/components/scales";
 import { SectionHeading } from "@/components/section";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { VisibleMount } from "@/components/visible-mount";
 import { getPublishedPosts } from "@/data/posts.server";
 import { labExperiments } from "@/data/lab";
 import {
@@ -52,7 +53,7 @@ export default async function Home() {
             proof={proof}
           />
 
-          <BoxedSection id="work">
+          <BoxedSection id="work" className="cv-auto">
             <SectionHeading
               index="01"
               eyebrow="Selected work"
@@ -71,17 +72,26 @@ export default async function Home() {
               Product constraints, architecture, and release path handled as one
               job — with a clear decision and a measurable result in each case.
             </p>
-            <div className="mt-8 sm:mt-9">
+            <VisibleMount className="mt-8 sm:mt-9" minHeight="36rem">
               <ProjectsBento projects={workProjects} />
-            </div>
+            </VisibleMount>
           </BoxedSection>
 
-          <BoxedSection id="about" tone="muted">
+          <BoxedSection id="about" tone="muted" className="cv-auto">
             <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-14">
               <Reveal className="overflow-x-clip py-9">
                 <ScalesFrame className="mx-auto w-full max-w-[15rem]">
                   <div className="relative grid aspect-square place-items-center overflow-hidden">
-                    <HomeAsciiField className="absolute inset-0 h-full w-full" cell={13} />
+                    <VisibleMount
+                      className="absolute inset-0"
+                      minHeight="100%"
+                      rootMargin="120px 0px"
+                    >
+                      <HomeAsciiField
+                        className="absolute inset-0 h-full w-full"
+                        cell={13}
+                      />
+                    </VisibleMount>
                     <span className="relative font-display text-[clamp(4rem,3rem+8vw,6.5rem)] font-medium leading-none tracking-tight text-accent">
                       {profile.initials}
                     </span>
@@ -135,7 +145,7 @@ export default async function Home() {
             </div>
           </BoxedSection>
 
-          <BoxedStrip>
+          <BoxedStrip className="cv-auto">
             <div className="py-3.5 sm:py-4">
               <div className="flex items-center gap-4 overflow-x-auto font-mono text-[0.64rem] uppercase tracking-[0.12em] text-muted-foreground sm:justify-center">
                 <span className="shrink-0 text-faint">Core stack</span>
@@ -149,14 +159,16 @@ export default async function Home() {
             </div>
           </BoxedStrip>
 
-          <BoxedSection id="experience">
-            <HomeExperienceTimeline items={experience} />
+          <BoxedSection id="experience" className="cv-auto">
+            <VisibleMount minHeight="22rem">
+              <HomeExperienceTimeline items={experience} />
+            </VisibleMount>
           </BoxedSection>
 
           <BoxedSection
             id="approach"
             tone="muted"
-            className="overflow-hidden"
+            className="cv-auto overflow-hidden"
             overlay={
               <div className="pointer-events-none absolute inset-0 hairline-grid opacity-30 [mask-image:radial-gradient(100%_60%_at_50%_0%,black,transparent_80%)]" />
             }
@@ -191,7 +203,7 @@ export default async function Home() {
             </div>
           </BoxedSection>
 
-          <BoxedSection>
+          <BoxedSection className="cv-auto">
             <div className="grid gap-14 xl:grid-cols-[1.1fr_0.9fr] xl:gap-12">
               <div>
                 <SectionHeading
@@ -208,9 +220,9 @@ export default async function Home() {
                     </Link>
                   }
                 />
-                <Reveal className="mt-8">
+                <VisibleMount className="mt-8" minHeight="16rem">
                   <WritingPreview posts={writingPreview} />
-                </Reveal>
+                </VisibleMount>
               </div>
 
               <div>
@@ -229,31 +241,33 @@ export default async function Home() {
                   }
                 />
                 {featuredLab ? (
-                  <Reveal className="mt-8">
+                  <VisibleMount className="mt-8" minHeight="22rem">
                     <LabLiveCard
                       experiment={featuredLab}
                       index={0}
                       featured
                       headingLevel="h3"
                     />
-                  </Reveal>
+                  </VisibleMount>
                 ) : null}
               </div>
             </div>
           </BoxedSection>
 
-          <BoxedSection tone="muted">
+          <BoxedSection tone="muted" className="cv-auto">
             <SectionHeading
               index="07"
               eyebrow="Endorsements"
               title="What collaborators say about the work."
             />
-            <div className="mt-8">
+            <VisibleMount className="mt-8" minHeight="20rem">
               <HomeTestimonials items={testimonials} />
-            </div>
+            </VisibleMount>
           </BoxedSection>
 
-          <ContactSection />
+          <VisibleMount minHeight="28rem" rootMargin="160px 0px">
+            <ContactSection />
+          </VisibleMount>
         </main>
       </BoxedPage>
       <SiteFooter />

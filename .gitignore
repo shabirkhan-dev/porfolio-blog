@@ -45,6 +45,7 @@ next-env.d.ts
 /work/
 lighthouse-*.json
 lighthouse-report.json
+lh-*.json
 audit-*.png
 *-after.png
 *-before.png

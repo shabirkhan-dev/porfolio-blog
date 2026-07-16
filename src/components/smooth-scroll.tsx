@@ -41,9 +41,9 @@ export function SmoothScroll() {
     };
 
     if (win.requestIdleCallback) {
-      idleId = win.requestIdleCallback(start, { timeout: 4000 });
+      idleId = win.requestIdleCallback(start, { timeout: 10000 });
     } else {
-      timeoutId = window.setTimeout(start, 1500);
+      timeoutId = window.setTimeout(start, 5000);
     }
 
     return () => {

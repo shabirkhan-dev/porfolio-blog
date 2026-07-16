@@ -6,6 +6,7 @@ import { PageCta } from "@/components/page-cta";
 import { ProjectsBento } from "@/components/portfolio/projects-bento";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { VisibleMount } from "@/components/visible-mount";
 import { profile, projects } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -45,43 +46,46 @@ export default function ProjectsPage() {
             </Reveal>
           </BoxedSection>
 
-          <BoxedStrip dividerTop={false}>
+          <BoxedStrip dividerTop={false} className="cv-auto">
             <div className="py-6">
-              <Marquee
-                items={[
-                  "SaaS",
-                  "Security",
-                  "Multi-tenant",
-                  "AI",
-                  "Mobile",
-                  "DevEx",
-                  "Infrastructure",
-                ]}
-              />
+              <VisibleMount minHeight="2.5rem" rootMargin="80px 0px">
+                <Marquee
+                  items={[
+                    "SaaS",
+                    "Security",
+                    "Multi-tenant",
+                    "AI",
+                    "Mobile",
+                    "DevEx",
+                    "Infrastructure",
+                  ]}
+                />
+              </VisibleMount>
             </div>
           </BoxedStrip>
 
-          <BoxedSection>
+          <BoxedSection className="cv-auto">
             <h2 className="sr-only">Projects</h2>
             <ProjectsBento projects={projects} variant="page" />
           </BoxedSection>
 
-          <BoxedSection pad="compact" closed>
-            <Reveal>
-              <PageCta
-                label="Let's talk"
-                title={
-                  <>
-                    A product that needs senior technical ownership and a{" "}
-                    <span className="text-accent">refined interface?</span>
-                  </>
-                }
-                href={`mailto:${profile.email}`}
-                button="Discuss the build"
-                variant="primary"
-              />
-            </Reveal>
-          </BoxedSection>
+          <VisibleMount minHeight="16rem" rootMargin="160px 0px">
+            <BoxedSection pad="compact" closed>
+              <Reveal>
+                <PageCta
+                  label="Let's talk"
+                  title={
+                    <>
+                      A product that needs senior technical ownership and a{" "}
+                      <span className="text-accent">refined interface?</span>
+                    </>
+                  }
+                  href={`mailto:${profile.email}`}
+                  button="Discuss the build"
+                />
+              </Reveal>
+            </BoxedSection>
+          </VisibleMount>
         </main>
       </BoxedPage>
       <SiteFooter />
