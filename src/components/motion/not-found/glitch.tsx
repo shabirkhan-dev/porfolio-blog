@@ -2,7 +2,7 @@
 // beui.dev/components/blocks/not-found
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion } from "framer-motion";
 import {
   NOT_FOUND_DEFAULTS,
   NotFoundActions,

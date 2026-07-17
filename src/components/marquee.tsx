@@ -19,11 +19,9 @@ export function Marquee({ items, className }: MarqueeProps) {
     </span>
   );
 
-  // The track animates by -50%, so it must contain two identical halves. Each
-  // half repeats the sequence enough times to always overflow the viewport,
-  // which keeps the loop seamless (no gap) on wide screens.
+  // The track animates by -50%, so it must contain two identical halves.
   const half = (
-    <span className="inline-flex items-center" aria-hidden={undefined}>
+    <span className="inline-flex items-center" aria-hidden="true">
       {Array.from({ length: 2 }, (_, i) => (
         <Fragment key={i}>{sequence}</Fragment>
       ))}
@@ -31,7 +29,11 @@ export function Marquee({ items, className }: MarqueeProps) {
   );
 
   return (
-    <div className={`marquee overflow-hidden ${className ?? ""}`}>
+    <div
+      className={`marquee overflow-hidden ${className ?? ""}`}
+      role="region"
+      aria-label={items.join(", ")}
+    >
       <div className="marquee-track">
         {half}
         {half}

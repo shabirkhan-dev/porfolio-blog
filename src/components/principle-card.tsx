@@ -1,6 +1,3 @@
-"use client";
-
-import { useActiveOnScroll } from "@/lib/use-active-on-scroll";
 import { cn } from "@/lib/utils";
 
 export function PrincipleCard({
@@ -16,15 +13,11 @@ export function PrincipleCard({
   practice: string;
   proof?: string;
 }) {
-  const { ref, active } = useActiveOnScroll<HTMLElement>();
-
   return (
     <article
-      ref={ref}
-      data-active={active}
       className={cn(
         "group relative grid gap-5 border-t border-border py-7 transition-colors sm:grid-cols-[4.5rem_1fr] sm:gap-8 sm:py-8",
-        "data-[active=true]:border-accent/40",
+        "hover:border-accent/40",
       )}
     >
       <div className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
@@ -33,7 +26,7 @@ export function PrincipleCard({
       </div>
 
       <div className="min-w-0">
-        <h3 className="font-display text-[clamp(1.2rem,1.05rem+0.7vw,1.55rem)] font-semibold tracking-tight transition-colors group-data-[active=true]:text-accent">
+        <h3 className="font-display text-[clamp(1.2rem,1.05rem+0.7vw,1.55rem)] font-semibold tracking-tight transition-colors group-hover:text-accent">
           {title}
         </h3>
         <p className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">

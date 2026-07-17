@@ -1,49 +1,23 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { FrameNodes } from "@/components/boxed-section";
+import { HeaderScrollShell } from "@/components/header-scroll-shell";
 import { DesktopNav, MobileBottomNav } from "@/components/site-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LinkButton } from "@/components/ui/button";
 import { navItems, profile } from "@/data/site";
-import { cn } from "@/lib/utils";
 
 /**
  * Frame Index header — thin rail aligned to the page frame.
- * Mobile uses a fixed bottom bar instead of a hamburger sheet.
+ * Scroll glass is a tiny client island; nav/theme stay client for pathname.
  */
 export function SiteHeader() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    let ticking = false;
-    const update = () => {
-      setScrolled(window.scrollY > 12);
-      ticking = false;
-    };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <>
-      <header
-        className={cn(
-          "sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-400",
-          scrolled
-            ? "glass border-b border-border"
-            : "border-b border-transparent bg-transparent",
-        )}
-      >
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
+      <HeaderScrollShell>
         <div className="shell relative">
           <div className="relative border-x border-border">
             <FrameNodes top className="hidden sm:block" />
@@ -85,7 +59,7 @@ export function SiteHeader() {
             </div>
           </div>
         </div>
-      </header>
+      </HeaderScrollShell>
 
       <MobileBottomNav />
     </>

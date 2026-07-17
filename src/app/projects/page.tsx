@@ -21,7 +21,7 @@ export default function ProjectsPage() {
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <BoxedPage>
-        <main>
+        <main id="main">
           <BoxedSection
             dividerTop
             pad="compact"

@@ -6,13 +6,14 @@ import { SiteHeader } from "@/components/site-header";
 export const metadata: Metadata = {
   title: "Page not found",
   description: "The page you were looking for doesn't exist or has moved.",
+  robots: { index: false, follow: true },
 };
 
 export default function NotFound() {
   return (
     <div className="page-shell flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="relative flex flex-1 items-center overflow-hidden">
+      <main id="main" className="relative flex flex-1 items-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0 hairline-grid opacity-40 [mask-image:radial-gradient(100%_70%_at_50%_40%,black,transparent_80%)]" />
         {/* Ambient accent glow */}
         <div className="pointer-events-none absolute -right-24 top-10 size-80 rounded-full bg-accent/10 blur-3xl" />

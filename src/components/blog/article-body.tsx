@@ -1,10 +1,9 @@
-"use client";
-
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Quote } from "lucide-react";
 import { slugifyHeading } from "@/data/site";
+import { externalRel } from "@/lib/links";
 
 function parseCodeMeta(meta?: string) {
   if (!meta) return { language: "text", filename: undefined as string | undefined };
@@ -213,6 +212,7 @@ function createMarkdownComponents(): Components {
       <a
         href={href}
         className="font-medium text-foreground underline decoration-accent/50 underline-offset-4 transition-colors hover:text-accent"
+        {...externalRel(href)}
       >
         {children}
       </a>

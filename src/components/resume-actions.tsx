@@ -25,7 +25,7 @@ export function ResumeActions() {
           className="inline-flex items-center gap-2 rounded-md bg-zinc-900 px-5 py-2.5 font-mono text-[0.72rem] uppercase tracking-[0.12em] text-white transition-colors hover:bg-zinc-700"
         >
           <Download aria-hidden="true" size={15} />
-          Download PDF
+          Download / Print PDF
         </button>
       </div>
     </div>

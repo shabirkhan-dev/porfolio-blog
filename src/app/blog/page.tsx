@@ -52,7 +52,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <BoxedPage>
-        <main>
+        <main id="main">
           <BoxedSection dividerTop pad={false} className="overflow-hidden">
             <div className="flex flex-col gap-5 py-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10 sm:py-8">
               <div className="max-w-2xl">
@@ -76,7 +76,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
           <BoxedStrip>
             <div className="py-3.5">
-              <div className="flex gap-1.5 overflow-x-auto">
+              <nav aria-label="Filter by category" className="flex gap-1.5 overflow-x-auto">
                 {["All", ...categories].map((item) => {
                   const href =
                     item === "All"
@@ -88,6 +88,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     <Link
                       key={item}
                       href={href}
+                      aria-current={active ? "page" : undefined}
                       className={cn(
                         "inline-flex min-h-11 shrink-0 items-center px-3.5 py-2 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors duration-300",
                         active
@@ -99,7 +100,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     </Link>
                   );
                 })}
-              </div>
+              </nav>
             </div>
           </BoxedStrip>
 

@@ -26,10 +26,27 @@ export async function generateMetadata({
   const { slug } = await params;
   const study = getCaseStudyBySlug(slug);
   if (!study) return {};
+  const project = projects.find((item) => item.slug === slug);
+  const canonical = `/case-studies/${study.slug}`;
   return {
     title: `${study.title} — Case Study`,
     description: study.tagline,
-    alternates: { canonical: `/case-studies/${study.slug}` },
+    alternates: { canonical },
+    openGraph: {
+      title: `${study.title} — Case Study`,
+      description: study.tagline,
+      url: canonical,
+      type: "article",
+      images: project?.image
+        ? [{ url: project.image, alt: `${study.title} interface` }]
+        : [{ url: "/opengraph-image", alt: study.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${study.title} — Case Study`,
+      description: study.tagline,
+      images: [project?.image ?? "/opengraph-image"],
+    },
   };
 }
 
@@ -58,7 +75,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
-      <main>
+      <main id="main">
         <header className="relative overflow-hidden border-b border-border">
           <div className="pointer-events-none absolute inset-0 hairline-grid [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]" />
           <div className="shell relative pb-8 pt-[clamp(2rem,1.25rem+3.5vw,3.75rem)]">

@@ -6,21 +6,51 @@ import { getPublishedPosts } from "@/data/posts.server";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev";
 
+/** Stable stamp for routes without their own content date. */
+const SITE_REVISED = new Date("2026-07-17");
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
   const posts = await getPublishedPosts();
+  const latestPost = posts[0]
+    ? new Date(posts[0].publishedAt)
+    : SITE_REVISED;
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "monthly", priority: 1 },
-    { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/lab`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/resume`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    {
+      url: `${SITE_URL}/`,
+      lastModified: SITE_REVISED,
+      changeFrequency: "monthly",
+      priority: 1,
+    },
+    {
+      url: `${SITE_URL}/projects`,
+      lastModified: SITE_REVISED,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/lab`,
+      lastModified: SITE_REVISED,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/resume`,
+      lastModified: SITE_REVISED,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/blog`,
+      lastModified: latestPost,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
 
   const caseStudyRoutes: MetadataRoute.Sitemap = caseStudies.map((study) => ({
     url: `${SITE_URL}/case-studies/${study.slug}`,
-    lastModified: now,
+    lastModified: SITE_REVISED,
     changeFrequency: "yearly",
     priority: 0.75,
   }));
@@ -34,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const labRoutes: MetadataRoute.Sitemap = getLabSlugs().map((slug) => ({
     url: `${SITE_URL}/lab/${slug}`,
-    lastModified: now,
+    lastModified: SITE_REVISED,
     changeFrequency: "monthly",
     priority: 0.55,
   }));

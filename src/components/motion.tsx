@@ -29,30 +29,3 @@ export function Reveal({
     </div>
   );
 }
-
-type WordRevealProps = {
-  text: string;
-  className?: string;
-  as?: "h1" | "h2" | "p" | "span";
-  delay?: number;
-};
-
-export function WordReveal({
-  text,
-  className,
-  as: Tag = "h1",
-}: WordRevealProps) {
-  return <Tag className={cn(className)}>{text}</Tag>;
-}
-
-export function GentleLift({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn("transition-transform duration-300 hover:-translate-y-1.5", className)} {...props}>
-      {children}
-    </div>
-  );
-}

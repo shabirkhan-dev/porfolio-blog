@@ -1,11 +1,3 @@
-import {
-  Github,
-  Linkedin,
-  Mail,
-  Phone,
-} from "lucide-react";
-
-
 /** Build a slug-safe id from a heading string (for TOC anchors). */
 export function slugifyHeading(value: string) {
   return value
@@ -73,10 +65,10 @@ export const navItems = [
 ];
 
 export const socials = [
-  { href: `mailto:${profile.email}`, label: "Email", icon: Mail },
-  { href: profile.github, label: "GitHub", icon: Github },
-  { href: profile.linkedin, label: "LinkedIn", icon: Linkedin },
-  { href: "tel:+923166651488", label: "Phone", icon: Phone },
+  { href: `mailto:${profile.email}`, label: "Email" },
+  { href: profile.github, label: "GitHub" },
+  { href: profile.linkedin, label: "LinkedIn" },
+  { href: "tel:+923166651488", label: "Phone" },
 ];
 
 /** Compact "core stack" strip under the hero — expanded from résumé stack groups. */
@@ -101,16 +93,6 @@ export const coreStack = [
   "Kafka",
   "RAG",
   "Design systems",
-];
-
-/** Tighter subset so mobile stays a single readable row. */
-export const coreStackMobile = [
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "React Native",
-  "PostgreSQL",
 ];
 
 export const proof = [

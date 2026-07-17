@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { WritingPreview } from "@/components/blog/writing-preview";
@@ -31,6 +32,10 @@ import {
   testimonials,
 } from "@/data/site";
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default async function Home() {
   const posts = await getPublishedPosts();
   const writingPreview = posts.slice(0, 3);
@@ -45,7 +50,7 @@ export default async function Home() {
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <BoxedPage>
-        <main>
+        <main id="main">
           <HeroSection
             name={profile.name}
             title={profile.title}
@@ -72,9 +77,9 @@ export default async function Home() {
               Product constraints, architecture, and release path handled as one
               job — with a clear decision and a measurable result in each case.
             </p>
-            <VisibleMount className="mt-8 sm:mt-9" minHeight="36rem">
+            <div className="mt-8 sm:mt-9">
               <ProjectsBento projects={workProjects} />
-            </VisibleMount>
+            </div>
           </BoxedSection>
 
           <BoxedSection id="about" tone="muted" className="cv-auto">
@@ -160,9 +165,7 @@ export default async function Home() {
           </BoxedStrip>
 
           <BoxedSection id="experience" className="cv-auto">
-            <VisibleMount minHeight="22rem">
-              <HomeExperienceTimeline items={experience} />
-            </VisibleMount>
+            <HomeExperienceTimeline items={experience} />
           </BoxedSection>
 
           <BoxedSection
@@ -220,9 +223,9 @@ export default async function Home() {
                     </Link>
                   }
                 />
-                <VisibleMount className="mt-8" minHeight="16rem">
+                <div className="mt-8">
                   <WritingPreview posts={writingPreview} />
-                </VisibleMount>
+                </div>
               </div>
 
               <div>
@@ -260,14 +263,12 @@ export default async function Home() {
               eyebrow="Endorsements"
               title="What collaborators say about the work."
             />
-            <VisibleMount className="mt-8" minHeight="20rem">
+            <div className="mt-8">
               <HomeTestimonials items={testimonials} />
-            </VisibleMount>
+            </div>
           </BoxedSection>
 
-          <VisibleMount minHeight="28rem" rootMargin="160px 0px">
-            <ContactSection />
-          </VisibleMount>
+          <ContactSection />
         </main>
       </BoxedPage>
       <SiteFooter />

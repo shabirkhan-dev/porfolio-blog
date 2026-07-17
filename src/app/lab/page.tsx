@@ -21,7 +21,7 @@ export default function LabPage() {
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <BoxedPage>
-        <main>
+        <main id="main">
           <BoxedSection dividerTop pad={false} className="overflow-hidden">
             <div className="flex flex-col gap-5 py-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10 sm:py-8">
               <div className="max-w-2xl">

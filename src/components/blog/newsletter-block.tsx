@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Corners } from "@/components/corners";
-import { Button } from "@/components/ui/button";
+import { LinkButton } from "@/components/ui/button";
+import { profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 export type NewsletterIssueItem = {
@@ -52,8 +53,8 @@ const DEFAULT_ITEMS: NewsletterIssueItem[] = [
 ];
 
 /**
- * Newsletter CTA using the site drafting-board system
- * (brass accent, mono metadata, border rails — not the old red Sunday edition).
+ * Newsletter CTA using the site drafting-board system.
+ * Subscribe is mailto until a list provider is wired.
  */
 export function NewsletterBlock({
   cover = DEFAULT_COVER,
@@ -62,6 +63,11 @@ export function NewsletterBlock({
   className,
 }: NewsletterBlockProps) {
   const list = items.slice(0, 3);
+  const subscribeHref = `mailto:${profile.email}?subject=${encodeURIComponent(
+    "Subscribe to field notes",
+  )}&body=${encodeURIComponent(
+    "Please add me to occasional notes on interfaces, systems, and shipping.",
+  )}`;
 
   return (
     <section
@@ -75,7 +81,6 @@ export function NewsletterBlock({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_55%_at_0%_0%,rgb(var(--accent-rgb)/0.1),transparent_65%)]" />
 
       <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
-        {/* Pitch + form */}
         <div className="flex flex-col justify-between border-b border-border px-5 py-8 sm:px-7 sm:py-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-11">
           <div className="max-w-xl">
             <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-accent">
@@ -92,33 +97,20 @@ export function NewsletterBlock({
 
           <div className="mt-10 max-w-xl">
             <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">
-              Subscribe · {readerCount}
+              Get updates · {readerCount}
             </p>
-            <form
-              action="#"
-              className="mt-3 flex flex-col gap-2.5 sm:flex-row sm:items-stretch"
-            >
-              <label className="sr-only" htmlFor="newsletter-email">
-                Email address
-              </label>
-              <input
-                id="newsletter-email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="you@studio.com"
-                className="h-11 min-w-0 flex-1 border border-border bg-background px-4 font-sans text-sm text-foreground outline-none transition-colors placeholder:text-faint focus:border-accent/50"
-              />
-              <Button type="submit" variant="primary" size="md" className="h-11 shrink-0">
-                Subscribe
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <LinkButton href={subscribeHref} variant="primary" size="md">
+                Email me to subscribe
                 <ArrowUpRight aria-hidden size={14} />
-              </Button>
-            </form>
+              </LinkButton>
+              <p className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-faint">
+                Or read the archive below
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Reading list */}
         <div className="flex flex-col px-5 py-8 sm:px-7 sm:py-10 lg:px-8 lg:py-11">
           <div className="flex items-center justify-between gap-4">
             <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">

@@ -5,7 +5,6 @@ import type { ComponentProps } from "react";
 import type { AsciiField } from "@/components/ascii-field";
 import type { ExperienceTimeline } from "@/components/experience-timeline";
 import type { Testimonials } from "@/components/testimonials";
-import type { Toolkit } from "@/components/toolkit";
 
 const DeferredAsciiField = dynamic(
   () =>
@@ -13,17 +12,14 @@ const DeferredAsciiField = dynamic(
   { ssr: false },
 );
 
-const DeferredToolkit = dynamic(
-  () => import("@/components/toolkit").then((m) => ({ default: m.Toolkit })),
-  { ssr: false, loading: () => <div className="min-h-[28rem]" aria-hidden /> },
-);
-
 const DeferredExperienceTimeline = dynamic(
   () =>
     import("@/components/experience-timeline").then((m) => ({
       default: m.ExperienceTimeline,
     })),
-  { ssr: false, loading: () => <div className="min-h-[22rem]" aria-hidden /> },
+  {
+    loading: () => <div className="min-h-[22rem]" aria-hidden />,
+  },
 );
 
 const DeferredTestimonials = dynamic(
@@ -31,15 +27,13 @@ const DeferredTestimonials = dynamic(
     import("@/components/testimonials").then((m) => ({
       default: m.Testimonials,
     })),
-  { ssr: false, loading: () => <div className="min-h-[20rem]" aria-hidden /> },
+  {
+    loading: () => <div className="min-h-[20rem]" aria-hidden />,
+  },
 );
 
 export function HomeAsciiField(props: ComponentProps<typeof AsciiField>) {
   return <DeferredAsciiField {...props} />;
-}
-
-export function HomeToolkit(props: ComponentProps<typeof Toolkit>) {
-  return <DeferredToolkit {...props} />;
 }
 
 export function HomeExperienceTimeline(

@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { BoxedSection, BoxedStrip } from "@/components/boxed-section";
 import { FooterLogoDots } from "@/components/footer-logo-dots";
 import { navItems, profile, socials } from "@/data/site";
+import { externalRel } from "@/lib/links";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -54,6 +55,7 @@ export function SiteFooter() {
                   key={item.label}
                   href={item.href}
                   className="group inline-flex w-fit items-center gap-1 text-muted-foreground transition-colors hover:text-accent"
+                  {...externalRel(item.href)}
                 >
                   {item.label}
                   <ArrowUpRight
@@ -92,7 +94,7 @@ export function SiteFooter() {
             <div>
               <dt className="text-faint">Type</dt>
               <dd className="mt-1.5 text-muted-foreground">
-                Space Grotesk · Inter · JetBrains Mono
+                Space Grotesk · JetBrains Mono
               </dd>
             </div>
             <div>

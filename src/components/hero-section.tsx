@@ -113,7 +113,7 @@ export function HeroSection({
               <a
                 href={profile.github}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="link-line font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted-foreground sm:text-xs"
               >
                 GitHub

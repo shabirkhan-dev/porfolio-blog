@@ -23,10 +23,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const experiment = getLabExperiment(slug);
   if (!experiment) return {};
+  const canonical = `/lab/${experiment.slug}`;
   return {
     title: `${experiment.title} — Lab`,
     description: experiment.description,
-    alternates: { canonical: `/lab/${experiment.slug}` },
+    alternates: { canonical },
+    openGraph: {
+      title: `${experiment.title} — Lab`,
+      description: experiment.description,
+      url: canonical,
+      images: [{ url: "/opengraph-image", alt: experiment.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${experiment.title} — Lab`,
+      description: experiment.description,
+      images: ["/opengraph-image"],
+    },
   };
 }
 
@@ -55,7 +68,7 @@ export default async function LabExperimentPage({
     <div className="page-shell min-h-screen">
       <SiteHeader />
       <BoxedPage>
-        <main>
+        <main id="main">
           <BoxedSection dividerTop pad={false}>
             <div className="py-6 sm:py-7">
               <Link

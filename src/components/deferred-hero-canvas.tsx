@@ -14,8 +14,7 @@ type DeferredHeroCanvasProps = {
 };
 
 /**
- * Decorative WebGL stays off the LCP path. Loads after first interaction,
- * or on a late idle timeout as a fallback.
+ * Decorative canvas stays off the LCP path. Loads only after user interaction.
  */
 export function DeferredHeroCanvas({ className }: DeferredHeroCanvasProps) {
   const [ready, setReady] = useState(false);
@@ -25,8 +24,6 @@ export function DeferredHeroCanvas({ className }: DeferredHeroCanvasProps) {
       return;
     }
 
-    let idleId = 0;
-    let timeoutId = 0;
     let done = false;
 
     const activate = () => {
@@ -36,33 +33,18 @@ export function DeferredHeroCanvas({ className }: DeferredHeroCanvasProps) {
       cleanup();
     };
 
-    const win = window as Window & {
-      requestIdleCallback?: (
-        cb: IdleRequestCallback,
-        opts?: IdleRequestOptions,
-      ) => number;
-      cancelIdleCallback?: (id: number) => void;
-    };
-
-    const onInteract = () => activate();
-
     const cleanup = () => {
-      win.cancelIdleCallback?.(idleId);
-      window.clearTimeout(timeoutId);
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("keydown", onInteract);
-      window.removeEventListener("scroll", onInteract);
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("keydown", activate);
+      window.removeEventListener("scroll", activate);
     };
 
-    window.addEventListener("pointerdown", onInteract, { once: true, passive: true });
-    window.addEventListener("keydown", onInteract, { once: true });
-    window.addEventListener("scroll", onInteract, { once: true, passive: true });
-
-    if (win.requestIdleCallback) {
-      idleId = win.requestIdleCallback(activate, { timeout: 12000 });
-    } else {
-      timeoutId = window.setTimeout(activate, 8000);
-    }
+    window.addEventListener("pointerdown", activate, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("keydown", activate, { once: true });
+    window.addEventListener("scroll", activate, { once: true, passive: true });
 
     return cleanup;
   }, []);

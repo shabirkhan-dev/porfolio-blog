@@ -11,7 +11,7 @@ import {
 } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Résumé — Shabir Khan",
+  title: "Résumé",
   description:
     "Résumé of Shabir Khan, Senior Full-Stack Engineer — experience, skills, and selected work.",
   alternates: { canonical: "/resume" },
@@ -24,7 +24,7 @@ export default function ResumePage() {
     <div className="min-h-screen bg-zinc-100 text-zinc-900">
       <ResumeActions />
 
-      <main className="mx-auto w-full max-w-3xl px-6 py-10 print:p-0">
+      <main id="main" className="mx-auto w-full max-w-3xl px-6 py-10 print:p-0">
         <article className="resume-sheet rounded-2xl bg-white p-8 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.3)] sm:p-12 print:rounded-none print:p-0 print:shadow-none">
           {/* Header */}
           <header className="flex flex-col gap-6 border-b border-zinc-200 pb-7 sm:flex-row sm:items-end sm:justify-between">

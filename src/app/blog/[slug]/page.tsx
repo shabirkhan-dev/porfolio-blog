@@ -60,11 +60,13 @@ export async function generateMetadata({
       url: canonical,
       publishedTime: post.publishedAt,
       authors: [profile.name],
+      images: [{ url: "/opengraph-image", alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
+      images: ["/opengraph-image"],
     },
   };
 }
@@ -81,16 +83,37 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const toc = getTableOfContents(post);
   const readingTime = getReadingTime(post);
   const { previous, next } = await getAdjacentPosts(post.slug);
-  const articleUrl = new URL(
-    `/blog/${post.slug}`,
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev",
-  ).toString();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev";
+  const articleUrl = new URL(`/blog/${post.slug}`, siteUrl).toString();
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    author: {
+      "@type": "Person",
+      name: profile.name,
+      url: profile.linkedin,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    url: articleUrl,
+    image: `${siteUrl}/opengraph-image`,
+  };
 
   return (
     <div className="page-shell min-h-screen">
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <BoxedPage>
-        <main>
+        <main id="main">
           <BoxedSection id="top" dividerTop pad={false} className="scroll-mt-24">
             <div className="grid gap-0 py-5 sm:py-6 lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-10">
               <div className="min-w-0 max-w-[44rem]">
@@ -272,14 +295,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </BoxedSection>
 
-          <BoxedSection tone="muted" pad="compact" closed>
-            <SectionHeading eyebrow="Related writing" title="Continue reading" />
-            <div className="mt-8 grid gap-3 md:grid-cols-3">
-              {relatedPosts.map((related) => (
-                <RelatedCard key={related.slug} post={related} />
-              ))}
-            </div>
-          </BoxedSection>
+          {relatedPosts.length > 0 ? (
+            <BoxedSection tone="muted" pad="compact" closed>
+              <SectionHeading eyebrow="Related writing" title="Continue reading" />
+              <div className="mt-8 grid gap-3 md:grid-cols-3">
+                {relatedPosts.map((related) => (
+                  <RelatedCard key={related.slug} post={related} />
+                ))}
+              </div>
+            </BoxedSection>
+          ) : null}
         </main>
       </BoxedPage>
       <SiteFooter />

@@ -109,7 +109,7 @@ export const mobileBottomItems: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/projects", label: "Work" },
   { href: "/blog", label: "Writing" },
-  { href: "/lab", label: "Lab" },
+  { href: "/resume", label: "Résumé" },
   { href: "/#contact", label: "Contact" },
 ];
 

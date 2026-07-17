@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { MotionProvider } from "@/components/motion-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeScript } from "@/components/theme-toggle";
 
@@ -44,7 +43,6 @@ export const metadata: Metadata = {
     "AI products",
     "Frontend architecture",
   ],
-  alternates: { canonical: "/" },
   openGraph: {
     title: "Shabir Khan — Senior Full-Stack Product Engineer",
     description:
@@ -116,10 +114,8 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        <MotionProvider>
-          <SmoothScroll />
-          {children}
-        </MotionProvider>
+        <SmoothScroll />
+        {children}
         <div className="grain" aria-hidden="true" />
       </body>
     </html>
