@@ -27,16 +27,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  images: {
-    formats: ["image/avif", "image/webp"],
-    qualities: [60, 75],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 30,
-  },
-  experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
-  },
+  // The few images are pre-sized in public/, so they are served as they are.
+  images: { unoptimized: true },
   async headers() {
     return [
       {
