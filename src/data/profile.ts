@@ -39,7 +39,13 @@ export const highlights: Highlight[] = [
     label: "Agent workspace",
     year: "2026",
     isNew: true,
-    image: "/projects/grid.webp",
+    image: "/projects/grid-board.webp",
+    screens: [
+      "/projects/grid-thread.webp",
+      "/projects/grid-home.webp",
+      "/projects/grid-pr.webp",
+      "/projects/grid-ship.webp",
+    ],
     about: [
       "A self-hosted workspace where people and AI coding agents share one project board, live agent threads, a file editor, terminals and pull request checks, from desktop or phone",
       "Works with Claude Code, Codex, opencode and any ACP agent",
