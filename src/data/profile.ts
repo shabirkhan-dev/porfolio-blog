@@ -14,7 +14,7 @@ export const profile = {
   location: "Islamabad, Pakistan",
   availability: "Open to remote, hybrid and relocation, full-time or contract",
   description:
-    "Senior full-stack engineer in Islamabad, building web and mobile products end to end.",
+    "Senior full-stack engineer in Islamabad with 8+ years building TypeScript web and mobile products end to end: React, Next.js, Node.js, NestJS and React Native.",
 };
 
 export type Highlight = {
