@@ -22,8 +22,10 @@ export type Highlight = {
   label: string;
   year: string;
   isNew?: boolean;
-  /** Product screenshot in public/projects. */
+  /** Product screenshot in public/projects, shown on the card and first in the dialog. */
   image: string;
+  /** Further screens, shown below the first one in the dialog. */
+  screens?: string[];
   about: string[];
   facts: [label: string, value: string][];
   github?: string;
@@ -73,6 +75,7 @@ export const highlights: Highlight[] = [
     label: "School platform",
     year: "2025",
     image: "/projects/school-os.webp",
+    screens: ["/projects/school-os-students.webp"],
     about: [
       "A multi-tenant school platform: a teacher scans a student's QR code at the gate, the parent gets a WhatsApp alert, and the principal's dashboard updates",
       "Students, guardians, staff, attendance, homework and assessments are built; parent alerts are next",

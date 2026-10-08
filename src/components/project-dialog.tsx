@@ -47,6 +47,16 @@ export function ProjectDialog({ ref, project }: Props) {
               </button>
             </form>
           </div>
+          {project.screens?.map((screen) => (
+            // eslint-disable-next-line @next/next/no-img-element -- pre-sized static asset
+            <img
+              key={screen}
+              src={screen}
+              alt={`${project.name} screenshot`}
+              loading="lazy"
+              className="aspect-[16/10] w-full rounded-[14px] md:mt-2 border border-line object-cover object-left-top"
+            />
+          ))}
 
           <div className="flex w-full flex-col gap-5 px-3 pt-1 md:px-4 md:pt-2 md:pb-4">
             <div className="flex items-start gap-2">
