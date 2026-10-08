@@ -30,6 +30,8 @@ export type Highlight = {
   about: string[];
   facts: [label: string, value: string][];
   github?: string;
+  /** The running product; the dialog's one button opens it, otherwise GitHub. */
+  live?: string;
 };
 
 export const highlights: Highlight[] = [
@@ -57,6 +59,7 @@ export const highlights: Highlight[] = [
       ["License", "MIT / Apache-2.0"],
     ],
     github: "https://github.com/shabirkhan-dev/grid",
+    live: "https://grid.rabtx.dev",
   },
   {
     id: "starter",

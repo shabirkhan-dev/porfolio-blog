@@ -1,7 +1,7 @@
 "use client";
 
 import type { Ref } from "react";
-import { ArrowUpRight, Github, X } from "lucide-react";
+import { ArrowUpRight, Github, Globe, X } from "lucide-react";
 import type { Highlight } from "@/data/profile";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 
@@ -84,20 +84,22 @@ export function ProjectDialog({ ref, project }: Props) {
               ))}
             </dl>
 
-            {project.github ? (
+            {project.live ?? project.github ? (
               <div className="flex gap-2">
-                {project.github ? (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${pill} bg-foreground text-background`}
-                  >
+                <a
+                  href={project.live ?? project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${pill} bg-foreground text-background`}
+                >
+                  {project.live ? (
+                    <Globe className="size-4" strokeWidth={1.5} />
+                  ) : (
                     <Github className="size-4" strokeWidth={1.5} />
-                    View on GitHub
-                    <ArrowUpRight className="size-4" strokeWidth={1.5} />
-                  </a>
-                ) : null}
+                  )}
+                  {project.live ? "Open live site" : "View on GitHub"}
+                  <ArrowUpRight className="size-4" strokeWidth={1.5} />
+                </a>
               </div>
             ) : null}
           </div>
