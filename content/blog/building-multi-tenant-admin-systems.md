@@ -1,17 +1,11 @@
 ---
-title: "Building multi-tenant admin systems that stay coherent"
+title: "Building multi-tenant admin systems"
 slug: building-multi-tenant-admin-systems
-category: Engineering
-excerpt: "A long field guide to tenancy models, authz, data isolation, and UI hierarchy when one codebase serves many customers — without becoming an unmaintainable blob."
-summary: "How I design multi-tenant SaaS admins: boundaries, permissions, and surfaces that stay honest under real organizational chaos."
-standfirst: "Multi-tenant is not a database flag. It is a product architecture that either protects customers — or slowly mixes them together."
-featured: true
+excerpt: "Tenancy models, permissions and data isolation when one codebase serves many customers"
+standfirst: "Multi-tenant is not a database flag. It is a product architecture that either protects customers or slowly mixes them together"
+order: 1
 publishedAt: 2026-07-02
-takeaways:
-  - "Choose the tenancy model from blast radius, not from convenience."
-  - "Authorization belongs in the domain, not only in the UI."
-  - "Every admin screen needs a tenant context you can see and trust."
-  - "Shared code is fine; shared assumptions about ‘the customer’ are not."
+thumbnail: /writing/grid-board.png
 ---
 
 ::lead During testing, I caught a tenant-scoping mistake that allowed one school’s records to appear in another tenant’s report preview. It was fixed before release and became the reason I now make tenant context explicit and testable at every data boundary. This essay is the checklist that came out of that work.

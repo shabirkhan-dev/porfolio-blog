@@ -1,16 +1,10 @@
 ---
 title: "Make shipping boring on purpose"
 slug: make-shipping-boring-on-purpose
-category: Engineering
-excerpt: "If merge-to-main requires tribal knowledge, the system is already failing. CI, security gates, and typed config should be unavoidable — and dull."
-summary: "How I treat the release path as product infrastructure: checks, secrets, and deploy discipline."
+excerpt: "Why CI, security checks and typed config should be unavoidable and dull"
 standfirst: "The best release process is the one nobody has to heroically remember."
-featured: false
+order: 3
 publishedAt: 2026-05-08
-takeaways:
-  - "Merge to main means checks ran — including security."
-  - "Config and secrets belong in typed, reviewed paths."
-  - "Rollback is a design requirement, not an incident improvisation."
 ---
 
 ::lead I care about the merge button more than the launch tweet. If shipping depends on one person’s laptop and a checklist in Slack, you do not have a delivery system — you have folklore.

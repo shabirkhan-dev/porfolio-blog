@@ -1,17 +1,11 @@
 ---
 title: "Frontend performance under real traffic"
 slug: frontend-performance-under-real-traffic
-category: Frontend
-excerpt: "A long, practical guide to making React and Next.js interfaces feel fast when the network is messy, the dataset is large, and users will not wait for your waterfall."
-summary: "How I approach frontend performance as a product system: measurement, rendering discipline, data shapes, and UX that stays calm under load."
+excerpt: "Making React and Next.js feel fast on messy networks and mid-range phones"
 standfirst: "Lab scores are useful. Real users on mid-range phones and hotel Wi‑Fi are the exam."
-featured: false
+order: 2
 publishedAt: 2026-07-10
-takeaways:
-  - "Measure the user journey, not only Lighthouse vanity."
-  - "Most ‘slow UI’ is over-fetching and layout thrash, not missing memo."
-  - "Preserve layout during load — jumping chrome destroys trust."
-  - "Optimize the critical path; leave the rest honestly deferred."
+thumbnail: /writing/starter-site.png
 ---
 
 ::lead I have watched teams celebrate a green Lighthouse score while support tickets said the admin “felt laggy.” Both can be true. Performance work that only chases lab metrics will miss the product moments that actually hurt: first useful paint of a dashboard, sorting a 10k-row table, submitting a form on a bad connection.

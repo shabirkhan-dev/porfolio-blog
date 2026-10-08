@@ -1,82 +1,86 @@
-import { slugifyHeading } from "@/data/site";
+import "server-only";
 
-export type BlogCategory =
-  | "Engineering"
-  | "Frontend"
-  | "Backend"
-  | "AI"
-  | "Product"
-  | "Design"
-  | "Personal";
+import { cache } from "react";
+import fs from "node:fs/promises";
+import path from "node:path";
+import matter from "gray-matter";
 
-export type PostStatus = "draft" | "published";
+const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
-export type BlogPost = {
-  id: string;
-  title: string;
+export type Post = {
   slug: string;
-  category: BlogCategory;
+  title: string;
+  excerpt: string;
+  standfirst: string;
   publishedAt: string;
   readingTime: string;
-  featured: boolean;
-  excerpt: string;
-  summary: string;
-  standfirst?: string;
-  takeaways?: string[];
+  thumbnail?: string;
   body: string;
-  status: PostStatus;
 };
 
-export const categories: BlogCategory[] = [
-  "Engineering",
-  "Frontend",
-  "Backend",
-  "AI",
-  "Product",
-  "Design",
-  "Personal",
-];
+type Frontmatter = {
+  title?: string;
+  slug?: string;
+  excerpt?: string;
+  standfirst?: string;
+  order?: number;
+  publishedAt?: string | Date;
+  thumbnail?: string;
+};
 
-function stripMarkdown(markdown: string) {
-  return markdown
+function readingTime(markdown: string) {
+  const words = markdown
     .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`[^`]+`/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/^#{1,6}\s+/gm, " ")
-    .replace(/^>\s?(\[!.*?\]\s*)?/gm, " ")
-    .replace(/[*_~]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return `${Math.max(1, Math.round(words / 200))} min read`;
 }
 
-export function estimateReadingTimeFromMarkdown(markdown: string) {
-  const words = stripMarkdown(markdown).split(/\s+/).filter(Boolean).length;
-  const minutes = Math.max(1, Math.round(words / 200));
-  return `${minutes} min read`;
+function toPost(filename: string, raw: string) {
+  const { data, content } = matter(raw);
+  const fm = data as Frontmatter;
+  const body = content.trim();
+  if (!fm.title || !body) {
+    throw new Error(`Post ${filename} needs a title and a body`);
+  }
+  const published = fm.publishedAt ? new Date(fm.publishedAt) : new Date(0);
+  const post: Post = {
+    slug: fm.slug ?? filename.replace(/\.md$/, ""),
+    title: fm.title,
+    excerpt: fm.excerpt ?? "",
+    standfirst: fm.standfirst ?? fm.excerpt ?? "",
+    publishedAt: published.toISOString(),
+    readingTime: readingTime(body),
+    thumbnail: fm.thumbnail,
+    body,
+  };
+  return { post, order: fm.order ?? Number.MAX_SAFE_INTEGER };
 }
 
-export function getReadingTime(post: Pick<BlogPost, "body">) {
-  return estimateReadingTimeFromMarkdown(post.body);
+/** Posts in the order their frontmatter `order` sets, then newest first. */
+export const getPosts = cache(async (): Promise<Post[]> => {
+  const files = (await fs.readdir(CONTENT_DIR)).filter((f) => f.endsWith(".md"));
+  const entries = await Promise.all(
+    files.map(async (f) => toPost(f, await fs.readFile(path.join(CONTENT_DIR, f), "utf8"))),
+  );
+  return entries
+    .sort(
+      (a, b) =>
+        a.order - b.order ||
+        b.post.publishedAt.localeCompare(a.post.publishedAt),
+    )
+    .map((e) => e.post);
+});
+
+export async function getPost(slug: string) {
+  return (await getPosts()).find((p) => p.slug === slug) ?? null;
 }
 
-export function getTableOfContents(post: Pick<BlogPost, "body">) {
-  const headings = [...post.body.matchAll(/^##\s+(.+)$/gm)];
-
-  return headings.map((match) => {
-    const label = match[1].trim();
-    return {
-      id: slugifyHeading(label),
-      label,
-    };
+export function formatPostDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
   });
-}
-
-export function getReadableText(
-  post: Pick<BlogPost, "title" | "standfirst" | "body">,
-) {
-  const parts = [post.title];
-  if (post.standfirst) parts.push(post.standfirst);
-  parts.push(stripMarkdown(post.body));
-  return parts.join(". ").replace(/\s+/g, " ").trim();
 }

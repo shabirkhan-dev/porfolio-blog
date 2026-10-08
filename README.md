@@ -1,8 +1,8 @@
 # Portfolio Blog
 
-A portfolio and blog built with Next.js App Router, TypeScript, Tailwind CSS,
-and Framer Motion. Blog posts are static Markdown files under `content/blog/`.
-Site profile, projects, and testimonials live in `src/data/site.ts`.
+A portfolio and blog built with Next.js App Router, TypeScript and Tailwind CSS,
+with the design from the "Portfolio" page of the Rabtx Figma file. Blog posts are static
+Markdown files under `content/blog/`; profile, projects and work live in `src/data/profile.ts`.
 
 ## Getting Started
 

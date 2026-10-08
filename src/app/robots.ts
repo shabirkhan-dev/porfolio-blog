@@ -1,15 +1,10 @@
 import type { MetadataRoute } from "next";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev";
+import { siteUrl } from "@/data/profile";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
+    rules: { userAgent: "*", allow: "/" },
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

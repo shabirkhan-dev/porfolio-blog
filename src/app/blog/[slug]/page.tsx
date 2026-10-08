@@ -1,334 +1,85 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
-import { ArticleBody } from "@/components/blog/article-body";
-import { ArticleShare } from "@/components/blog/article-share";
-import { ListenButton } from "@/components/blog/listen-button";
-import { TableOfContents } from "@/components/blog/table-of-contents";
-import { BoxedPage, BoxedSection } from "@/components/boxed-section";
-import { SectionHeading } from "@/components/section";
+import { ArrowUpRight, Undo2 } from "lucide-react";
+import { links } from "@/data/profile";
+import { formatPostDate, getPost, getPosts } from "@/data/posts";
+import { PageColumn } from "@/components/page-column";
+import { PostBody } from "@/components/post-body";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import {
-  getReadableText,
-  getReadingTime,
-  getTableOfContents,
-  type BlogPost,
-} from "@/data/posts";
-import {
-  getAdjacentPosts,
-  getPostBySlug,
-  getPublishedSlugs,
-  getRelatedPosts,
-} from "@/data/posts.server";
-import { profile } from "@/data/site";
-import { formatDate } from "@/lib/format";
+import { ThemeToggle } from "@/components/theme-toggle";
 
-type BlogPostPageProps = {
-  params: Promise<{
-    slug: string;
-  }>;
-};
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const slugs = await getPublishedSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return (await getPosts()).map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
-
-  if (!post) {
-    return {};
-  }
-
-  const canonical = `/blog/${post.slug}`;
-
+export async function generateMetadata(props: PageProps<"/blog/[slug]">): Promise<Metadata> {
+  const { slug } = await props.params;
+  const post = await getPost(slug);
+  if (!post) return {};
   return {
     title: post.title,
-    description: post.excerpt,
-    alternates: { canonical },
-    authors: [{ name: profile.name, url: profile.linkedin }],
-    openGraph: {
-      type: "article",
-      title: post.title,
-      description: post.excerpt,
-      url: canonical,
-      publishedTime: post.publishedAt,
-      authors: [profile.name],
-      images: [{ url: "/opengraph-image", alt: post.title }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: ["/opengraph-image"],
-    },
+    description: post.standfirst,
+    openGraph: { title: post.title, description: post.standfirst, type: "article" },
   };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
+export default async function PostPage(props: PageProps<"/blog/[slug]">) {
+  const { slug } = await props.params;
+  const post = await getPost(slug);
+  if (!post) notFound();
 
-  if (!post) {
-    notFound();
-  }
-
-  const relatedPosts = await getRelatedPosts(post.slug, post.category);
-  const toc = getTableOfContents(post);
-  const readingTime = getReadingTime(post);
-  const { previous, next } = await getAdjacentPosts(post.slug);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev";
-  const articleUrl = new URL(`/blog/${post.slug}`, siteUrl).toString();
-
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: post.publishedAt,
-    author: {
-      "@type": "Person",
-      name: profile.name,
-      url: profile.linkedin,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": articleUrl,
-    },
-    url: articleUrl,
-    image: `${siteUrl}/opengraph-image`,
-  };
+  const talkHref = `${links.email}?subject=${encodeURIComponent(post.title)}`;
 
   return (
-    <div className="page-shell min-h-screen">
-      <SiteHeader />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <BoxedPage>
-        <main id="main">
-          <BoxedSection id="top" dividerTop pad={false} className="scroll-mt-24">
-            <div className="grid gap-0 py-5 sm:py-6 lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-10">
-              <div className="min-w-0 max-w-[44rem]">
-                <Link
-                  href="/blog"
-                  className="group inline-flex items-center gap-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-faint transition-colors hover:text-accent"
-                >
-                  <ArrowLeft
-                    aria-hidden="true"
-                    size={13}
-                    className="transition-transform group-hover:-translate-x-0.5"
-                  />
-                  Writing
-                </Link>
+    <PageColumn>
+      <nav className="flex items-center gap-2">
+        <Link
+          href="/#writing"
+          className="flex flex-1 items-center gap-2 text-sm leading-5 tracking-[-0.0064em] text-muted transition-colors hover-capable:hover:text-foreground"
+        >
+          <Undo2 className="size-3.5" strokeWidth={1.17} />
+          All writing
+        </Link>
+        <ThemeToggle />
+      </nav>
 
-                <p className="mt-4 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-                  <span className="text-accent">{post.category}</span>
-                  <span className="mx-2 text-border-strong">·</span>
-                  {formatDate(post.publishedAt)}
-                  <span className="mx-2 text-border-strong">·</span>
-                  {readingTime}
-                </p>
+      <div className="h-14 md:h-20" />
 
-                <h1 className="mt-3 font-display text-[clamp(1.65rem,1.25rem+1.6vw,2.55rem)] font-semibold leading-[1.08] tracking-tight text-balance">
-                  {post.title}
-                </h1>
+      <article>
+        <header className="flex flex-col gap-3.5 border-b border-line pb-12">
+          <p className="text-xs leading-4 tracking-[-0.0064em] text-muted">
+            <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time> ·{" "}
+            {post.readingTime}
+          </p>
+          <h1 className="text-[28px] leading-8 font-semibold tracking-[-0.03em] text-foreground md:text-[36px] md:leading-[42px]">
+            {post.title}
+          </h1>
+          <p className="text-[17px] leading-7 tracking-[-0.0064em] text-muted">{post.standfirst}</p>
+        </header>
 
-                {(post.standfirst || post.summary) && (
-                  <p className="mt-3 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground">
-                    {post.standfirst || post.summary}
-                  </p>
-                )}
+        <div className="h-10" />
 
-                <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-4">
-                  <div className="flex items-center gap-3">
-                    <span className="grid size-8 shrink-0 place-items-center rounded-sm bg-accent font-display text-[0.65rem] font-bold text-accent-foreground">
-                      {profile.initials}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium leading-none tracking-tight">
-                        {profile.name}
-                      </p>
-                      <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.12em] text-faint">
-                        {profile.title}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full sm:ml-auto sm:w-auto">
-                    <ListenButton text={getReadableText(post)} />
-                  </div>
-                </div>
-              </div>
-              <div className="hidden lg:block" aria-hidden />
-            </div>
-          </BoxedSection>
-
-          <BoxedSection pad={false}>
-            <div className="grid gap-10 py-7 sm:py-8 lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-10">
-              <article className="min-w-0 max-w-[44rem]">
-                {toc.length > 0 ? (
-                  <details className="mb-7 border border-border bg-background-2 px-4 py-3 lg:hidden">
-                    <summary className="min-h-11 cursor-pointer select-none py-3 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-foreground">
-                      Article contents
-                    </summary>
-                    <div className="border-t border-border pb-3 pt-4">
-                      <TableOfContents items={toc} />
-                      <div className="mt-5 border-t border-border pt-4">
-                        <ArticleShare title={post.title} url={articleUrl} />
-                      </div>
-                    </div>
-                  </details>
-                ) : null}
-
-                {post.takeaways && post.takeaways.length > 0 ? (
-                  <div className="mb-7 border border-border bg-background-2 px-4 py-4 sm:px-5">
-                    <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-accent">
-                      Takeaways
-                    </p>
-                    <ul className="mt-3 space-y-2">
-                      {post.takeaways.map((item) => (
-                        <li
-                          key={item}
-                          className="flex gap-2.5 text-sm leading-6 text-foreground/85"
-                        >
-                          <span className="mt-[0.45rem] size-1 shrink-0 rounded-full bg-accent" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-
-                <ArticleBody markdown={post.body} />
-
-                <nav
-                  aria-label="More essays"
-                  className="mt-10 grid gap-3 border-t border-border pt-6 sm:grid-cols-2"
-                >
-                  {previous ? (
-                    <Link
-                      href={`/blog/${previous.slug}`}
-                      className="group border border-border p-4 transition-colors hover:border-border-strong hover:bg-background-2"
-                    >
-                      <span className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-                        <ArrowLeft
-                          aria-hidden="true"
-                          size={12}
-                          className="text-accent"
-                        />
-                        Previous
-                      </span>
-                      <p className="mt-2 font-display text-base font-semibold leading-snug tracking-tight transition-colors group-hover:text-accent">
-                        {previous.title}
-                      </p>
-                    </Link>
-                  ) : (
-                    <span />
-                  )}
-                  {next ? (
-                    <Link
-                      href={`/blog/${next.slug}`}
-                      className="group border border-border p-4 text-right transition-colors hover:border-border-strong hover:bg-background-2"
-                    >
-                      <span className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-                        Next
-                        <ArrowRight
-                          aria-hidden="true"
-                          size={12}
-                          className="text-accent"
-                        />
-                      </span>
-                      <p className="mt-2 font-display text-base font-semibold leading-snug tracking-tight transition-colors group-hover:text-accent">
-                        {next.title}
-                      </p>
-                    </Link>
-                  ) : null}
-                </nav>
-
-                <div className="mt-8 flex justify-start">
-                  <a
-                    href="#top"
-                    className="group inline-flex items-center gap-2 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint transition-colors hover:text-accent"
-                  >
-                    <ArrowUp
-                      aria-hidden="true"
-                      size={13}
-                      className="text-accent"
-                    />
-                    Back to top
-                  </a>
-                </div>
-              </article>
-
-              <aside className="hidden lg:block">
-                <div className="sticky top-24 flex flex-col gap-7">
-                  <TableOfContents items={toc} />
-
-                  <div className="border-t border-border pt-5">
-                    <ArticleShare title={post.title} url={articleUrl} />
-                  </div>
-
-                  <Link
-                    href="/#contact"
-                    className="block border border-border bg-background-2 p-4 transition-colors hover:border-accent/40"
-                  >
-                    <p className="font-display text-sm font-semibold tracking-tight">
-                      Building something serious?
-                    </p>
-                    <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-                      Senior product builds — a small number at a time.
-                    </p>
-                    <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-accent">
-                      Start a conversation
-                      <ArrowRight aria-hidden="true" size={12} />
-                    </span>
-                  </Link>
-                </div>
-              </aside>
-            </div>
-          </BoxedSection>
-
-          {relatedPosts.length > 0 ? (
-            <BoxedSection tone="muted" pad="compact" closed>
-              <SectionHeading eyebrow="Related writing" title="Continue reading" />
-              <div className="mt-8 grid gap-3 md:grid-cols-3">
-                {relatedPosts.map((related) => (
-                  <RelatedCard key={related.slug} post={related} />
-                ))}
-              </div>
-            </BoxedSection>
-          ) : null}
-        </main>
-      </BoxedPage>
-      <SiteFooter />
-    </div>
-  );
-}
-
-function RelatedCard({ post }: { post: BlogPost }) {
-  return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <article className="flex h-full flex-col border border-border bg-background p-5 transition-colors hover:border-border-strong hover:bg-card">
-        <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-accent">
-          {post.category}
-        </span>
-        <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight transition-colors group-hover:text-accent">
-          {post.title}
-        </h3>
-        <p className="mt-2 line-clamp-3 flex-1 text-sm leading-6 text-muted-foreground">
-          {post.excerpt}
-        </p>
-        <p className="mt-4 font-mono text-[0.56rem] uppercase tracking-[0.12em] text-faint">
-          {formatDate(post.publishedAt)} · {getReadingTime(post)}
-        </p>
+        <div className="border-b border-line pb-12">
+          <PostBody markdown={post.body} />
+        </div>
       </article>
-    </Link>
+
+      <div className="h-8" />
+
+      <a
+        href={talkHref}
+        className="flex items-center gap-2.5 self-start rounded-full bg-foreground py-2.5 pr-3.5 pl-4 text-sm leading-5 font-medium tracking-[-0.0064em] text-background transition-opacity hover-capable:hover:opacity-85"
+      >
+        Talk about this
+        <ArrowUpRight className="size-[13px]" strokeWidth={1.08} />
+      </a>
+
+      <div className="h-16 md:h-[104px]" />
+
+      <SiteFooter />
+    </PageColumn>
   );
 }
