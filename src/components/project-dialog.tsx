@@ -3,6 +3,7 @@
 import type { Ref } from "react";
 import { ArrowUpRight, Github, X } from "lucide-react";
 import type { Highlight } from "@/data/profile";
+import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 
 type Props = {
   ref: Ref<HTMLDialogElement>;
@@ -31,11 +32,10 @@ export function ProjectDialog({ ref, project }: Props) {
         <div className="flex flex-col items-center gap-2 md:gap-0">
           <span className="h-1 w-9 rounded-full bg-line md:hidden" aria-hidden="true" />
           <div className="relative w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized static asset */}
-            <img
-              src={project.image}
-              alt={`${project.name} screenshot`}
-              className="aspect-[16/10] w-full rounded-[14px] border border-line object-cover object-left-top"
+            <ScreenshotCarousel
+              key={project.id}
+              images={[project.image, ...(project.screens ?? [])]}
+              alt={project.name}
             />
             <form method="dialog">
               <button
@@ -47,16 +47,6 @@ export function ProjectDialog({ ref, project }: Props) {
               </button>
             </form>
           </div>
-          {project.screens?.map((screen) => (
-            // eslint-disable-next-line @next/next/no-img-element -- pre-sized static asset
-            <img
-              key={screen}
-              src={screen}
-              alt={`${project.name} screenshot`}
-              loading="lazy"
-              className="aspect-[16/10] w-full rounded-[14px] md:mt-2 border border-line object-cover object-left-top"
-            />
-          ))}
 
           <div className="flex w-full flex-col gap-5 px-3 pt-1 md:px-4 md:pt-2 md:pb-4">
             <div className="flex items-start gap-2">
