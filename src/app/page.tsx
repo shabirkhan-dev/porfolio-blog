@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Github } from "lucide-react";
-import { links, profile, projects, skills, work, type Project } from "@/data/profile";
+import { links, profile, projects, skills, work } from "@/data/profile";
 import { getPosts } from "@/data/posts";
 import { Highlights } from "@/components/highlights";
 import { PageColumn, SectionTitle } from "@/components/page-column";
@@ -38,8 +38,11 @@ function Intro() {
         <p>
           Right now I am leading the frontend of <span className={strong}>Auspira</span> at{" "}
           <span className={strong}>Nexora AI</span>, and building{" "}
-          <span className={strong}>Grid</span>, a workspace where people and AI coding agents work on
-          the same project, now in private beta
+          <a href={projects[0].live} className={underlined}>
+            Grid
+          </a>
+          , an open-source workspace where people and AI coding agents work on the same project, now
+          in public beta
         </p>
         <p>
           The last eight years have moved between freelance work, an AI startup, and leading
@@ -66,24 +69,6 @@ function Intro() {
 
 const iconLink = `relative z-10 ${iconButtonRaised}`;
 
-const projectName = "text-sm leading-5 font-medium tracking-[-0.0064em] text-foreground";
-
-/** The row's title; it covers the whole row as a link when the project has somewhere to go. */
-function ProjectName({ project }: { project: Project }) {
-  const href = project.live ?? project.github;
-  if (!href) return <p className={projectName}>{project.name}</p>;
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${projectName} after:absolute after:inset-0 after:rounded-xl`}
-    >
-      {project.name}
-    </a>
-  );
-}
-
 function Projects() {
   return (
     <section className="flex flex-col gap-1">
@@ -96,7 +81,14 @@ function Projects() {
         >
           <div className="flex flex-1 flex-col gap-1">
             <div className="flex items-center gap-2">
-              <ProjectName project={project} />
+              <a
+                href={project.live ?? project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm leading-5 font-medium tracking-[-0.0064em] text-foreground after:absolute after:inset-0 after:rounded-xl"
+              >
+                {project.name}
+              </a>
               {project.isNew ? (
                 <span className="rounded-full border border-new px-[7px] pb-px font-hand text-[15px] leading-4 text-new">
                   New
@@ -107,21 +99,17 @@ function Projects() {
               {project.description}
             </p>
           </div>
-          {project.github ? (
-            <div className="flex items-center gap-2 transition-opacity hover-capable:opacity-0 hover-capable:group-hover:opacity-100 hover-capable:group-focus-within:opacity-100">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.name} on GitHub`}
-                className={iconLink}
-              >
-                <Github className="size-4" strokeWidth={1.5} />
-              </a>
-            </div>
-          ) : (
-            <p className="font-mono text-[11px] leading-4 text-faint">Private beta</p>
-          )}
+          <div className="flex items-center gap-2 transition-opacity hover-capable:opacity-0 hover-capable:group-hover:opacity-100 hover-capable:group-focus-within:opacity-100">
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.name} on GitHub`}
+              className={iconLink}
+            >
+              <Github className="size-4" strokeWidth={1.5} />
+            </a>
+          </div>
         </div>
       ))}
     </section>

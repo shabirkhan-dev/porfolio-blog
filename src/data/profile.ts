@@ -53,9 +53,10 @@ export const highlights: Highlight[] = [
     facts: [
       ["Role", "Founder and lead engineer"],
       ["Stack", "SolidJS, Hono, PostgreSQL, Bun"],
-      ["Status", "Private beta"],
+      ["Status", "Public beta"],
       ["License", "MIT / Apache-2.0"],
     ],
+    github: "https://github.com/shabirkhan-dev/grid",
   },
   {
     id: "starter",
@@ -97,8 +98,7 @@ export type Project = {
   name: string;
   description: string;
   isNew?: boolean;
-  /** Left out while the repository is private. */
-  github?: string;
+  github: string;
   live?: string;
 };
 
@@ -108,6 +108,8 @@ export const projects: Project[] = [
     description:
       "A workspace where people and AI coding agents share one board, threads, terminals and pull requests",
     isNew: true,
+    github: "https://github.com/shabirkhan-dev/grid",
+    live: "https://grid.rabtx.dev",
   },
   {
     name: "Starter",
@@ -153,7 +155,7 @@ export const work: Job[] = [
   {
     company: "RabtX",
     role: "Founder",
-    summary: "Building Grid, a workspace for people and AI coding agents, now in private beta",
+    summary: "Building Grid, an open-source workspace for people and AI coding agents",
     stack: ["SolidJS", "Hono", "PostgreSQL", "Bun"],
     from: "2025",
     to: "Now",
