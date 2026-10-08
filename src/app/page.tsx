@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
+import { ArrowRight, Github } from "lucide-react";
 import { links, profile, projects, skills, work } from "@/data/profile";
 import { getPosts } from "@/data/posts";
 import { Highlights } from "@/components/highlights";
@@ -51,8 +51,12 @@ function Intro() {
           I share my work on{" "}
           <a href={links.github} className={underlined}>
             GitHub
+          </a>
+          , my{" "}
+          <a href={links.cv} className={underlined}>
+            CV
           </a>{" "}
-          and can be reached by{" "}
+          is a PDF, and I can be reached by{" "}
           <a href={links.email} className={underlined}>
             email
           </a>
@@ -104,17 +108,6 @@ function Projects() {
             >
               <Github className="size-4" strokeWidth={1.5} />
             </a>
-            {project.live ? (
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${project.name}`}
-                className={iconLink}
-              >
-                <ArrowUpRight className="size-4" strokeWidth={1.5} />
-              </a>
-            ) : null}
           </div>
         </div>
       ))}
@@ -137,7 +130,7 @@ async function Writing() {
           {post.thumbnail ? (
             <Image
               src={post.thumbnail}
-              alt=""
+              alt={`Cover image for ${post.title}`}
               width={80}
               height={64}
               sizes="80px"

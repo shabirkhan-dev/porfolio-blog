@@ -6,12 +6,12 @@ import { SectionTitle } from "@/components/page-column";
 import { ProjectDialog } from "@/components/project-dialog";
 
 /** A product screenshot set into the card, cropped by the card's right and bottom edges. */
-function Shot({ src }: { src: string }) {
+function Shot({ src, alt }: { src: string; alt: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element -- pre-sized static asset
     <img
       src={src}
-      alt=""
+      alt={alt}
       loading="lazy"
       className="absolute top-6 left-5 aspect-[16/10] w-[360px] max-w-none rounded-[10px] border border-line object-cover object-left-top md:top-7 md:left-6 md:w-[400px]"
     />
@@ -27,7 +27,7 @@ function HighlightCard({ highlight, onOpen }: { highlight: Highlight; onOpen: ()
       className="group flex shrink-0 cursor-pointer snap-start flex-col gap-3 text-left"
     >
       <div className="relative grid h-[220px] w-[260px] place-items-center overflow-hidden rounded-2xl bg-surface transition-[filter] group-hover:brightness-110 md:h-[252px] md:w-[290px]">
-        <Shot src={highlight.image} />
+        <Shot src={highlight.image} alt={`${highlight.name} screenshot`} />
       </div>
       <div className="flex w-full gap-2">
         <div className="flex flex-1 flex-col gap-0.5">

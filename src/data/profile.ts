@@ -1,10 +1,11 @@
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.dev";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://shabirkhan.rabtx.dev";
 
 export const links = {
   github: "https://github.com/shabirkhan-dev",
   linkedin: "https://linkedin.com/in/shabirkhan23",
   email: "mailto:shabirkhan.dev@gmail.com",
+  cv: "/shabir-khan-cv.pdf",
 };
 
 export const profile = {
@@ -29,7 +30,6 @@ export type Highlight = {
   about: string[];
   facts: [label: string, value: string][];
   github?: string;
-  live?: string;
 };
 
 export const highlights: Highlight[] = [
@@ -73,7 +73,6 @@ export const highlights: Highlight[] = [
       ["License", "MIT / Apache-2.0"],
     ],
     github: "https://github.com/shabirkhan-dev/starter",
-    live: "https://starter-two-henna.vercel.app",
   },
   {
     id: "school-os",

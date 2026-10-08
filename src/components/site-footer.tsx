@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail } from "lucide-react";
+import { FileText, Github, Linkedin, Mail } from "lucide-react";
 import { links, profile } from "@/data/profile";
 import { SectionTitle } from "@/components/page-column";
 import { iconButton } from "@/lib/icon-button";
@@ -7,6 +7,7 @@ const social = [
   { label: "GitHub", href: links.github, Icon: Github },
   { label: "LinkedIn", href: links.linkedin, Icon: Linkedin },
   { label: "Email", href: links.email, Icon: Mail },
+  { label: "CV (PDF)", href: links.cv, Icon: FileText },
 ];
 
 export function SiteFooter() {

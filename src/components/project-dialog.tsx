@@ -84,7 +84,7 @@ export function ProjectDialog({ ref, project }: Props) {
               ))}
             </dl>
 
-            {project.github || project.live ? (
+            {project.github ? (
               <div className="flex gap-2">
                 {project.github ? (
                   <a
@@ -95,17 +95,6 @@ export function ProjectDialog({ ref, project }: Props) {
                   >
                     <Github className="size-4" strokeWidth={1.5} />
                     View on GitHub
-                    <ArrowUpRight className="size-4" strokeWidth={1.5} />
-                  </a>
-                ) : null}
-                {project.live ? (
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${pill} border border-line text-foreground`}
-                  >
-                    Live site
                     <ArrowUpRight className="size-4" strokeWidth={1.5} />
                   </a>
                 ) : null}
