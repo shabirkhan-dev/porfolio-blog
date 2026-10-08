@@ -168,11 +168,12 @@ function Work() {
       {work.map((job) => (
         <div
           key={job.company}
-          className="flex items-start gap-4 border-t border-line py-4 text-sm leading-5 tracking-[-0.0064em] last:border-b"
+          className="flex items-start gap-4 border-t border-line py-[18px] text-sm leading-5 tracking-[-0.0064em] last:border-b"
         >
           <div className="flex flex-1 flex-col gap-1">
             <p className="font-medium text-foreground">{job.company}</p>
             <p className="text-muted">{job.role}</p>
+            <p className="mt-2 max-w-[430px] text-muted">{job.summary}</p>
           </div>
           <p className="text-muted">{job.period}</p>
         </div>

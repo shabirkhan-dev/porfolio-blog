@@ -66,3 +66,8 @@ body {
   background: var(--foreground);
   color: var(--background);
 }
+
+/* Keep the page still behind an open project dialog. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
