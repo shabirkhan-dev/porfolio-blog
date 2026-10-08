@@ -17,13 +17,13 @@ export const profile = {
 };
 
 export type Highlight = {
-  id: "grid" | "auspira" | "starter" | "school-os";
+  id: "grid" | "starter" | "school-os";
   name: string;
   label: string;
   year: string;
   isNew?: boolean;
-  /** Product screenshot in public/projects; Auspira is a client product, so it has none. */
-  image?: string;
+  /** Product screenshot in public/projects. */
+  image: string;
   about: string[];
   facts: [label: string, value: string][];
   github?: string;
@@ -49,21 +49,6 @@ export const highlights: Highlight[] = [
       ["License", "MIT / Apache-2.0"],
     ],
     github: "https://github.com/shabirkhan-dev/grid",
-  },
-  {
-    id: "auspira",
-    name: "Auspira",
-    label: "Contract management",
-    year: "2026",
-    about: [
-      "A contract-management platform for a UK client, built around NEC contracts: early warnings, compensation events, PM instructions, defect notices and programme tracking",
-      "I lead its frontend architecture at Nexora AI",
-    ],
-    facts: [
-      ["Role", "Senior frontend lead, contract"],
-      ["Stack", "Next.js, React 19, TanStack Query, Ant Design, Tailwind CSS"],
-      ["Status", "Client product"],
-    ],
   },
   {
     id: "starter",

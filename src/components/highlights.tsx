@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { highlights, type Highlight } from "@/data/profile";
 import { SectionTitle } from "@/components/page-column";
-import { AuspiraFace } from "@/components/auspira-face";
 import { ProjectDialog } from "@/components/project-dialog";
 
 /** A product screenshot set into the card, cropped by the card's right and bottom edges. */
@@ -28,7 +27,7 @@ function HighlightCard({ highlight, onOpen }: { highlight: Highlight; onOpen: ()
       className="group flex shrink-0 cursor-pointer snap-start flex-col gap-3 text-left"
     >
       <div className="relative grid h-[220px] w-[260px] place-items-center overflow-hidden rounded-2xl bg-surface transition-[filter] group-hover:brightness-110 md:h-[252px] md:w-[290px]">
-        {highlight.image ? <Shot src={highlight.image} /> : <AuspiraFace />}
+        <Shot src={highlight.image} />
       </div>
       <div className="flex w-full gap-2">
         <div className="flex flex-1 flex-col gap-0.5">
