@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, IBM_Plex_Mono, Inter } from "next/font/google";
 import { profile, siteUrl } from "@/data/profile";
-import { ThemeScript } from "@/components/theme-script";
+import { THEME_COLORS, ThemeScript } from "@/components/theme-script";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,13 +38,12 @@ export const metadata: Metadata = {
     url: "/",
     siteName: profile.name,
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0d0d0c" },
-    { media: "(prefers-color-scheme: light)", color: "#fafaf8" },
-  ],
+  // One colour; ThemeScript and the toggle switch it to the page's theme.
+  themeColor: THEME_COLORS.dark,
 };
 
 export default function RootLayout({

@@ -26,9 +26,9 @@ export function SiteFooter() {
               <a
                 href={href}
                 aria-label={label}
-                {...(href.startsWith("http")
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
+                {...(href.startsWith("mailto:")
+                  ? {}
+                  : { target: "_blank", rel: "noopener noreferrer" })}
                 className={iconButton}
               >
                 <Icon className="size-4" strokeWidth={1.5} />

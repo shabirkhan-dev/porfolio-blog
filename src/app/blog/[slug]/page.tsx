@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, Undo2 } from "lucide-react";
-import { links } from "@/data/profile";
+import { links, profile, siteUrl } from "@/data/profile";
 import { formatPostDate, getPost, getPosts } from "@/data/posts";
 import { PageColumn } from "@/components/page-column";
 import { PostBody } from "@/components/post-body";
@@ -22,7 +22,15 @@ export async function generateMetadata(props: PageProps<"/blog/[slug]">): Promis
   return {
     title: post.title,
     description: post.standfirst,
-    openGraph: { title: post.title, description: post.standfirst, type: "article" },
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.standfirst,
+      type: "article",
+      url: `/blog/${post.slug}`,
+      publishedTime: post.publishedAt,
+      authors: [profile.name],
+    },
   };
 }
 
@@ -32,9 +40,24 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
   if (!post) notFound();
 
   const talkHref = `${links.email}?subject=${encodeURIComponent(post.title)}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.standfirst,
+    datePublished: post.publishedAt,
+    url: `${siteUrl}/blog/${post.slug}`,
+    image: `${siteUrl}/blog/${post.slug}/opengraph-image`,
+    author: { "@type": "Person", name: profile.name, url: siteUrl },
+  };
 
   return (
     <PageColumn>
+      <script
+        type="application/ld+json"
+        // Escaped so a "<" in a title cannot end the script tag.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <nav className="flex items-center gap-2">
         <Link
           href="/#writing"

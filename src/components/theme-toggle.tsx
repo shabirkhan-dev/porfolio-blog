@@ -1,7 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { THEME_STORAGE_KEY } from "@/components/theme-script";
+import { THEME_STORAGE_KEY, syncThemeColor } from "@/components/theme-script";
 import { iconButton } from "@/lib/icon-button";
 
 export function ThemeToggle() {
@@ -9,6 +9,7 @@ export function ThemeToggle() {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     root.dataset.theme = next;
+    syncThemeColor(next);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {
