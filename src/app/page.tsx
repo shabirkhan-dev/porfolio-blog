@@ -7,6 +7,7 @@ import { Highlights } from "@/components/highlights";
 import { PageColumn, SectionTitle } from "@/components/page-column";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { iconButton, iconButtonRaised } from "@/lib/icon-button";
 
 const strong = "font-medium text-foreground";
 const underlined = `${strong} underline decoration-from-font underline-offset-2`;
@@ -61,8 +62,7 @@ function Intro() {
   );
 }
 
-const iconLink =
-  "relative z-10 -m-1.5 p-1.5 text-muted transition-colors hover-capable:hover:text-foreground";
+const iconLink = `relative z-10 ${iconButtonRaised}`;
 
 function Projects() {
   return (
@@ -94,7 +94,7 @@ function Projects() {
               {project.description}
             </p>
           </div>
-          <div className="flex items-center gap-[18px] transition-opacity hover-capable:opacity-0 hover-capable:group-hover:opacity-100 hover-capable:group-focus-within:opacity-100">
+          <div className="flex items-center gap-2 transition-opacity hover-capable:opacity-0 hover-capable:group-hover:opacity-100 hover-capable:group-focus-within:opacity-100">
             <a
               href={project.github}
               target="_blank"
@@ -102,7 +102,7 @@ function Projects() {
               aria-label={`${project.name} on GitHub`}
               className={iconLink}
             >
-              <Github className="size-6" strokeWidth={1.5} />
+              <Github className="size-4" strokeWidth={1.5} />
             </a>
             {project.live ? (
               <a
@@ -112,7 +112,7 @@ function Projects() {
                 aria-label={`Open ${project.name}`}
                 className={iconLink}
               >
-                <ArrowUpRight className="size-6" strokeWidth={1.5} />
+                <ArrowUpRight className="size-4" strokeWidth={1.5} />
               </a>
             ) : null}
           </div>
@@ -150,10 +150,12 @@ async function Writing() {
             <p className="font-medium text-foreground">{post.title}</p>
             <p className="max-w-[400px] text-muted">{post.excerpt}</p>
           </div>
-          <ArrowRight
-            className="size-6 shrink-0 text-muted transition-[color,translate] group-hover:translate-x-0.5 group-hover:text-foreground"
-            strokeWidth={1.5}
-          />
+          <span
+            className={`${iconButton} group-hover:bg-raised group-hover:text-foreground`}
+            aria-hidden="true"
+          >
+            <ArrowRight className="size-4" strokeWidth={1.5} />
+          </span>
         </Link>
       ))}
     </section>

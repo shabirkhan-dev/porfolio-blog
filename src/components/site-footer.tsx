@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import { links, profile } from "@/data/profile";
 import { SectionTitle } from "@/components/page-column";
+import { iconButton } from "@/lib/icon-button";
 
 const social = [
   { label: "GitHub", href: links.github, Icon: Github },
@@ -18,7 +19,7 @@ export function SiteFooter() {
             {profile.availability}
           </p>
         </div>
-        <ul className="flex items-center gap-5 md:pb-1">
+        <ul className="flex items-center gap-2">
           {social.map(({ label, href, Icon }) => (
             <li key={label}>
               <a
@@ -27,9 +28,9 @@ export function SiteFooter() {
                 {...(href.startsWith("http")
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="-m-1.5 block p-1.5 text-muted transition-colors hover-capable:hover:text-foreground"
+                className={iconButton}
               >
-                <Icon className="size-6" strokeWidth={1.5} />
+                <Icon className="size-4" strokeWidth={1.5} />
               </a>
             </li>
           ))}

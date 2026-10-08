@@ -2,6 +2,7 @@
 
 import { Moon, Sun } from "lucide-react";
 import { THEME_STORAGE_KEY } from "@/components/theme-script";
+import { iconButton } from "@/lib/icon-button";
 
 export function ThemeToggle() {
   function toggle() {
@@ -20,10 +21,10 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Switch colour theme"
-      className="-m-2 grid size-10 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover-capable:hover:text-foreground"
+      className={iconButton}
     >
-      <Moon className="hidden size-6 dark:block" strokeWidth={1.5} />
-      <Sun className="size-6 dark:hidden" strokeWidth={1.5} />
+      <Moon className="hidden size-4 dark:block" strokeWidth={1.5} />
+      <Sun className="size-4 dark:hidden" strokeWidth={1.5} />
     </button>
   );
 }
