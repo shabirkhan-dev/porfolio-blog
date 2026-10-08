@@ -29,7 +29,7 @@ export function SiteFooter() {
                   : {})}
                 className="-m-1.5 block p-1.5 text-muted transition-colors hover-capable:hover:text-foreground"
               >
-                <Icon className="size-[17px]" strokeWidth={1.42} />
+                <Icon className="size-6" strokeWidth={1.5} />
               </a>
             </li>
           ))}

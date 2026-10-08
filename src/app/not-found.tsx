@@ -14,7 +14,7 @@ export default function NotFound() {
           href="/"
           className="flex items-center gap-2 text-sm leading-5 text-muted transition-colors hover-capable:hover:text-foreground"
         >
-          <Undo2 className="size-3.5" strokeWidth={1.17} />
+          <Undo2 className="size-6" strokeWidth={1.5} />
           Home
         </Link>
       </div>

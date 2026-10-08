@@ -40,7 +40,7 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
           href="/#writing"
           className="flex flex-1 items-center gap-2 text-sm leading-5 tracking-[-0.0064em] text-muted transition-colors hover-capable:hover:text-foreground"
         >
-          <Undo2 className="size-3.5" strokeWidth={1.17} />
+          <Undo2 className="size-6" strokeWidth={1.5} />
           All writing
         </Link>
         <ThemeToggle />
@@ -74,7 +74,7 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
         className="flex items-center gap-2.5 self-start rounded-full bg-foreground py-2.5 pr-3.5 pl-4 text-sm leading-5 font-medium tracking-[-0.0064em] text-background transition-opacity hover-capable:hover:opacity-85"
       >
         Talk about this
-        <ArrowUpRight className="size-[13px]" strokeWidth={1.08} />
+        <ArrowUpRight className="size-6" strokeWidth={1.5} />
       </a>
 
       <div className="h-16 md:h-[104px]" />

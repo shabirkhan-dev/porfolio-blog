@@ -48,9 +48,9 @@ export function ProjectDialog({ ref, project }: Props) {
               <button
                 type="submit"
                 aria-label="Close"
-                className="absolute top-2.5 right-2.5 grid size-8 cursor-pointer place-items-center rounded-full border border-line bg-background/80 text-foreground md:top-3 md:right-3"
+                className="absolute top-2.5 right-2.5 grid size-10 cursor-pointer place-items-center rounded-full border border-line bg-background/80 text-foreground md:top-3 md:right-3"
               >
-                <X className="size-4" strokeWidth={1.6} />
+                <X className="size-6" strokeWidth={1.5} />
               </button>
             </form>
           </div>
@@ -100,9 +100,9 @@ export function ProjectDialog({ ref, project }: Props) {
                     rel="noopener noreferrer"
                     className={`${pill} bg-foreground text-background`}
                   >
-                    <Github className="size-3.5" strokeWidth={1.17} />
+                    <Github className="size-6" strokeWidth={1.5} />
                     View on GitHub
-                    <ArrowUpRight className="size-[13px]" strokeWidth={1.08} />
+                    <ArrowUpRight className="size-6" strokeWidth={1.5} />
                   </a>
                 ) : null}
                 {project.live ? (
@@ -113,7 +113,7 @@ export function ProjectDialog({ ref, project }: Props) {
                     className={`${pill} border border-line text-foreground`}
                   >
                     Live site
-                    <ArrowUpRight className="size-[13px]" strokeWidth={1.08} />
+                    <ArrowUpRight className="size-6" strokeWidth={1.5} />
                   </a>
                 ) : null}
               </div>

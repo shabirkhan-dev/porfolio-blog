@@ -20,10 +20,10 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Switch colour theme"
-      className="-m-2 grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover-capable:hover:text-foreground"
+      className="-m-2 grid size-10 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover-capable:hover:text-foreground"
     >
-      <Moon className="hidden size-4 dark:block" strokeWidth={1.33} />
-      <Sun className="size-4 dark:hidden" strokeWidth={1.33} />
+      <Moon className="hidden size-6 dark:block" strokeWidth={1.5} />
+      <Sun className="size-6 dark:hidden" strokeWidth={1.5} />
     </button>
   );
 }

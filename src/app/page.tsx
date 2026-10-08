@@ -102,7 +102,7 @@ function Projects() {
               aria-label={`${project.name} on GitHub`}
               className={iconLink}
             >
-              <Github className="size-3.5" strokeWidth={1.17} />
+              <Github className="size-6" strokeWidth={1.5} />
             </a>
             {project.live ? (
               <a
@@ -112,7 +112,7 @@ function Projects() {
                 aria-label={`Open ${project.name}`}
                 className={iconLink}
               >
-                <ArrowUpRight className="size-3.5" strokeWidth={1.17} />
+                <ArrowUpRight className="size-6" strokeWidth={1.5} />
               </a>
             ) : null}
           </div>
@@ -151,8 +151,8 @@ async function Writing() {
             <p className="max-w-[400px] text-muted">{post.excerpt}</p>
           </div>
           <ArrowRight
-            className="size-3.5 shrink-0 text-muted transition-[color,translate] group-hover:translate-x-0.5 group-hover:text-foreground"
-            strokeWidth={1.17}
+            className="size-6 shrink-0 text-muted transition-[color,translate] group-hover:translate-x-0.5 group-hover:text-foreground"
+            strokeWidth={1.5}
           />
         </Link>
       ))}
