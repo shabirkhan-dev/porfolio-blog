@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
-import { links, profile, projects, work } from "@/data/profile";
+import { links, profile, projects, skills, work } from "@/data/profile";
 import { getPosts } from "@/data/posts";
 import { Highlights } from "@/components/highlights";
 import { PageColumn, SectionTitle } from "@/components/page-column";
@@ -162,24 +162,69 @@ async function Writing() {
   );
 }
 
+const mono = "font-mono text-[11px] leading-4";
+
 function Work() {
   return (
     <section className="flex flex-col">
       <SectionTitle>Work</SectionTitle>
+      <div className="h-5" />
+      <ol>
+        {work.map((job, i) => {
+          const current = job.to === "Now";
+          const last = i === work.length - 1;
+          return (
+            <li key={job.company} className="flex gap-3.5 md:gap-4">
+              <p className={`hidden w-14 shrink-0 pt-0.5 md:block ${mono} text-muted`}>
+                {job.from}
+                <br />
+                <span className={current ? "text-new" : "text-faint"}>{job.to}</span>
+              </p>
+              <div className="flex w-[9px] shrink-0 flex-col items-center pt-[5px]" aria-hidden="true">
+                <span
+                  className={`size-[9px] shrink-0 rounded-full ${
+                    current
+                      ? "bg-new shadow-[0_0_0_4px_color-mix(in_oklab,var(--new)_25%,transparent)]"
+                      : "border-[1.5px] border-faint bg-background"
+                  }`}
+                />
+                {last ? null : <span className="w-px flex-1 bg-line" />}
+              </div>
+              <div className={`flex flex-1 flex-col gap-1 text-sm leading-5 tracking-[-0.0064em] ${last ? "" : "pb-7"}`}>
+                <div className="flex items-baseline gap-2">
+                  <p className="flex-1 font-medium text-foreground">{job.company}</p>
+                  <p className={`md:hidden ${mono} ${current ? "text-new" : "text-faint"}`}>
+                    {job.from}—{job.to}
+                  </p>
+                </div>
+                <p className="text-muted">{job.role}</p>
+                <p className="mt-0.5 text-muted">{job.summary}</p>
+                <p className={`mt-0.5 ${mono} text-faint`}>{job.stack.join(" · ")}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+function Skills() {
+  return (
+    <section className="flex flex-col">
+      <SectionTitle>Skills</SectionTitle>
       <div className="h-4" />
-      {work.map((job) => (
-        <div
-          key={job.company}
-          className="flex items-start gap-4 border-t border-line py-[18px] text-sm leading-5 tracking-[-0.0064em] last:border-b"
-        >
-          <div className="flex flex-1 flex-col gap-1">
-            <p className="font-medium text-foreground">{job.company}</p>
-            <p className="text-muted">{job.role}</p>
-            <p className="mt-2 max-w-[430px] text-muted">{job.summary}</p>
+      <dl>
+        {skills.map(([area, list]) => (
+          <div
+            key={area}
+            className="flex flex-col gap-1 border-t border-line py-3.5 text-sm leading-5 tracking-[-0.0064em] last:border-b md:flex-row md:gap-4"
+          >
+            <dt className="font-medium text-foreground md:w-[140px] md:shrink-0">{area}</dt>
+            <dd className="text-muted">{list}</dd>
           </div>
-          <p className="text-muted">{job.period}</p>
-        </div>
-      ))}
+        ))}
+      </dl>
     </section>
   );
 }
@@ -193,6 +238,7 @@ export default function Home() {
         <Projects />
         <Writing />
         <Work />
+        <Skills />
         <SiteFooter />
       </div>
     </PageColumn>

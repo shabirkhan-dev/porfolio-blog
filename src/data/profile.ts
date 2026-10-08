@@ -136,7 +136,10 @@ export type Job = {
   company: string;
   role: string;
   summary: string;
-  period: string;
+  stack: string[];
+  from: string;
+  /** "Now" for a current role. */
+  to: string;
 };
 
 export const work: Job[] = [
@@ -145,40 +148,60 @@ export const work: Job[] = [
     role: "Senior frontend lead · Contract",
     summary:
       "Leading the frontend of Auspira, a contract-management platform for a UK client",
-    period: "2026—Now",
+    stack: ["Next.js", "React 19", "TanStack Query", "Ant Design"],
+    from: "2026",
+    to: "Now",
   },
   {
     company: "RabtX",
     role: "Founder",
     summary: "Building Grid, an open-source workspace for people and AI coding agents",
-    period: "2025—Now",
+    stack: ["SolidJS", "Hono", "PostgreSQL", "Bun"],
+    from: "2025",
+    to: "Now",
   },
   {
     company: "Kansai Group",
     role: "Frontend engineer, web and mobile · Part-time",
     summary:
       "Built the Expo app, the vehicle listing site and the admin panel for a used-car exporter in Osaka",
-    period: "2024—2026",
+    stack: ["Expo", "Next.js", "real-time inventory"],
+    from: "2024",
+    to: "2026",
   },
   {
     company: "Excelorithm",
     role: "Lead frontend engineer",
     summary:
       "Led the rebuild of BullseyeEngagement, an HR platform used by PepsiCo, Intel and Emory, with 35% faster page loads",
-    period: "2023—2025",
+    stack: ["Next.js", "React Query", "Tailwind CSS"],
+    from: "2023",
+    to: "2025",
   },
   {
     company: "Revoxai",
     role: "Senior full-stack developer",
-    summary:
-      "Built an AI e-learning platform across Next.js, Node.js and Python services",
-    period: "2021—2023",
+    summary: "Built an AI e-learning platform across Next.js, Node.js and Python services",
+    stack: ["Next.js", "Node.js", "Python"],
+    from: "2021",
+    to: "2023",
   },
   {
     company: "Freelance",
     role: "Software developer",
-    summary:
-      "Web and mobile apps for clients on Fiverr and direct, on Node.js, PostgreSQL and React",
-    period: "2018—2021",
+    summary: "Web and mobile apps for clients on Fiverr and direct",
+    stack: ["Node.js", "Express", "PostgreSQL", "React"],
+    from: "2018",
+    to: "2021",
   },
+];
+
+export const skills: [area: string, list: string][] = [
+  [
+    "Frontend",
+    "React 19, Next.js, SolidJS, React Native and Expo, TanStack Query, Zustand, Tailwind CSS, design systems",
+  ],
+  ["Backend & data", "Node.js, NestJS, Hono, Bun, Express, PostgreSQL, Redis, SQLite, Drizzle, Prisma"],
+  ["Delivery", "Docker, GitHub Actions, Azure Pipelines, AWS, Vitest, Biome, Lefthook"],
+  ["AI", "LLM APIs, coding-agent integration (ACP, Claude Code, Codex), RAG, local models"],
 ];
